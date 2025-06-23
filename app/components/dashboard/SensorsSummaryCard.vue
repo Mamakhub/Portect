@@ -41,8 +41,11 @@ defineProps<{
         </div>
       </div>
       <div>
-        <!-- Placeholder for the worker image -->
-        <div class="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full" />
+        <img
+          src="~/assets/worker.png"
+          alt="Worker"
+          class="w-24 h-24 rounded-full object-cover"
+        >
       </div>
     </div>
     <div class="mt-4 text-xs text-gray-500 dark:text-gray-400">
