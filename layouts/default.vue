@@ -1,12 +1,3 @@
-<script setup lang="ts">
-const colorMode = useColorMode()
-const config = useRuntimeConfig()
-
-function toggleColorMode() {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-</script>
-
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <header class="bg-white dark:bg-gray-800 shadow-sm">
@@ -43,3 +34,12 @@ function toggleColorMode() {
     </footer>
   </div>
 </template>
+
+<script setup lang="ts">
+const colorMode = useColorMode()
+const config = useRuntimeConfig()
+
+function toggleColorMode() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+</script>
