@@ -2,19 +2,44 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
+  // Add compatibility date to fix warning
+  compatibilityDate: '2025-06-23',
+
   modules: [
     '@nuxt/eslint',
     '@unocss/nuxt',
-    '@nuxtjs/color-mode',
+    [
+      '@nuxtjs/color-mode',
+      {
+        classSuffix: '',
+      },
+    ],
   ],
+
+  // Explicit auto-import configuration for app directory structure
+  imports: {
+    dirs: ['composable/**', 'utils/**'],
+    global: true,
+  },
+
+  // Component auto-import configuration for app directory structure
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+    {
+      path: '~/components/Navigation',
+      pathPrefix: false,
+    },
+  ],
+
+  // Configure source directory
+  srcDir: 'app',
 
   css: [
     '@unocss/reset/tailwind.css',
   ],
-
-  colorMode: {
-    classSuffix: '',
-  },
 
   app: {
     head: {

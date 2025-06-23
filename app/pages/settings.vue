@@ -1,24 +1,52 @@
+<script setup lang="ts">
+const colorMode = useColorMode()
+
+// Reactive data
+const notifications = ref(true)
+const userName = ref('John Doe')
+const userEmail = ref('john@example.com')
+
+// Methods
+function toggleTheme() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+definePageMeta({
+  title: 'Settings',
+})
+</script>
+
 <template>
   <div class="space-y-6">
     <div>
-      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Settings</h1>
-      <p class="text-gray-600 dark:text-gray-300">Manage your application settings</p>
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+        Settings
+      </h1>
+      <p class="text-gray-600 dark:text-gray-300">
+        Manage your application settings
+      </p>
     </div>
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">General Settings</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          General Settings
+        </h2>
       </div>
       <div class="p-6 space-y-4">
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="text-sm font-medium text-gray-900 dark:text-white">Dark Mode</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Toggle between light and dark themes</p>
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Dark Mode
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Toggle between light and dark themes
+            </p>
           </div>
           <button
-            @click="toggleTheme"
             class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
             :class="colorMode.value === 'dark' ? 'bg-primary-600' : 'bg-gray-200'"
+            @click="toggleTheme"
           >
             <span
               class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
@@ -29,13 +57,17 @@
 
         <div class="flex items-center justify-between">
           <div>
-            <h3 class="text-sm font-medium text-gray-900 dark:text-white">Notifications</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Receive email notifications</p>
+            <h3 class="text-sm font-medium text-gray-900 dark:text-white">
+              Notifications
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">
+              Receive email notifications
+            </p>
           </div>
           <button
-            @click="notifications = !notifications"
             class="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
             :class="notifications ? 'bg-primary-600' : 'bg-gray-200'"
+            @click="notifications = !notifications"
           >
             <span
               class="inline-block h-4 w-4 transform rounded-full bg-white transition-transform"
@@ -48,7 +80,9 @@
 
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
       <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Account Settings</h2>
+        <h2 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Account Settings
+        </h2>
       </div>
       <div class="p-6 space-y-4">
         <div>
@@ -57,7 +91,7 @@
             v-model="userName"
             type="text"
             class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
-          />
+          >
         </div>
         <div>
           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
@@ -65,7 +99,7 @@
             v-model="userEmail"
             type="email"
             class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
-          />
+          >
         </div>
         <div class="flex justify-end">
           <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium">
@@ -76,21 +110,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const colorMode = useColorMode()
-
-// Reactive data
-const notifications = ref(true)
-const userName = ref('John Doe')
-const userEmail = ref('john@example.com')
-
-// Methods
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-definePageMeta({
-  title: 'Settings'
-})
-</script>

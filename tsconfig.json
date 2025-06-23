@@ -1,7 +1,26 @@
 {
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
+    "jsx": "preserve",
+    "moduleResolution": "bundler",
+    "allowJs": true,
     "strict": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
     "skipLibCheck": true
-  }
+  },
+  "include": [
+    "app/**/*",
+    "nuxt.config.ts",
+    "uno.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".nuxt",
+    ".output",
+    "dist"
+  ]
 }
