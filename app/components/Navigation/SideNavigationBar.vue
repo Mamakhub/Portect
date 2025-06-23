@@ -72,35 +72,22 @@ function closeMobileSidebar() {
     >
       <!-- Logo/Brand -->
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-        <div v-if="isExpanded" class="flex items-center">
-          <Icon
-            icon="heroicons:home" class="w-8 h-8 text-primary-600 cursor-pointer"
+        <div class="flex items-center w-full">
+          <img
+            src="~/assets/icon.png"
+            alt="App Icon"
+            class="w-8 h-8 cursor-pointer object-contain"
             @click="toggleSidebar"
-          />
-          <span class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">
-            {{ config.public.appName }}
-          </span>
+          >
+          <transition name="slide-fade">
+            <span
+              v-if="isExpanded"
+              class="ml-3 text-lg font-semibold text-gray-900 dark:text-white whitespace-nowrap"
+            >
+              {{ config.public.appName }}
+            </span>
+          </transition>
         </div>
-        <div v-else class="flex justify-center w-full">
-          <Icon
-            icon="heroicons:home"
-            class="w-8 h-8 text-primary-600 cursor-pointer"
-            @click="toggleSidebar"
-          />
-        </div>
-
-        <!-- Toggle Button -->
-        <button
-          class="p-1 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" :class="[
-            isExpanded ? 'ml-auto' : 'absolute right-2 top-1/2 transform -translate-y-1/2',
-          ]"
-          @click="toggleSidebar"
-        >
-          <Icon
-            :icon="isExpanded ? 'heroicons:chevron-left' : 'heroicons:chevron-right'"
-            class="w-5 h-5"
-          />
-        </button>
       </div>
 
       <!-- Navigation Menu -->
@@ -168,7 +155,12 @@ function closeMobileSidebar() {
       <!-- Mobile Header -->
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
-          <Icon icon="heroicons:home" class="w-8 h-8 text-primary-600" />
+          <img
+            src="~/assets/icon.png"
+            alt="App Icon"
+            class="w-8 h-8 cursor-pointer object-contain"
+            @click="toggleSidebar"
+          >
           <span class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">
             {{ config.public.appName }}
           </span>
@@ -221,3 +213,28 @@ function closeMobileSidebar() {
     </aside>
   </div>
 </template>
+
+<style scoped>
+.slide-fade-enter-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-fade-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.slide-fade-enter-from {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+.slide-fade-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+.slide-fade-leave-from {
+  opacity: 1;
+  transform: translateX(0);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(-24px);
+}
+</style>
