@@ -40,6 +40,11 @@ export default defineNuxtConfig({
   // Configure source directory
   srcDir: 'app',
 
+  // Exclude internal files from routing and auto-imports
+  ignore: [
+    '**/_internal/**',
+  ],
+
   css: [
     '@unocss/reset/tailwind.css',
   ],
