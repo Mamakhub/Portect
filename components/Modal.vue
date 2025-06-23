@@ -1,6 +1,14 @@
+<script setup lang="ts">
+import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
+
+defineEmits<{
+  close: []
+}>()
+</script>
+
 <template>
   <TransitionRoot appear :show="true" as="template">
-    <Dialog as="div" @close="$emit('close')" class="relative z-50">
+    <Dialog as="div" class="relative z-50" @close="$emit('close')">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -28,7 +36,7 @@
               <DialogTitle as="h3" class="text-lg font-medium leading-6 text-gray-900 dark:text-white mb-4">
                 <slot name="header" />
               </DialogTitle>
-              
+
               <div class="mt-2 mb-6">
                 <slot name="body" />
               </div>
@@ -43,11 +51,3 @@
     </Dialog>
   </TransitionRoot>
 </template>
-
-<script setup lang="ts">
-import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-
-defineEmits<{
-  close: []
-}>()
-</script> 

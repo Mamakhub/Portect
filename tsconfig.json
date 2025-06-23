@@ -1,11 +1,11 @@
 {
-    "extends": "./.nuxt/tsconfig.json",
-    "compilerOptions": {
-        "strict": true,
-        "skipLibCheck": true,
-        "types": [
-            "@nuxt/types",
-            "@types/node"
-        ]
-    }
+  "extends": "./.nuxt/tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "@nuxt/types",
+      "@types/node"
+    ],
+    "strict": true,
+    "skipLibCheck": true
+  }
 }

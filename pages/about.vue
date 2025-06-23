@@ -1,3 +1,11 @@
+<script setup lang="ts">
+const config = useRuntimeConfig()
+
+definePageMeta({
+  title: 'About',
+})
+</script>
+
 <template>
   <div class="space-y-8">
     <div class="text-center">
@@ -45,31 +53,55 @@
       </h2>
       <div class="space-y-4">
         <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">✓</div>
+          <div class="text-primary-600 text-xl">
+            ✓
+          </div>
           <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">Server-Side Rendering</h3>
-            <p class="text-gray-600 dark:text-gray-300">SEO-friendly with Nuxt.js SSR capabilities</p>
+            <h3 class="font-medium text-gray-900 dark:text-white">
+              Server-Side Rendering
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              SEO-friendly with Nuxt.js SSR capabilities
+            </p>
           </div>
         </div>
         <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">✓</div>
+          <div class="text-primary-600 text-xl">
+            ✓
+          </div>
           <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">Dark Mode Support</h3>
-            <p class="text-gray-600 dark:text-gray-300">Automatic dark/light theme switching</p>
+            <h3 class="font-medium text-gray-900 dark:text-white">
+              Dark Mode Support
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Automatic dark/light theme switching
+            </p>
           </div>
         </div>
         <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">✓</div>
+          <div class="text-primary-600 text-xl">
+            ✓
+          </div>
           <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">Responsive Design</h3>
-            <p class="text-gray-600 dark:text-gray-300">Mobile-first responsive layout</p>
+            <h3 class="font-medium text-gray-900 dark:text-white">
+              Responsive Design
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Mobile-first responsive layout
+            </p>
           </div>
         </div>
         <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">✓</div>
+          <div class="text-primary-600 text-xl">
+            ✓
+          </div>
           <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">Type Safety</h3>
-            <p class="text-gray-600 dark:text-gray-300">Full TypeScript support for better development experience</p>
+            <h3 class="font-medium text-gray-900 dark:text-white">
+              Type Safety
+            </h3>
+            <p class="text-gray-600 dark:text-gray-300">
+              Full TypeScript support for better development experience
+            </p>
           </div>
         </div>
       </div>
@@ -85,11 +117,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-const config = useRuntimeConfig()
-
-definePageMeta({
-  title: 'About'
-})
-</script> 

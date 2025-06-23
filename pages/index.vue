@@ -1,3 +1,26 @@
+<script setup lang="ts">
+const config = useRuntimeConfig()
+const showModal = ref(false)
+
+const features = [
+  {
+    icon: '⚡',
+    title: 'Fast Performance',
+    description: 'Built with Nuxt.js for optimal performance and SEO.',
+  },
+  {
+    icon: '🎨',
+    title: 'Modern Design',
+    description: 'Beautiful UI with dark mode support and responsive design.',
+  },
+  {
+    icon: '🔧',
+    title: 'Developer Friendly',
+    description: 'TypeScript support and excellent developer experience.',
+  },
+]
+</script>
+
 <template>
   <div class="space-y-8">
     <!-- Hero Section -->
@@ -16,8 +39,8 @@
           Learn More
         </NuxtLink>
         <button
-          @click="showModal = true"
           class="border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 px-6 py-3 rounded-lg font-medium transition-colors"
+          @click="showModal = true"
         >
           Get Started
         </button>
@@ -31,7 +54,9 @@
         :key="feature.title"
         class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
       >
-        <div class="text-3xl mb-4">{{ feature.icon }}</div>
+        <div class="text-3xl mb-4">
+          {{ feature.icon }}
+        </div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
           {{ feature.title }}
         </h3>
@@ -55,8 +80,8 @@
       </template>
       <template #footer>
         <button
-          @click="showModal = false"
           class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          @click="showModal = false"
         >
           Close
         </button>
@@ -64,26 +89,3 @@
     </Modal>
   </div>
 </template>
-
-<script setup lang="ts">
-const config = useRuntimeConfig()
-const showModal = ref(false)
-
-const features = [
-  {
-    icon: '⚡',
-    title: 'Fast Performance',
-    description: 'Built with Nuxt.js for optimal performance and SEO.'
-  },
-  {
-    icon: '🎨',
-    title: 'Modern Design',
-    description: 'Beautiful UI with dark mode support and responsive design.'
-  },
-  {
-    icon: '🔧',
-    title: 'Developer Friendly',
-    description: 'TypeScript support and excellent developer experience.'
-  }
-]
-</script> 

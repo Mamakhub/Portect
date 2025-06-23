@@ -1,3 +1,12 @@
+<script setup lang="ts">
+const colorMode = useColorMode()
+const config = useRuntimeConfig()
+
+function toggleColorMode() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+</script>
+
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
     <header class="bg-white dark:bg-gray-800 shadow-sm">
@@ -10,8 +19,8 @@
           </div>
           <div class="flex items-center space-x-4">
             <button
-              @click="toggleColorMode"
               class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600"
+              @click="toggleColorMode"
             >
               <span v-if="colorMode.value === 'dark'">🌞</span>
               <span v-else>🌙</span>
@@ -34,12 +43,3 @@
     </footer>
   </div>
 </template>
-
-<script setup lang="ts">
-const colorMode = useColorMode()
-const config = useRuntimeConfig()
-
-const toggleColorMode = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-</script> 

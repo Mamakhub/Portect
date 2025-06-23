@@ -1,3 +1,7 @@
+<script setup lang="ts">
+// Main app component
+</script>
+
 <template>
   <div>
     <NuxtLayout>
@@ -6,10 +10,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
-// Main app component
-</script>
-
 <style>
 /* Global styles can be added here */
-</style> 
+</style>
