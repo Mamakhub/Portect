@@ -1,91 +1,93 @@
 <script setup lang="ts">
-const config = useRuntimeConfig()
-const showModal = ref(false)
+// Page metadata
+definePageMeta({
+  title: 'Dashboard',
+})
 
-const features = [
-  {
-    icon: '⚡',
-    title: 'Fast Performance',
-    description: 'Built with Nuxt.js for optimal performance and SEO.',
-  },
-  {
-    icon: '🎨',
-    title: 'Modern Design',
-    description: 'Beautiful UI with dark mode support and responsive design.',
-  },
-  {
-    icon: '🔧',
-    title: 'Developer Friendly',
-    description: 'TypeScript support and excellent developer experience.',
-  },
+// Mock Data
+const noiseData = [
+  { x: 0, y: 30 },
+  { x: 1, y: 40 },
+  { x: 2, y: 25 },
+  { x: 3, y: 50 },
+  { x: 4, y: 45 },
+  { x: 5, y: 60 },
+  { x: 6, y: 90 },
+  { x: 7, y: 70 },
+  { x: 8, y: 55 },
 ]
+const dustData = [
+  { x: 0, y: 0.3 },
+  { x: 1, y: 0.4 },
+  { x: 2, y: 0.2 },
+  { x: 3, y: 0.6 },
+  { x: 4, y: 0.8 },
+  { x: 5, y: 1.1 },
+  { x: 6, y: 0.9 },
+  { x: 7, y: 0.7 },
+  { x: 8, y: 0.5 },
+]
+
+const scheduleItems = [
+  { time: '8:00 AM', title: 'Zone A Inspection', color: 'blue' },
+  { time: '9:00 AM', title: 'Zone B Inspection', color: 'blue' },
+  { time: '10:00 AM', title: 'Zone C Inspection', color: 'blue' },
+  { time: '11:00 AM', title: 'Lunch Break', color: 'purple' },
+  { time: '1:00 PM', title: 'Zone A Inspection', color: 'blue' },
+  { time: '2:00 PM', title: 'Zone B Inspection', color: 'blue' },
+  { time: '3:00 PM', title: 'Zone C Inspection', color: 'blue' },
+]
+
+function handleAcknowledge() {
+  console.log('Alert acknowledged')
+  // Add logic to dismiss the alert
+}
 </script>
 
 <template>
-  <div class="space-y-8">
-    <!-- Hero Section -->
-    <section class="text-center py-12">
-      <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-        Welcome to {{ config.public.appName }}
-      </h1>
-      <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
-        A modern Nuxt.js frontend application built with Vue 3 and TypeScript
-      </p>
-      <div class="flex justify-center space-x-4">
-        <NuxtLink
-          to="/about"
-          class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-        >
-          Learn More
-        </NuxtLink>
-        <button
-          class="border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 px-6 py-3 rounded-lg font-medium transition-colors"
-          @click="showModal = true"
-        >
-          Get Started
-        </button>
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content Column -->
+    <div class="lg:col-span-2 space-y-6">
+      <DashboardChartCard
+        title="Noise Level"
+        value="78 dBA"
+        :chart-data="noiseData"
+        chart-color="#F87171"
+      />
+      <DashboardChartCard
+        title="Dust Level"
+        value="0.82 mg/m^3"
+        :chart-data="dustData"
+        chart-color="#FBBF24"
+      />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <DashboardSensorsSummaryCard
+          :dust-active="12"
+          :dust-inactive="5"
+          :noise-active="15"
+          :noise-inactive="2"
+          last-updated="18 May 2025, 11:05AM (GMT+8)"
+        />
+        <DashboardAlertCard
+          :alert-count="1"
+          message="Thresholds are exceeded at Zone B. Kindly inspect the zone and take necessary actions."
+          @acknowledge="handleAcknowledge"
+        />
       </div>
-    </section>
+    </div>
 
-    <!-- Features Section -->
-    <section class="grid md:grid-cols-3 gap-8">
-      <div
-        v-for="feature in features"
-        :key="feature.title"
-        class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700"
-      >
-        <div class="text-3xl mb-4">
-          {{ feature.icon }}
-        </div>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-          {{ feature.title }}
-        </h3>
-        <p class="text-gray-600 dark:text-gray-300">
-          {{ feature.description }}
-        </p>
-      </div>
-    </section>
-
-    <!-- Modal -->
-    <Modal v-if="showModal" @close="showModal = false">
-      <template #header>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-          Welcome!
-        </h3>
-      </template>
-      <template #body>
-        <p class="text-gray-600 dark:text-gray-300">
-          This is a sample modal component. You can customize it according to your needs.
-        </p>
-      </template>
-      <template #footer>
-        <button
-          class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-          @click="showModal = false"
-        >
-          Close
-        </button>
-      </template>
-    </Modal>
+    <!-- Right Sidebar Column -->
+    <div class="space-y-6">
+      <DashboardMapCard />
+      <DashboardScheduleCard>
+        <DashboardScheduleItem
+          v-for="(item, index) in scheduleItems"
+          :key="index"
+          :time="item.time"
+          :title="item.title"
+          :color="item.color"
+        />
+      </DashboardScheduleCard>
+    </div>
   </div>
 </template>

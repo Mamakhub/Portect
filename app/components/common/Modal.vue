@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 
-defineEmits<{
-  close: []
+const props = defineProps<{
+  isOpen: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'close'): void
 }>()
 </script>
 
 <template>
-  <TransitionRoot appear :show="true" as="template">
-    <Dialog as="div" class="relative z-50" @close="$emit('close')">
+  <TransitionRoot appear :show="isOpen" as="template">
+    <Dialog as="div" class="relative z-50" @close="emit('close')">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"

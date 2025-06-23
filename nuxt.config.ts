@@ -25,12 +25,15 @@ export default defineNuxtConfig({
   // Component auto-import configuration for app directory structure
   components: [
     {
-      path: '~/components',
-      pathPrefix: false,
+      path: '~/components/common',
+      prefix: 'Common',
+    },
+    {
+      path: '~/components/dashboard',
+      prefix: 'Dashboard',
     },
     {
       path: '~/components/Navigation',
-      pathPrefix: false,
     },
   ],
 
