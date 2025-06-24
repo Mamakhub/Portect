@@ -305,10 +305,32 @@ export const mockAlerts: SiteAlert[] = [
     acknowledgedAt: '2024-01-24T07:45:00Z',
     acknowledgedBy: 'Ahmad Rahman',
   },
+  {
+    id: 'alert-003',
+    siteId: 'site-001',
+    title: 'Safety Equipment Maintenance',
+    message: 'Safety harness inspection overdue by 1 day',
+    type: 'safety',
+    severity: 'medium',
+    status: 'active',
+    createdAt: '2024-01-24T06:15:00Z',
+  },
+  {
+    id: 'alert-004',
+    siteId: 'site-001',
+    title: 'Generator Maintenance Required',
+    message: 'Backup generator requires scheduled maintenance',
+    type: 'maintenance',
+    severity: 'low',
+    status: 'acknowledged',
+    createdAt: '2024-01-24T05:30:00Z',
+    acknowledgedAt: '2024-01-24T06:00:00Z',
+    acknowledgedBy: 'Technical Team',
+  },
 
   // Site 002 - Putrajaya Bridge
   {
-    id: 'alert-003',
+    id: 'alert-005',
     siteId: 'site-002',
     title: 'Critical Noise Alert',
     message: 'Noise levels have exceeded 75 dB for 15 minutes',
@@ -317,10 +339,56 @@ export const mockAlerts: SiteAlert[] = [
     status: 'active',
     createdAt: '2024-01-24T08:15:00Z',
   },
+  {
+    id: 'alert-006',
+    siteId: 'site-002',
+    title: 'Crane Safety Check',
+    message: 'Crane safety inspection required before next operation',
+    type: 'safety',
+    severity: 'high',
+    status: 'active',
+    createdAt: '2024-01-24T07:45:00Z',
+  },
+  {
+    id: 'alert-007',
+    siteId: 'site-002',
+    title: 'Material Delivery Delay',
+    message: 'Steel beam delivery delayed by 2 hours',
+    type: 'general',
+    severity: 'medium',
+    status: 'acknowledged',
+    createdAt: '2024-01-24T07:00:00Z',
+    acknowledgedAt: '2024-01-24T07:15:00Z',
+    acknowledgedBy: 'Sarah Lim',
+  },
+
+  // Site 003 - Subang Jaya
+  {
+    id: 'alert-008',
+    siteId: 'site-003',
+    title: 'Foundation Inspection Required',
+    message: 'Foundation work quality inspection overdue',
+    type: 'safety',
+    severity: 'high',
+    status: 'active',
+    createdAt: '2024-01-24T08:30:00Z',
+  },
+  {
+    id: 'alert-009',
+    siteId: 'site-003',
+    title: 'Low Dust Level Alert',
+    message: 'Dust levels below normal range, check sensor calibration',
+    type: 'dust',
+    severity: 'low',
+    status: 'acknowledged',
+    createdAt: '2024-01-24T08:00:00Z',
+    acknowledgedAt: '2024-01-24T08:10:00Z',
+    acknowledgedBy: 'David Chen',
+  },
 
   // Site 004 - Port Klang
   {
-    id: 'alert-004',
+    id: 'alert-010',
     siteId: 'site-004',
     title: 'High Dust Levels',
     message: 'Dust levels have exceeded 0.5 mg/m³ threshold',
@@ -330,7 +398,7 @@ export const mockAlerts: SiteAlert[] = [
     createdAt: '2024-01-24T08:10:00Z',
   },
   {
-    id: 'alert-005',
+    id: 'alert-011',
     siteId: 'site-004',
     title: 'Safety Equipment Check',
     message: 'Safety equipment inspection overdue by 2 days',
@@ -341,29 +409,78 @@ export const mockAlerts: SiteAlert[] = [
     acknowledgedAt: '2024-01-24T07:30:00Z',
     acknowledgedBy: 'Maria Rodriguez',
   },
+  {
+    id: 'alert-012',
+    siteId: 'site-004',
+    title: 'Critical Noise Level',
+    message: 'Noise levels exceeded 80 dB for 10 minutes',
+    type: 'noise',
+    severity: 'critical',
+    status: 'active',
+    createdAt: '2024-01-24T08:20:00Z',
+  },
+  {
+    id: 'alert-013',
+    siteId: 'site-004',
+    title: 'Heavy Machinery Maintenance',
+    message: 'Excavator requires immediate maintenance check',
+    type: 'maintenance',
+    severity: 'high',
+    status: 'active',
+    createdAt: '2024-01-24T06:45:00Z',
+  },
+
+  // Site 005 - Cyberjaya (inactive site)
+  {
+    id: 'alert-014',
+    siteId: 'site-005',
+    title: 'Site Inactivity Notice',
+    message: 'Site has been inactive for 3 days, check project status',
+    type: 'general',
+    severity: 'low',
+    status: 'acknowledged',
+    createdAt: '2024-01-24T07:30:00Z',
+    acknowledgedAt: '2024-01-24T08:00:00Z',
+    acknowledgedBy: 'James Wong',
+  },
 ]
 
-// Generate sensor data for each site
+// Enhanced sensor data with more realistic device counts and status
 export const mockSensorData = {
   'site-001': {
     noiseData: generateNoiseData('001', 68, 15, 'fluctuating'),
     dustData: generateDustData('001', 0.28, 0.1, 'stable'),
+    // KLCC has 8 devices: 4 noise sensors, 4 dust sensors
+    noiseSensors: { active: 4, inactive: 0 },
+    dustSensors: { active: 4, inactive: 0 },
   },
   'site-002': {
     noiseData: generateNoiseData('002', 72, 20, 'increasing'),
     dustData: generateDustData('002', 0.42, 0.15, 'fluctuating'),
+    // Putrajaya Bridge has 6 devices: 3 noise sensors, 3 dust sensors
+    noiseSensors: { active: 3, inactive: 0 },
+    dustSensors: { active: 3, inactive: 0 },
   },
   'site-003': {
     noiseData: generateNoiseData('003', 45, 10, 'stable'),
     dustData: generateDustData('003', 0.15, 0.05, 'stable'),
+    // Subang Jaya has 4 devices: 2 noise sensors, 2 dust sensors
+    noiseSensors: { active: 2, inactive: 0 },
+    dustSensors: { active: 2, inactive: 0 },
   },
   'site-004': {
     noiseData: generateNoiseData('004', 85, 25, 'fluctuating'),
     dustData: generateDustData('004', 0.65, 0.2, 'increasing'),
+    // Port Klang has 10 devices: 5 noise sensors, 5 dust sensors
+    noiseSensors: { active: 5, inactive: 0 },
+    dustSensors: { active: 5, inactive: 0 },
   },
   'site-005': {
     noiseData: generateNoiseData('005', 25, 5, 'stable'),
     dustData: generateDustData('005', 0.08, 0.03, 'stable'),
+    // Cyberjaya has 3 devices: 2 noise sensors, 1 dust sensor (inactive site)
+    noiseSensors: { active: 1, inactive: 1 },
+    dustSensors: { active: 0, inactive: 1 },
   },
 }
 
@@ -399,4 +516,56 @@ export function getActiveAlerts(): SiteAlert[] {
 // Helper function to get today's schedules
 export function getTodaySchedules(): SiteSchedule[] {
   return mockSchedules.filter(schedule => schedule.status === 'pending' || schedule.status === 'in-progress')
+}
+
+// Helper function to get sensor summary data for all sites
+export function getSensorSummary() {
+  let totalNoiseActive = 0
+  let totalNoiseInactive = 0
+  let totalDustActive = 0
+  let totalDustInactive = 0
+
+  Object.values(mockSensorData).forEach((siteData) => {
+    totalNoiseActive += siteData.noiseSensors.active
+    totalNoiseInactive += siteData.noiseSensors.inactive
+    totalDustActive += siteData.dustSensors.active
+    totalDustInactive += siteData.dustSensors.inactive
+  })
+
+  return {
+    noiseActive: totalNoiseActive,
+    noiseInactive: totalNoiseInactive,
+    dustActive: totalDustActive,
+    dustInactive: totalDustInactive,
+  }
+}
+
+// Helper function to get sensor summary for a specific site
+export function getSiteSensorSummary(siteId: string) {
+  const sensorData = mockSensorData[siteId as keyof typeof mockSensorData]
+  if (!sensorData) {
+    return {
+      noiseActive: 0,
+      noiseInactive: 0,
+      dustActive: 0,
+      dustInactive: 0,
+    }
+  }
+
+  return {
+    noiseActive: sensorData.noiseSensors.active,
+    noiseInactive: sensorData.noiseSensors.inactive,
+    dustActive: sensorData.dustSensors.active,
+    dustInactive: sensorData.dustSensors.inactive,
+  }
+}
+
+// Helper function to get alerts for a specific site
+export function getSiteAlerts(siteId: string): SiteAlert[] {
+  return mockAlerts.filter(alert => alert.siteId === siteId)
+}
+
+// Helper function to get active alerts for a specific site
+export function getSiteActiveAlerts(siteId: string): SiteAlert[] {
+  return mockAlerts.filter(alert => alert.siteId === siteId && alert.status === 'active')
 }

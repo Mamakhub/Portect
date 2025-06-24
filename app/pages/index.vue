@@ -18,8 +18,8 @@ const {
   selectedSiteNoiseChartData,
   selectedSiteDustChartData,
   selectedSiteStats,
-  activeAlerts,
-  totalDevices,
+  selectedSiteSensorSummary,
+  selectedSiteActiveAlerts,
   averageNoiseLevel,
   averageDustLevel,
   selectSite,
@@ -150,15 +150,15 @@ function closeDustModal() {
         />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <DashboardSensorsSummaryCard
-            :dust-active="sites.filter(s => s.status === 'active').length"
-            :dust-inactive="sites.filter(s => s.status === 'inactive').length"
-            :noise-active="totalDevices"
-            :noise-inactive="0"
+            :dust-active="selectedSiteSensorSummary.dustActive"
+            :dust-inactive="selectedSiteSensorSummary.dustInactive"
+            :noise-active="selectedSiteSensorSummary.noiseActive"
+            :noise-inactive="selectedSiteSensorSummary.noiseInactive"
             last-updated="18 May 2025, 11:05AM (GMT+8)"
           />
           <DashboardAlertCard
-            :alert-count="activeAlerts.length"
-            :message="activeAlerts.length > 0 ? `There are ${activeAlerts.length} active alerts across all sites. Please review and take necessary actions.` : 'All systems are operating normally with no active alerts.'"
+            :alert-count="selectedSiteActiveAlerts.length"
+            :alerts="selectedSiteActiveAlerts"
             @acknowledge="handleAcknowledge"
           />
         </div>

@@ -1,6 +1,9 @@
 import { computed, ref } from 'vue'
 import {
+  getSensorSummary,
+  getSiteActiveAlerts,
   getSiteData,
+  getSiteSensorSummary,
   mockAlerts,
   mockSchedules,
   mockSensorData,
@@ -58,6 +61,21 @@ export function useMultiSiteData() {
   const totalDevices = computed(() =>
     sites.value.reduce((sum, site) => sum + site.deviceCount, 0),
   )
+
+  // Sensor summary data
+  const sensorSummary = computed(() => getSensorSummary())
+
+  const selectedSiteSensorSummary = computed(() => {
+    if (!selectedSiteId.value)
+      return sensorSummary.value
+    return getSiteSensorSummary(selectedSiteId.value)
+  })
+
+  const selectedSiteActiveAlerts = computed(() => {
+    if (!selectedSiteId.value)
+      return activeAlerts.value
+    return getSiteActiveAlerts(selectedSiteId.value)
+  })
 
   const averageNoiseLevel = computed(() => {
     const activeSitesData = activeSites.value
@@ -230,6 +248,9 @@ export function useMultiSiteData() {
     todaySchedules,
     totalSites,
     totalDevices,
+    sensorSummary,
+    selectedSiteSensorSummary,
+    selectedSiteActiveAlerts,
     averageNoiseLevel,
     averageDustLevel,
     selectedSiteNoiseChartData,
