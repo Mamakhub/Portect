@@ -18,7 +18,21 @@ const colorClasses = {
     bg: 'bg-purple-100 dark:bg-purple-900/50',
     text: 'text-purple-800 dark:text-purple-200',
   },
-  // Add other colors as needed
+  green: {
+    border: 'border-green-500',
+    bg: 'bg-green-100 dark:bg-green-900/50',
+    text: 'text-green-800 dark:text-green-200',
+  },
+  yellow: {
+    border: 'border-yellow-500',
+    bg: 'bg-yellow-100 dark:bg-yellow-900/50',
+    text: 'text-yellow-800 dark:text-yellow-200',
+  },
+  red: {
+    border: 'border-red-500',
+    bg: 'bg-red-100 dark:bg-red-900/50',
+    text: 'text-red-800 dark:text-red-200',
+  },
 }
 
 const borderColor = computed(() => colorClasses[props.color]?.border || 'border-gray-300')
