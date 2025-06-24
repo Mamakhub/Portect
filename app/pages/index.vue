@@ -1,31 +1,54 @@
 <script setup lang="ts">
+import { computed, onMounted } from 'vue'
+
 // Page metadata
 definePageMeta({
   title: 'Dashboard',
 })
 
-// Mock Data
-const noiseData = [
-  { x: 0, y: 30 },
-  { x: 1, y: 40 },
-  { x: 2, y: 25 },
-  { x: 3, y: 50 },
-  { x: 4, y: 45 },
-  { x: 5, y: 60 },
-  { x: 6, y: 90 },
-  { x: 7, y: 70 },
-  { x: 8, y: 55 },
+// CSV Data for Noise
+const {
+  chartData: noiseChartData,
+  averageNoiseLevel,
+  loadCsvData,
+  loading,
+} = useCsvData()
+
+// Load noise data from CSV
+onMounted(async () => {
+  console.log('Loading CSV data...')
+  await loadCsvData('/data/noise-data.csv')
+  console.log('CSV data loaded:', noiseChartData.value)
+})
+
+// Fallback data for noise chart when CSV is loading
+const fallbackNoiseData = [
+  { x: '00:00', y: 45 },
+  { x: '01:00', y: 48 },
+  { x: '02:00', y: 52 },
+  { x: '03:00', y: 47 },
+  { x: '04:00', y: 50 },
 ]
+
+// Use fallback data when CSV is loading or empty
+const displayNoiseData = computed(() => {
+  if (loading.value || noiseChartData.value.length === 0) {
+    return fallbackNoiseData
+  }
+  return noiseChartData.value
+})
+
+// Mock Data for Dust (keeping original format)
 const dustData = [
-  { x: 0, y: 0.3 },
-  { x: 1, y: 0.4 },
-  { x: 2, y: 0.2 },
-  { x: 3, y: 0.6 },
-  { x: 4, y: 0.8 },
-  { x: 5, y: 1.1 },
-  { x: 6, y: 0.9 },
-  { x: 7, y: 0.7 },
-  { x: 8, y: 0.5 },
+  { x: '00:00', y: 0.3 },
+  { x: '01:00', y: 0.4 },
+  { x: '02:00', y: 0.2 },
+  { x: '03:00', y: 0.6 },
+  { x: '04:00', y: 0.8 },
+  { x: '05:00', y: 1.1 },
+  { x: '06:00', y: 0.9 },
+  { x: '07:00', y: 0.7 },
+  { x: '08:00', y: 0.5 },
 ]
 
 const scheduleItems = [
@@ -50,8 +73,8 @@ function handleAcknowledge() {
     <div class="lg:col-span-2 space-y-6">
       <DashboardChartCard
         title="Noise Level"
-        value="78 dBA"
-        :chart-data="noiseData"
+        :value="`${averageNoiseLevel || '--'} dBA`"
+        :chart-data="displayNoiseData"
         chart-color="#F87171"
       />
       <DashboardChartCard

@@ -37,6 +37,11 @@ const navigationItems: NavItem[] = [
     icon: 'heroicons:home',
   },
   {
+    name: 'Noise Monitoring',
+    href: '/noise-monitoring',
+    icon: 'heroicons:speaker-wave',
+  },
+  {
     name: 'About',
     href: '/about',
     icon: 'heroicons:information-circle',
