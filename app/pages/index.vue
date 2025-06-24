@@ -12,6 +12,7 @@ const isNoiseModalOpen = ref(false)
 const isDustModalOpen = ref(false)
 const isSensorSummaryModalOpen = ref(false)
 const isAlertModalOpen = ref(false)
+const isScheduleModalOpen = ref(false)
 
 // Multi-site data
 const {
@@ -33,6 +34,7 @@ const {
   acknowledgeAlert,
   resolveAlert,
   archiveAlert,
+  updateScheduleStatus,
 } = useMultiSiteData()
 
 // Select first active site by default
@@ -115,6 +117,18 @@ function handleAlertResolve(alertId: string) {
 
 function handleAlertArchive(alertId: string) {
   archiveAlert(alertId)
+}
+
+function openScheduleModal() {
+  isScheduleModalOpen.value = true
+}
+
+function closeScheduleModal() {
+  isScheduleModalOpen.value = false
+}
+
+function handleScheduleMarkAsDone(scheduleId: string) {
+  updateScheduleStatus(scheduleId, 'completed')
 }
 </script>
 
@@ -200,7 +214,7 @@ function handleAlertArchive(alertId: string) {
       <!-- Right Sidebar Column -->
       <div class="space-y-6">
         <DashboardMapCard :on-site-select="handleSiteSelectFromMap" />
-        <DashboardScheduleCard>
+        <DashboardScheduleCard @view-details="openScheduleModal">
           <div v-if="selectedSiteId && selectedSiteSchedules.length > 0">
             <div
               v-for="item in selectedSiteSchedules.slice(0, 5)"
@@ -278,6 +292,13 @@ function handleAlertArchive(alertId: string) {
       @acknowledge="handleAlertAcknowledge"
       @resolve="handleAlertResolve"
       @archive="handleAlertArchive"
+    />
+    <DashboardScheduleModal
+      :is-open="isScheduleModalOpen"
+      :schedules="selectedSiteSchedules"
+      :selected-site-name="selectedSite?.name"
+      @close="closeScheduleModal"
+      @mark-as-done="handleScheduleMarkAsDone"
     />
   </div>
 </template>
