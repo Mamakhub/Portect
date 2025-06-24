@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import type { ConstructionSite } from '~/types/sites'
 
 // Page metadata
 definePageMeta({
@@ -93,6 +94,10 @@ function handleSiteChange(event: Event) {
     clearSelection()
   }
 }
+
+function handleSiteSelectFromMap(site: ConstructionSite) {
+  selectSite(site.id)
+}
 </script>
 
 <template>
@@ -173,7 +178,7 @@ function handleSiteChange(event: Event) {
 
       <!-- Right Sidebar Column -->
       <div class="space-y-6">
-        <DashboardMapCard />
+        <DashboardMapCard :on-site-select="handleSiteSelectFromMap" />
         <DashboardScheduleCard>
           <div v-if="selectedSiteId && selectedSiteSchedules.length > 0">
             <div

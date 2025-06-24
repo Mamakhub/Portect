@@ -83,6 +83,19 @@ function getSchedulePriorityClass(priority: string) {
 
       <!-- Site Data Display -->
       <div v-else class="space-y-6">
+        <!-- Back Button -->
+        <div class="flex items-center space-x-4">
+          <NuxtLink
+            to="/"
+            class="flex items-center space-x-2 text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Dashboard</span>
+          </NuxtLink>
+        </div>
+
         <!-- Site Header -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
           <div class="flex justify-between items-start">

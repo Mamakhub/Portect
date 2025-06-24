@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import type { ConstructionSite } from '~/types/sites'
 
 // Import Leaflet CSS
@@ -14,15 +14,16 @@ const props = withDefaults(defineProps<Props>(), {
   onSiteSelect: undefined,
 })
 
-// Composables
+// Composables - use the new multi-site data
 const {
   sites,
   selectedSite,
-  mapMarkers,
+  selectedSiteId,
   selectSite,
   clearSelection,
   getStatusColor,
-} = useConstructionSites()
+  getSiteById,
+} = useMultiSiteData()
 
 // Map state
 const mapContainer = ref<HTMLElement>()
@@ -36,6 +37,18 @@ const mapConfig = {
   minZoom: 8,
   maxZoom: 18,
 }
+
+// Computed map markers from multi-site data
+const mapMarkers = computed(() => {
+  return sites.value.map(site => ({
+    id: site.id,
+    position: site.coordinates,
+    title: site.name,
+    status: site.status,
+    color: getStatusColor(site.status),
+    data: site,
+  }))
+})
 
 // Methods
 function initializeMap() {
@@ -89,33 +102,49 @@ function addMarkers(L: any) {
       fillOpacity: 0.8,
     })
 
-    // Create popup content
+    // Create popup content with enhanced information
     const popupContent = `
-      <div class="p-2">
-        <h3 class="font-semibold text-gray-900">${markerData.title}</h3>
-        <p class="text-sm text-gray-600">${markerData.data.location}</p>
-        <div class="mt-2 space-y-1">
+      <div class="p-3 min-w-[200px]">
+        <h3 class="font-semibold text-gray-900 text-sm mb-1">${markerData.title}</h3>
+        <p class="text-xs text-gray-600 mb-2">${markerData.data.location}</p>
+        <div class="space-y-1 text-xs">
           <div class="flex justify-between">
-            <span class="text-xs text-gray-500">Status:</span>
-            <span class="text-xs font-medium" style="color: ${markerData.color}">
+            <span class="text-gray-500">Status:</span>
+            <span class="font-medium" style="color: ${markerData.color}">
               ${markerData.status.charAt(0).toUpperCase() + markerData.status.slice(1)}
             </span>
           </div>
           <div class="flex justify-between">
-            <span class="text-xs text-gray-500">Noise:</span>
-            <span class="text-xs font-medium">${markerData.data.noiseLevel} dB</span>
+            <span class="text-gray-500">Noise:</span>
+            <span class="font-medium">${markerData.data.noiseLevel} dB</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-xs text-gray-500">Dust:</span>
-            <span class="text-xs font-medium">${markerData.data.dustLevel} mg/m³</span>
+            <span class="text-gray-500">Dust:</span>
+            <span class="font-medium">${markerData.data.dustLevel} mg/m³</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Progress:</span>
+            <span class="font-medium">${markerData.data.progress}%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Devices:</span>
+            <span class="font-medium">${markerData.data.deviceCount}</span>
           </div>
         </div>
-        <button 
-          class="mt-2 w-full px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          onclick="window.selectSite('${markerData.id}')"
-        >
-          Select Site
-        </button>
+        <div class="mt-3 space-y-1">
+          <button 
+            class="w-full px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            onclick="window.selectSiteFromMap('${markerData.id}')"
+          >
+            Select Site
+          </button>
+          <button 
+            class="w-full px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+            onclick="window.viewSiteDetails('${markerData.id}')"
+          >
+            View Details
+          </button>
+        </div>
       </div>
     `
 
@@ -125,9 +154,9 @@ function addMarkers(L: any) {
 
     // Handle marker click
     marker.on('click', () => {
-      const site = sites.value.find(s => s.id === markerData.id)
+      const site = getSiteById(markerData.id)
       if (site) {
-        selectSite(site)
+        selectSite(site.id)
         if (props.onSiteSelect) {
           props.onSiteSelect(site)
         }
@@ -136,19 +165,57 @@ function addMarkers(L: any) {
   })
 }
 
-function handleSiteSelect(siteId: string) {
-  const site = sites.value.find(s => s.id === siteId)
+function handleSiteSelectFromMap(siteId: string) {
+  const site = getSiteById(siteId)
   if (site) {
-    selectSite(site)
+    selectSite(site.id)
     if (props.onSiteSelect) {
       props.onSiteSelect(site)
     }
   }
 }
 
-// Expose method globally for popup buttons
+function handleViewSiteDetails(siteId: string) {
+  // Navigate to site details page
+  if (typeof window !== 'undefined') {
+    window.location.href = `/site/${siteId}`
+  }
+}
+
+// Watch for changes in selected site and update map
+watch(selectedSiteId, (newSiteId) => {
+  if (map.value && newSiteId) {
+    const site = getSiteById(newSiteId)
+    if (site) {
+      // Pan to selected site
+      map.value.setView(site.coordinates, 14)
+
+      // Highlight the selected marker
+      markers.value.forEach((marker, index) => {
+        const markerData = mapMarkers.value[index]
+        if (markerData.id === newSiteId) {
+          marker.setStyle({
+            radius: 16,
+            fillOpacity: 1,
+            weight: 3,
+          })
+        }
+        else {
+          marker.setStyle({
+            radius: 12,
+            fillOpacity: 0.8,
+            weight: 2,
+          })
+        }
+      })
+    }
+  }
+})
+
+// Expose methods globally for popup buttons
 if (typeof window !== 'undefined') {
-  (window as any).selectSite = handleSiteSelect
+  ;(window as any).selectSiteFromMap = handleSiteSelectFromMap
+  ;(window as any).viewSiteDetails = handleViewSiteDetails
 }
 
 // Lifecycle
@@ -211,8 +278,8 @@ onMounted(() => {
           <span class="font-medium ml-1">{{ selectedSite.dustLevel }} mg/m³</span>
         </div>
         <div>
-          <span class="text-gray-500">Devices:</span>
-          <span class="font-medium ml-1">{{ selectedSite.deviceCount }}</span>
+          <span class="text-gray-500">Progress:</span>
+          <span class="font-medium ml-1">{{ selectedSite.progress }}%</span>
         </div>
         <div>
           <span class="text-gray-500">Status:</span>
@@ -223,6 +290,20 @@ onMounted(() => {
             {{ selectedSite.status }}
           </span>
         </div>
+      </div>
+      <div class="mt-3 flex space-x-2">
+        <NuxtLink
+          :to="`/site/${selectedSite.id}`"
+          class="flex-1 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-center"
+        >
+          View Details
+        </NuxtLink>
+        <button
+          class="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+          @click="clearSelection"
+        >
+          Clear
+        </button>
       </div>
     </div>
 
@@ -244,7 +325,7 @@ onMounted(() => {
           :key="site.id"
           class="flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
           :class="{ 'bg-blue-50 dark:bg-blue-900/20': selectedSite?.id === site.id }"
-          @click="selectSite(site)"
+          @click="selectSite(site.id)"
         >
           <div class="flex items-center space-x-2">
             <div
@@ -265,7 +346,7 @@ onMounted(() => {
               {{ site.noiseLevel }} dB
             </p>
             <p class="text-xs text-gray-500 dark:text-gray-400">
-              {{ site.deviceCount }} devices
+              {{ site.progress }}% complete
             </p>
           </div>
         </div>
