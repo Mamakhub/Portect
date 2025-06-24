@@ -6,33 +6,48 @@ definePageMeta({
   title: 'Dashboard',
 })
 
-// CSV Data for Noise
+// Multi-site data
 const {
-  chartData: noiseChartData,
+  sites,
+  selectedSiteId,
+  selectedSite,
+  selectedSiteNoiseChartData,
+  selectedSiteDustChartData,
+  selectedSiteStats,
+  activeAlerts,
+  todaySchedules,
+  totalSites,
+  totalDevices,
   averageNoiseLevel,
-  loadCsvData: loadNoiseCsvData,
-  loading: noiseLoading,
-} = useCsvData()
-
-// CSV Data for Dust
-const {
-  chartData: dustChartData,
   averageDustLevel,
-  loadCsvData: loadDustCsvData,
-  loading: dustLoading,
-} = useDustData()
+  selectSite,
+  clearSelection,
+  getSiteSchedules,
+  getSiteAlerts,
+} = useMultiSiteData()
 
-// Load data from CSV files
-onMounted(async () => {
-  console.log('Loading CSV data...')
-  await Promise.all([
-    loadNoiseCsvData('/data/noise-data.csv'),
-    loadDustCsvData('/data/dust-data.csv'),
-  ])
-  console.log('CSV data loaded:', { noise: noiseChartData.value, dust: dustChartData.value })
+// Select first active site by default
+onMounted(() => {
+  const firstActiveSite = sites.value.find(site => site.status === 'active')
+  if (firstActiveSite) {
+    selectSite(firstActiveSite.id)
+  }
 })
 
-// Fallback data for noise chart when CSV is loading
+// Get selected site data
+const selectedSiteSchedules = computed(() => {
+  if (!selectedSiteId.value)
+    return []
+  return getSiteSchedules(selectedSiteId.value)
+})
+
+const selectedSiteAlerts = computed(() => {
+  if (!selectedSiteId.value)
+    return []
+  return getSiteAlerts(selectedSiteId.value)
+})
+
+// Fallback data for charts when no site is selected
 const fallbackNoiseData = [
   { x: '00:00', y: 45 },
   { x: '01:00', y: 48 },
@@ -41,7 +56,6 @@ const fallbackNoiseData = [
   { x: '04:00', y: 50 },
 ]
 
-// Fallback data for dust chart when CSV is loading
 const fallbackDustData = [
   { x: '00:00', y: 0.3 },
   { x: '01:00', y: 0.4 },
@@ -50,86 +64,164 @@ const fallbackDustData = [
   { x: '04:00', y: 0.8 },
 ]
 
-// Use fallback data when CSV is loading or empty
+// Use selected site data or fallback
 const displayNoiseData = computed(() => {
-  if (noiseLoading.value || noiseChartData.value.length === 0) {
-    return fallbackNoiseData
+  if (selectedSiteNoiseChartData.value.length > 0) {
+    return selectedSiteNoiseChartData.value
   }
-  return noiseChartData.value
+  return fallbackNoiseData
 })
 
-// Use fallback data when CSV is loading or empty
 const displayDustData = computed(() => {
-  if (dustLoading.value || dustChartData.value.length === 0) {
-    return fallbackDustData
+  if (selectedSiteDustChartData.value.length > 0) {
+    return selectedSiteDustChartData.value
   }
-  return dustChartData.value
+  return fallbackDustData
 })
-
-const scheduleItems = [
-  { time: '8:00 AM', title: 'Zone A Inspection', color: 'blue' },
-  { time: '9:00 AM', title: 'Zone B Inspection', color: 'blue' },
-  { time: '10:00 AM', title: 'Zone C Inspection', color: 'blue' },
-  { time: '11:00 AM', title: 'Lunch Break', color: 'purple' },
-  { time: '1:00 PM', title: 'Zone A Inspection', color: 'blue' },
-  { time: '2:00 PM', title: 'Zone B Inspection', color: 'blue' },
-  { time: '3:00 PM', title: 'Zone C Inspection', color: 'blue' },
-]
 
 function handleAcknowledge() {
   console.log('Alert acknowledged')
   // Add logic to dismiss the alert
 }
+
+function handleSiteChange(event: Event) {
+  const target = event.target as HTMLSelectElement
+  if (target.value) {
+    selectSite(target.value)
+  }
+  else {
+    clearSelection()
+  }
+}
 </script>
 
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Main Content Column -->
-    <div class="lg:col-span-2 space-y-6">
-      <DashboardChartCard
-        title="Noise Level"
-        :value="`${averageNoiseLevel || '--'} dBA`"
-        :chart-data="displayNoiseData"
-        chart-color="#F87171"
-        label="Noise Level"
-        unit="dB"
-      />
-      <DashboardChartCard
-        title="Dust Level"
-        :value="`${averageDustLevel || '--'} mg/m³`"
-        :chart-data="displayDustData"
-        chart-color="#FBBF24"
-        label="Dust Level"
-        unit="mg/m³"
-      />
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <DashboardSensorsSummaryCard
-          :dust-active="12"
-          :dust-inactive="5"
-          :noise-active="15"
-          :noise-inactive="2"
-          last-updated="18 May 2025, 11:05AM (GMT+8)"
-        />
-        <DashboardAlertCard
-          :alert-count="1"
-          message="Thresholds are exceeded at Zone B. Kindly inspect the zone and take necessary actions."
-          @acknowledge="handleAcknowledge"
-        />
+  <div class="space-y-6">
+    <!-- Site Selector -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-lg font-medium text-gray-900 dark:text-white">
+            Site Overview
+          </h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            Select a site to view detailed monitoring data
+          </p>
+        </div>
+        <div class="flex items-center space-x-4">
+          <select
+            :value="selectedSiteId || ''"
+            class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            @change="handleSiteChange"
+          >
+            <option value="">
+              All Sites Overview
+            </option>
+            <option
+              v-for="site in sites"
+              :key="site.id"
+              :value="site.id"
+            >
+              {{ site.name }} ({{ site.status }})
+            </option>
+          </select>
+          <NuxtLink
+            v-if="selectedSiteId"
+            :to="`/site/${selectedSiteId}`"
+            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+          >
+            View Details
+          </NuxtLink>
+        </div>
       </div>
     </div>
 
-    <!-- Right Sidebar Column -->
-    <div class="space-y-6">
-      <DashboardMapCard />
-      <DashboardScheduleCard>
-        <DashboardScheduleItem
-          v-for="(item, index) in scheduleItems"
-          :key="index"
-          :time="item.time"
-          :title="item.title"
-          :color="item.color"
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main Content Column -->
+      <div class="lg:col-span-2 space-y-6">
+        <DashboardChartCard
+          title="Noise Level"
+          :value="selectedSiteStats?.averageNoise ? `${selectedSiteStats.averageNoise} dB` : `${averageNoiseLevel} dB`"
+          :chart-data="displayNoiseData"
+          chart-color="#F87171"
+          label="Noise Level"
+          unit="dB"
         />
-      </DashboardScheduleCard>
+        <DashboardChartCard
+          title="Dust Level"
+          :value="selectedSiteStats?.averageDust ? `${selectedSiteStats.averageDust} mg/m³` : `${averageDustLevel} mg/m³`"
+          :chart-data="displayDustData"
+          chart-color="#FBBF24"
+          label="Dust Level"
+          unit="mg/m³"
+        />
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <DashboardSensorsSummaryCard
+            :dust-active="sites.filter(s => s.status === 'active').length"
+            :dust-inactive="sites.filter(s => s.status === 'inactive').length"
+            :noise-active="totalDevices"
+            :noise-inactive="0"
+            last-updated="18 May 2025, 11:05AM (GMT+8)"
+          />
+          <DashboardAlertCard
+            :alert-count="activeAlerts.length"
+            :message="activeAlerts.length > 0 ? `There are ${activeAlerts.length} active alerts across all sites. Please review and take necessary actions.` : 'All systems are operating normally with no active alerts.'"
+            @acknowledge="handleAcknowledge"
+          />
+        </div>
+      </div>
+
+      <!-- Right Sidebar Column -->
+      <div class="space-y-6">
+        <DashboardMapCard />
+        <DashboardScheduleCard>
+          <div v-if="selectedSiteId && selectedSiteSchedules.length > 0">
+            <div
+              v-for="(item, index) in selectedSiteSchedules.slice(0, 5)"
+              :key="item.id"
+              class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg mb-3"
+            >
+              <div>
+                <div class="font-medium text-gray-900 dark:text-white text-sm">
+                  {{ item.time }}
+                </div>
+                <div class="text-gray-600 dark:text-gray-400 text-xs">
+                  {{ item.title }}
+                </div>
+              </div>
+              <div class="flex items-center space-x-2">
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  :class="{
+                    'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-400': item.priority === 'critical',
+                    'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-400': item.priority === 'high',
+                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-400': item.priority === 'medium',
+                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-400': item.priority === 'low',
+                  }"
+                >
+                  {{ item.priority }}
+                </span>
+                <span
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                  :class="{
+                    'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-400': item.status === 'pending',
+                    'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-400': item.status === 'in-progress',
+                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-400': item.status === 'completed',
+                    'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-400': item.status === 'cancelled',
+                  }"
+                >
+                  {{ item.status }}
+                </span>
+              </div>
+            </div>
+          </div>
+          <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
+            <p class="text-sm">
+              No scheduled tasks for today
+            </p>
+          </div>
+        </DashboardScheduleCard>
+      </div>
     </div>
   </div>
 </template>
