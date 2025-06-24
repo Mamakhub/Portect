@@ -6,15 +6,15 @@ const {
   loading,
   error,
   chartData,
-  averageNoiseLevel,
-  maxNoiseLevel,
-  minNoiseLevel,
-  noiseLevelStatus,
+  averageDustLevel,
+  maxDustLevel,
+  minDustLevel,
+  dustLevelStatus,
   loadCsvData,
-} = useCsvData()
+} = useDustData()
 
 onMounted(() => {
-  loadCsvData('/data/noise-data.csv')
+  loadCsvData('/data/dust-data.csv')
 })
 
 function getStatusColor(status: string) {
@@ -32,16 +32,16 @@ function getStatusColor(status: string) {
     <div class="container mx-auto px-4 py-8">
       <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Noise Monitoring Dashboard
+          Dust Monitoring Dashboard
         </h1>
         <p class="text-gray-600 dark:text-gray-400">
-          Real-time noise level monitoring and analysis
+          Real-time dust level monitoring and analysis
         </p>
       </div>
 
       <!-- Loading State -->
       <div v-if="loading" class="flex justify-center items-center py-12">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-600" />
       </div>
 
       <!-- Error State -->
@@ -71,16 +71,16 @@ function getStatusColor(status: string) {
             <template #header>
               <div class="flex items-center justify-between">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                  Average Noise
+                  Average Dust
                 </h3>
-                <span class="text-2xl font-bold text-blue-600">
-                  {{ averageNoiseLevel }} dB
+                <span class="text-2xl font-bold text-orange-600">
+                  {{ averageDustLevel }} mg/m³
                 </span>
               </div>
             </template>
             <div class="flex items-center">
-              <span :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(noiseLevelStatus.status)}`">
-                {{ noiseLevelStatus.status }}
+              <span :class="`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(dustLevelStatus.status)}`">
+                {{ dustLevelStatus.status }}
               </span>
             </div>
           </CommonAppCard>
@@ -89,15 +89,15 @@ function getStatusColor(status: string) {
             <template #header>
               <div class="flex items-center justify-between">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                  Max Noise
+                  Max Dust
                 </h3>
                 <span class="text-2xl font-bold text-red-600">
-                  {{ maxNoiseLevel }} dB
+                  {{ maxDustLevel }} mg/m³
                 </span>
               </div>
             </template>
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              Peak noise level recorded
+              Peak dust level recorded
             </div>
           </CommonAppCard>
 
@@ -105,15 +105,15 @@ function getStatusColor(status: string) {
             <template #header>
               <div class="flex items-center justify-between">
                 <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                  Min Noise
+                  Min Dust
                 </h3>
                 <span class="text-2xl font-bold text-green-600">
-                  {{ minNoiseLevel }} dB
+                  {{ minDustLevel }} mg/m³
                 </span>
               </div>
             </template>
             <div class="text-sm text-gray-600 dark:text-gray-400">
-              Lowest noise level recorded
+              Lowest dust level recorded
             </div>
           </CommonAppCard>
 
@@ -139,20 +139,20 @@ function getStatusColor(status: string) {
           <template #header>
             <div class="flex justify-between items-center">
               <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-                Noise Level Over Time
+                Dust Level Over Time
               </h3>
               <div class="flex items-center space-x-2">
-                <div class="w-3 h-3 bg-blue-500 rounded-full" />
-                <span class="text-sm text-gray-600 dark:text-gray-400">Noise Level (dB)</span>
+                <div class="w-3 h-3 bg-orange-500 rounded-full" />
+                <span class="text-sm text-gray-600 dark:text-gray-400">Dust Level (mg/m³)</span>
               </div>
             </div>
           </template>
           <div class="p-4">
             <DashboardDataChart
               :data="chartData"
-              color="#3b82f6"
-              label="Noise Level"
-              unit="dB"
+              color="#f97316"
+              label="Dust Level"
+              unit="mg/m³"
             />
           </div>
         </CommonAppCard>
@@ -172,7 +172,7 @@ function getStatusColor(status: string) {
                     Time
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                    Noise Level
+                    Dust Level
                   </th>
                   <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                     Location
@@ -188,7 +188,7 @@ function getStatusColor(status: string) {
                     {{ new Date(item.timestamp).toLocaleString() }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                    {{ item.noise_level }} dB
+                    {{ item.dust_level }} mg/m³
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                     {{ item.location }}

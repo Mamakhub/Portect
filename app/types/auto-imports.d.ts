@@ -37,6 +37,7 @@ declare global {
   // Custom composables
   const useCounter: typeof import('~/composable/useCounter').useCounter
   const useCsvData: typeof import('~/composable/useCsvData').useCsvData
+  const useDustData: typeof import('~/composable/useDustData').useDustData
   const useConstructionSites: typeof import('~/composable/useConstructionSites').useConstructionSites
   
   // Custom utilities

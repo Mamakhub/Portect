@@ -10,15 +10,26 @@ definePageMeta({
 const {
   chartData: noiseChartData,
   averageNoiseLevel,
-  loadCsvData,
-  loading,
+  loadCsvData: loadNoiseCsvData,
+  loading: noiseLoading,
 } = useCsvData()
 
-// Load noise data from CSV
+// CSV Data for Dust
+const {
+  chartData: dustChartData,
+  averageDustLevel,
+  loadCsvData: loadDustCsvData,
+  loading: dustLoading,
+} = useDustData()
+
+// Load data from CSV files
 onMounted(async () => {
   console.log('Loading CSV data...')
-  await loadCsvData('/data/noise-data.csv')
-  console.log('CSV data loaded:', noiseChartData.value)
+  await Promise.all([
+    loadNoiseCsvData('/data/noise-data.csv'),
+    loadDustCsvData('/data/dust-data.csv'),
+  ])
+  console.log('CSV data loaded:', { noise: noiseChartData.value, dust: dustChartData.value })
 })
 
 // Fallback data for noise chart when CSV is loading
@@ -30,26 +41,30 @@ const fallbackNoiseData = [
   { x: '04:00', y: 50 },
 ]
 
-// Use fallback data when CSV is loading or empty
-const displayNoiseData = computed(() => {
-  if (loading.value || noiseChartData.value.length === 0) {
-    return fallbackNoiseData
-  }
-  return noiseChartData.value
-})
-
-// Mock Data for Dust (keeping original format)
-const dustData = [
+// Fallback data for dust chart when CSV is loading
+const fallbackDustData = [
   { x: '00:00', y: 0.3 },
   { x: '01:00', y: 0.4 },
   { x: '02:00', y: 0.2 },
   { x: '03:00', y: 0.6 },
   { x: '04:00', y: 0.8 },
-  { x: '05:00', y: 1.1 },
-  { x: '06:00', y: 0.9 },
-  { x: '07:00', y: 0.7 },
-  { x: '08:00', y: 0.5 },
 ]
+
+// Use fallback data when CSV is loading or empty
+const displayNoiseData = computed(() => {
+  if (noiseLoading.value || noiseChartData.value.length === 0) {
+    return fallbackNoiseData
+  }
+  return noiseChartData.value
+})
+
+// Use fallback data when CSV is loading or empty
+const displayDustData = computed(() => {
+  if (dustLoading.value || dustChartData.value.length === 0) {
+    return fallbackDustData
+  }
+  return dustChartData.value
+})
 
 const scheduleItems = [
   { time: '8:00 AM', title: 'Zone A Inspection', color: 'blue' },
@@ -76,12 +91,16 @@ function handleAcknowledge() {
         :value="`${averageNoiseLevel || '--'} dBA`"
         :chart-data="displayNoiseData"
         chart-color="#F87171"
+        label="Noise Level"
+        unit="dB"
       />
       <DashboardChartCard
         title="Dust Level"
-        value="0.82 mg/m^3"
-        :chart-data="dustData"
+        :value="`${averageDustLevel || '--'} mg/m³`"
+        :chart-data="displayDustData"
         chart-color="#FBBF24"
+        label="Dust Level"
+        unit="mg/m³"
       />
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <DashboardSensorsSummaryCard

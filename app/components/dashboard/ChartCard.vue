@@ -4,6 +4,8 @@ defineProps<{
   value: string
   chartData: any[] // Replace with a proper type later
   chartColor: string
+  label?: string
+  unit?: string
 }>()
 </script>
 
@@ -18,7 +20,12 @@ defineProps<{
       </div>
     </template>
     <div>
-      <DashboardDataChart :data="chartData" :color="chartColor" />
+      <DashboardDataChart
+        :data="chartData"
+        :color="chartColor"
+        :label="label"
+        :unit="unit"
+      />
     </div>
   </CommonAppCard>
 </template>

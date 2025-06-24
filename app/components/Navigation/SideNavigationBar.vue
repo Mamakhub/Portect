@@ -42,6 +42,11 @@ const navigationItems: NavItem[] = [
     icon: 'heroicons:speaker-wave',
   },
   {
+    name: 'Dust Monitoring',
+    href: '/dust-monitoring',
+    icon: 'heroicons:cloud',
+  },
+  {
     name: 'About',
     href: '/about',
     icon: 'heroicons:information-circle',

@@ -16,6 +16,8 @@ import { Line } from 'vue-chartjs'
 const props = defineProps<{
   data: Array<{ x: string, y: number }>
   color: string
+  label?: string
+  unit?: string
 }>()
 
 // Register Chart.js components
@@ -36,7 +38,7 @@ const chartData = computed(() => {
     labels: props.data.map(item => item.x),
     datasets: [
       {
-        label: 'Noise Level (dB)',
+        label: props.label || 'Value',
         data: props.data.map(item => item.y),
         borderColor: props.color,
         backgroundColor: `${props.color}20`,
@@ -73,7 +75,7 @@ const chartOptions = computed(() => ({
       displayColors: false,
       callbacks: {
         title: (context: any) => `Time: ${context[0].label}`,
-        label: (context: any) => `Noise Level: ${context.parsed.y} dB`,
+        label: (context: any) => `${props.label || 'Value'}: ${context.parsed.y} ${props.unit || ''}`,
       },
     },
   },
@@ -100,7 +102,7 @@ const chartOptions = computed(() => ({
         font: {
           size: 12,
         },
-        callback: (value: any) => `${value} dB`,
+        callback: (value: any) => `${value} ${props.unit || ''}`,
       },
       beginAtZero: false,
     },
