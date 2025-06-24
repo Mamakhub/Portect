@@ -44,12 +44,13 @@ export interface SiteAlert {
   message: string
   type: 'noise' | 'dust' | 'safety' | 'maintenance' | 'general'
   severity: 'low' | 'medium' | 'high' | 'critical'
-  status: 'active' | 'acknowledged' | 'resolved'
+  status: 'active' | 'acknowledged' | 'resolved' | 'archived'
   createdAt: string
   acknowledgedAt?: string
   resolvedAt?: string
   acknowledgedBy?: string
   resolvedBy?: string
+  archivedAt?: string
 }
 
 export interface SiteData {

@@ -79,6 +79,12 @@ export function useMultiSiteData() {
     return getSiteActiveAlerts(selectedSiteId.value)
   })
 
+  const selectedSiteAllAlerts = computed(() => {
+    if (!selectedSiteId.value)
+      return alerts.value
+    return alerts.value.filter(alert => alert.siteId === selectedSiteId.value)
+  })
+
   const averageNoiseLevel = computed(() => {
     const activeSitesData = activeSites.value
     if (activeSitesData.length === 0)
@@ -215,6 +221,14 @@ export function useMultiSiteData() {
     }
   }
 
+  const archiveAlert = (alertId: string) => {
+    const alert = alerts.value.find(a => a.id === alertId)
+    if (alert) {
+      alert.status = 'archived'
+      alert.archivedAt = new Date().toISOString()
+    }
+  }
+
   const updateScheduleStatus = (scheduleId: string, status: SiteSchedule['status']) => {
     const schedule = schedules.value.find(s => s.id === scheduleId)
     if (schedule) {
@@ -271,6 +285,7 @@ export function useMultiSiteData() {
     sensorSummary,
     selectedSiteSensorSummary,
     selectedSiteActiveAlerts,
+    selectedSiteAllAlerts,
     averageNoiseLevel,
     averageDustLevel,
     selectedSiteNoiseChartData,
@@ -288,6 +303,7 @@ export function useMultiSiteData() {
     getSiteAlerts,
     acknowledgeAlert,
     resolveAlert,
+    archiveAlert,
     updateScheduleStatus,
     getStatusColor,
     getAlertSeverityColor,

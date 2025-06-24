@@ -7,11 +7,11 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  (e: 'acknowledge'): void
+  (e: 'viewDetails'): void
 }>()
 
-function acknowledge() {
-  emit('acknowledge')
+function handleViewDetails() {
+  emit('viewDetails')
 }
 
 // Get severity color
@@ -39,13 +39,23 @@ function getTypeIcon(type: string): string {
 </script>
 
 <template>
-  <CommonAppCard>
+  <CommonAppCard class="cursor-pointer hover:shadow-lg transition-shadow" @click="handleViewDetails">
     <template #header>
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-          Alerts
-        </h3>
-        <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">{{ alertCount }}</span>
+        <div class="flex items-center space-x-3">
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+            Alerts
+          </h3>
+          <span class="bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">{{ alertCount }}</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button
+            class="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            @click.stop="handleViewDetails"
+          >
+            View Details
+          </button>
+        </div>
       </div>
     </template>
     <div>
@@ -102,15 +112,12 @@ function getTypeIcon(type: string): string {
         </p>
       </div>
 
-      <!-- Acknowledge button -->
-      <CommonButton
-        v-if="alerts.length > 0"
-        variant="secondary"
-        class="w-full"
-        @click="acknowledge"
-      >
-        Acknowledge All
-      </CommonButton>
+      <!-- Info message -->
+      <div class="text-center py-2">
+        <p class="text-xs text-gray-500 dark:text-gray-400">
+          Click "View Details" to manage alerts
+        </p>
+      </div>
     </div>
   </CommonAppCard>
 </template>

@@ -11,6 +11,7 @@ definePageMeta({
 const isNoiseModalOpen = ref(false)
 const isDustModalOpen = ref(false)
 const isSensorSummaryModalOpen = ref(false)
+const isAlertModalOpen = ref(false)
 
 // Multi-site data
 const {
@@ -21,7 +22,7 @@ const {
   selectedSiteDustChartData,
   selectedSiteStats,
   selectedSiteSensorSummary,
-  selectedSiteActiveAlerts,
+  selectedSiteAllAlerts,
   selectedSiteSensorDevices,
   selectedSiteSensorSummaryWithTotal,
   averageNoiseLevel,
@@ -29,6 +30,9 @@ const {
   selectSite,
   clearSelection,
   getSiteSchedules,
+  acknowledgeAlert,
+  resolveAlert,
+  archiveAlert,
 } = useMultiSiteData()
 
 // Select first active site by default
@@ -54,10 +58,6 @@ const displayNoiseData = computed(() => {
 const displayDustData = computed(() => {
   return selectedSiteDustChartData.value
 })
-
-function handleAcknowledge() {
-  // Add logic to dismiss the alert
-}
 
 function handleSiteChange(event: Event) {
   const target = event.target as HTMLSelectElement
@@ -95,6 +95,26 @@ function openSensorSummaryModal() {
 
 function closeSensorSummaryModal() {
   isSensorSummaryModalOpen.value = false
+}
+
+function openAlertModal() {
+  isAlertModalOpen.value = true
+}
+
+function closeAlertModal() {
+  isAlertModalOpen.value = false
+}
+
+function handleAlertAcknowledge(alertId: string) {
+  acknowledgeAlert(alertId, 'Current User')
+}
+
+function handleAlertResolve(alertId: string) {
+  resolveAlert(alertId, 'Current User')
+}
+
+function handleAlertArchive(alertId: string) {
+  archiveAlert(alertId)
 }
 </script>
 
@@ -170,9 +190,9 @@ function closeSensorSummaryModal() {
             @view-details="openSensorSummaryModal"
           />
           <DashboardAlertCard
-            :alert-count="selectedSiteActiveAlerts.length"
-            :alerts="selectedSiteActiveAlerts"
-            @acknowledge="handleAcknowledge"
+            :alert-count="selectedSiteAllAlerts.length"
+            :alerts="selectedSiteAllAlerts"
+            @view-details="openAlertModal"
           />
         </div>
       </div>
@@ -249,6 +269,15 @@ function closeSensorSummaryModal() {
       :sensor-devices="selectedSiteSensorDevices"
       :selected-site-name="selectedSite?.name"
       @close="closeSensorSummaryModal"
+    />
+    <DashboardAlertModal
+      :is-open="isAlertModalOpen"
+      :alerts="selectedSiteAllAlerts"
+      :selected-site-name="selectedSite?.name"
+      @close="closeAlertModal"
+      @acknowledge="handleAlertAcknowledge"
+      @resolve="handleAlertResolve"
+      @archive="handleAlertArchive"
     />
   </div>
 </template>
