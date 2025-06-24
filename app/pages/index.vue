@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import type { ConstructionSite } from '~/types/sites'
 
 // Page metadata
@@ -7,24 +7,24 @@ definePageMeta({
   title: 'Dashboard',
 })
 
+// Modal state
+const isNoiseModalOpen = ref(false)
+const isDustModalOpen = ref(false)
+
 // Multi-site data
 const {
   sites,
   selectedSiteId,
-  selectedSite,
   selectedSiteNoiseChartData,
   selectedSiteDustChartData,
   selectedSiteStats,
   activeAlerts,
-  todaySchedules,
-  totalSites,
   totalDevices,
   averageNoiseLevel,
   averageDustLevel,
   selectSite,
   clearSelection,
   getSiteSchedules,
-  getSiteAlerts,
 } = useMultiSiteData()
 
 // Select first active site by default
@@ -40,12 +40,6 @@ const selectedSiteSchedules = computed(() => {
   if (!selectedSiteId.value)
     return []
   return getSiteSchedules(selectedSiteId.value)
-})
-
-const selectedSiteAlerts = computed(() => {
-  if (!selectedSiteId.value)
-    return []
-  return getSiteAlerts(selectedSiteId.value)
 })
 
 // Fallback data for charts when no site is selected
@@ -97,6 +91,22 @@ function handleSiteChange(event: Event) {
 
 function handleSiteSelectFromMap(site: ConstructionSite) {
   selectSite(site.id)
+}
+
+function openNoiseModal() {
+  isNoiseModalOpen.value = true
+}
+
+function closeNoiseModal() {
+  isNoiseModalOpen.value = false
+}
+
+function openDustModal() {
+  isDustModalOpen.value = true
+}
+
+function closeDustModal() {
+  isDustModalOpen.value = false
 }
 </script>
 
@@ -151,6 +161,7 @@ function handleSiteSelectFromMap(site: ConstructionSite) {
           chart-color="#F87171"
           label="Noise Level"
           unit="dB"
+          @view-details="openNoiseModal"
         />
         <DashboardChartCard
           title="Dust Level"
@@ -159,6 +170,7 @@ function handleSiteSelectFromMap(site: ConstructionSite) {
           chart-color="#FBBF24"
           label="Dust Level"
           unit="mg/m³"
+          @view-details="openDustModal"
         />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <DashboardSensorsSummaryCard
@@ -182,7 +194,7 @@ function handleSiteSelectFromMap(site: ConstructionSite) {
         <DashboardScheduleCard>
           <div v-if="selectedSiteId && selectedSiteSchedules.length > 0">
             <div
-              v-for="(item, index) in selectedSiteSchedules.slice(0, 5)"
+              v-for="item in selectedSiteSchedules.slice(0, 5)"
               :key="item.id"
               class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg mb-3"
             >
@@ -228,5 +240,19 @@ function handleSiteSelectFromMap(site: ConstructionSite) {
         </DashboardScheduleCard>
       </div>
     </div>
+
+    <!-- Modals -->
+    <DashboardNoiseMonitoringModal
+      :is-open="isNoiseModalOpen"
+      :chart-data="displayNoiseData"
+      :selected-site-stats="selectedSiteStats"
+      @close="closeNoiseModal"
+    />
+    <DashboardDustMonitoringModal
+      :is-open="isDustModalOpen"
+      :chart-data="displayDustData"
+      :selected-site-stats="selectedSiteStats"
+      @close="closeDustModal"
+    />
   </div>
 </template>

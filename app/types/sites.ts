@@ -1,6 +1,9 @@
 import type { DustDataPoint } from './dust'
 import type { NoiseDataPoint } from './noise'
 
+// Re-export the imported types
+export type { DustDataPoint, NoiseDataPoint }
+
 export interface ConstructionSite {
   id: string
   name: string

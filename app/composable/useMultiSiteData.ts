@@ -6,8 +6,8 @@ import {
   mockSensorData,
   mockSites,
 } from '~/data/mockSites'
+import type { ChartDataPoint } from '~/types/noise'
 import type {
-  ChartDataPoint,
   ConstructionSite,
   SiteAlert,
   SiteSchedule,
