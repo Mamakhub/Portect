@@ -99,24 +99,24 @@ onMounted(() => {
           </div>
           <ul class="py-2">
             <li>
-              <a
-                href="#"
+              <NuxtLink
+                to="/settings"
                 class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 @click="showUserMenu = false"
               >
                 <Icon icon="heroicons:user-circle" class="w-4 h-4 mr-3" />
                 Profile
-              </a>
+              </NuxtLink>
             </li>
             <li>
-              <a
-                href="#"
+              <NuxtLink
+                to="/settings"
                 class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 @click="showUserMenu = false"
               >
                 <Icon icon="heroicons:cog-6-tooth" class="w-4 h-4 mr-3" />
                 Settings
-              </a>
+              </NuxtLink>
             </li>
             <li class="border-t border-gray-200 dark:border-gray-700">
               <a
