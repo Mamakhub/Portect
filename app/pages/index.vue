@@ -10,16 +10,20 @@ definePageMeta({
 // Modal state
 const isNoiseModalOpen = ref(false)
 const isDustModalOpen = ref(false)
+const isSensorSummaryModalOpen = ref(false)
 
 // Multi-site data
 const {
   sites,
   selectedSiteId,
+  selectedSite,
   selectedSiteNoiseChartData,
   selectedSiteDustChartData,
   selectedSiteStats,
   selectedSiteSensorSummary,
   selectedSiteActiveAlerts,
+  selectedSiteSensorDevices,
+  selectedSiteSensorSummaryWithTotal,
   averageNoiseLevel,
   averageDustLevel,
   selectSite,
@@ -83,6 +87,14 @@ function openDustModal() {
 
 function closeDustModal() {
   isDustModalOpen.value = false
+}
+
+function openSensorSummaryModal() {
+  isSensorSummaryModalOpen.value = true
+}
+
+function closeSensorSummaryModal() {
+  isSensorSummaryModalOpen.value = false
 }
 </script>
 
@@ -155,6 +167,7 @@ function closeDustModal() {
             :noise-active="selectedSiteSensorSummary.noiseActive"
             :noise-inactive="selectedSiteSensorSummary.noiseInactive"
             last-updated="18 May 2025, 11:05AM (GMT+8)"
+            @view-details="openSensorSummaryModal"
           />
           <DashboardAlertCard
             :alert-count="selectedSiteActiveAlerts.length"
@@ -229,6 +242,13 @@ function closeDustModal() {
       :chart-data="displayDustData"
       :selected-site-stats="selectedSiteStats"
       @close="closeDustModal"
+    />
+    <DashboardSensorsSummaryModal
+      :is-open="isSensorSummaryModalOpen"
+      :sensor-summary="selectedSiteSensorSummaryWithTotal"
+      :sensor-devices="selectedSiteSensorDevices"
+      :selected-site-name="selectedSite?.name"
+      @close="closeSensorSummaryModal"
     />
   </div>
 </template>

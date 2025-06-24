@@ -1,8 +1,10 @@
 import { computed, ref } from 'vue'
 import {
+  getAllSensorDevices,
   getSensorSummary,
   getSiteActiveAlerts,
   getSiteData,
+  getSiteSensorDevices,
   getSiteSensorSummary,
   mockAlerts,
   mockSchedules,
@@ -102,7 +104,7 @@ export function useMultiSiteData() {
     if (!sensorData)
       return []
 
-    return sensorData.noiseData.map((item, index) => {
+    return sensorData.noiseData.map((item) => {
       const date = new Date(item.timestamp)
       return {
         x: date.toLocaleTimeString('en-US', {
@@ -122,7 +124,7 @@ export function useMultiSiteData() {
     if (!sensorData)
       return []
 
-    return sensorData.dustData.map((item, index) => {
+    return sensorData.dustData.map((item) => {
       const date = new Date(item.timestamp)
       return {
         x: date.toLocaleTimeString('en-US', {
@@ -153,6 +155,24 @@ export function useMultiSiteData() {
       averageDust: Math.round((dustLevels.reduce((a, b) => a + b, 0) / dustLevels.length) * 100) / 100,
       maxDust: Math.max(...dustLevels),
       minDust: Math.min(...dustLevels),
+    }
+  })
+
+  // Sensor device data
+  const allSensorDevices = computed(() => getAllSensorDevices())
+
+  const selectedSiteSensorDevices = computed(() => {
+    if (!selectedSiteId.value)
+      return allSensorDevices.value
+    return getSiteSensorDevices(selectedSiteId.value)
+  })
+
+  const selectedSiteSensorSummaryWithTotal = computed(() => {
+    const summary = selectedSiteSensorSummary.value
+    const totalDevices = selectedSiteSensorDevices.value.length
+    return {
+      ...summary,
+      totalDevices,
     }
   })
 
@@ -256,6 +276,9 @@ export function useMultiSiteData() {
     selectedSiteNoiseChartData,
     selectedSiteDustChartData,
     selectedSiteStats,
+    allSensorDevices,
+    selectedSiteSensorDevices,
+    selectedSiteSensorSummaryWithTotal,
 
     // Methods
     selectSite,

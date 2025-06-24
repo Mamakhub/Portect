@@ -6,14 +6,33 @@ defineProps<{
   noiseInactive: number
   lastUpdated: string
 }>()
+
+const emit = defineEmits<{
+  (e: 'viewDetails'): void
+}>()
+
+function handleViewDetails() {
+  emit('viewDetails')
+}
 </script>
 
 <template>
-  <CommonAppCard>
+  <CommonAppCard class="cursor-pointer hover:shadow-lg transition-shadow" @click="handleViewDetails">
     <template #header>
-      <h3 class="text-lg font-medium text-gray-900 dark:text-white">
-        Sensors' Summary
-      </h3>
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+          Sensors' Summary
+        </h3>
+        <div class="flex items-center space-x-4">
+          <Icon icon="heroicons:chevron-right" class="w-5 h-5 text-gray-400" />
+          <button
+            class="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            @click.stop="handleViewDetails"
+          >
+            View Details
+          </button>
+        </div>
+      </div>
     </template>
     <div class="flex justify-between items-center">
       <div class="space-y-4">
@@ -48,8 +67,10 @@ defineProps<{
         >
       </div>
     </div>
-    <div class="mt-4 text-xs text-gray-500 dark:text-gray-400">
-      Last Updated: {{ lastUpdated }}
+    <div class="mt-4">
+      <div class="text-xs text-gray-500 dark:text-gray-400">
+        Last Updated: {{ lastUpdated }}
+      </div>
     </div>
   </CommonAppCard>
 </template>

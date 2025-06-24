@@ -75,3 +75,16 @@ export interface MapConfig {
   minZoom: number
   maxZoom: number
 }
+
+export interface SensorDevice {
+  id: string
+  name: string
+  type: 'dust' | 'noise'
+  status: 'active' | 'inactive' | 'maintenance' | 'offline'
+  batteryLevel: number
+  signalStrength: number
+  lastReading?: number
+  lastReadingTime?: string
+  location?: string
+  siteId: string
+}
