@@ -10,18 +10,15 @@ export function useCsvData() {
     const lines = csvText.trim().split('\n')
 
     if (lines.length < 2) {
-      console.error('CSV file has no data rows')
       return []
     }
 
     const headers = lines[0].split(',')
-    console.log('CSV headers:', headers)
 
     const parsedData = lines.slice(1).map((line, index) => {
       const values = line.split(',')
 
       if (values.length < 4) {
-        console.warn(`Line ${index + 1} has insufficient values:`, values)
         return null
       }
 
@@ -31,7 +28,6 @@ export function useCsvData() {
       const deviceId = values[3].trim()
 
       if (Number.isNaN(noiseLevel)) {
-        console.warn(`Invalid noise level in line ${index + 1}:`, values[1])
         return null
       }
 
@@ -43,7 +39,6 @@ export function useCsvData() {
       }
     }).filter(item => item !== null) as NoiseDataPoint[]
 
-    console.log('Parsed data count:', parsedData.length)
     return parsedData
   }
 
@@ -52,21 +47,17 @@ export function useCsvData() {
     error.value = null
 
     try {
-      console.log('Fetching CSV from:', filePath)
       const response = await fetch(filePath)
       if (!response.ok) {
         throw new Error(`Failed to load CSV file: ${response.statusText}`)
       }
 
       const csvText = await response.text()
-      console.log('CSV text received:', `${csvText.substring(0, 200)}...`)
       const parsedData = parseCsv(csvText)
-      console.log('Parsed data:', parsedData.slice(0, 3))
       data.value = parsedData
     }
     catch (err) {
       error.value = err instanceof Error ? err.message : 'Failed to load CSV data'
-      console.error('Error loading CSV data:', err)
     }
     finally {
       loading.value = false
@@ -83,7 +74,6 @@ export function useCsvData() {
       const isValidDate = !Number.isNaN(date.getTime())
 
       if (!isValidDate) {
-        console.warn(`Invalid date for item ${index}:`, item.timestamp)
         return { x: `Time ${index}`, y: item.noise_level }
       }
 

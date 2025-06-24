@@ -33,7 +33,6 @@ ChartJS.register(
 )
 
 const chartData = computed(() => {
-  console.log('Chart data received:', props.data)
   return {
     labels: props.data.map(item => item.x),
     datasets: [

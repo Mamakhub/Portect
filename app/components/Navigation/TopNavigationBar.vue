@@ -1,10 +1,56 @@
+<script setup lang="ts">
+import { Icon } from '@iconify/vue'
+
+// Emits
+defineEmits<{
+  toggleSidebar: []
+}>()
+
+// Composables
+const colorMode = useColorMode()
+
+// Reactive data
+const showUserMenu = ref(false)
+
+// Mock user data (replace with actual user data)
+const userName = ref('John Doe')
+const userEmail = ref('john@example.com')
+const userInitials = computed(() => {
+  return userName.value
+    .split(' ')
+    .map(name => name[0])
+    .join('')
+    .toUpperCase()
+})
+
+// Methods
+function toggleTheme() {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
+
+function logout() {
+  showUserMenu.value = false
+  // Add logout logic here
+}
+
+// Close dropdown when clicking outside
+onMounted(() => {
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement
+    if (!target.closest('.relative')) {
+      showUserMenu.value = false
+    }
+  })
+})
+</script>
+
 <template>
   <div class="flex justify-between items-center bg-white dark:bg-gray-800 py-3 px-6 border-b border-gray-200 dark:border-gray-700">
     <!-- Left side - Mobile menu button -->
     <div class="flex items-center">
       <button
-        @click="$emit('toggleSidebar')"
         class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
+        @click="$emit('toggleSidebar')"
       >
         <Icon icon="heroicons:bars-3" class="w-6 h-6" />
       </button>
@@ -14,8 +60,8 @@
     <div class="flex items-center gap-x-4">
       <!-- Theme Toggle -->
       <button
-        @click="toggleTheme"
         class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        @click="toggleTheme"
       >
         <Icon
           :icon="colorMode.value === 'dark' ? 'heroicons:sun' : 'heroicons:moon'"
@@ -26,8 +72,8 @@
       <!-- User Profile Dropdown -->
       <div class="relative">
         <button
-          @click="showUserMenu = !showUserMenu"
           class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          @click="showUserMenu = !showUserMenu"
         >
           <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
             {{ userInitials }}
@@ -44,8 +90,12 @@
           class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50"
         >
           <div class="px-4 py-3 border-b border-gray-200 dark:border-gray-700">
-            <p class="text-sm font-medium text-gray-900 dark:text-white">{{ userName }}</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">{{ userEmail }}</p>
+            <p class="text-sm font-medium text-gray-900 dark:text-white">
+              {{ userName }}
+            </p>
+            <p class="text-xs text-gray-500 dark:text-gray-400">
+              {{ userEmail }}
+            </p>
           </div>
           <ul class="py-2">
             <li>
@@ -84,50 +134,3 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { Icon } from '@iconify/vue'
-
-// Emits
-defineEmits<{
-  toggleSidebar: []
-}>()
-
-// Composables
-const colorMode = useColorMode()
-
-// Reactive data
-const showUserMenu = ref(false)
-
-// Mock user data (replace with actual user data)
-const userName = ref('John Doe')
-const userEmail = ref('john@example.com')
-const userInitials = computed(() => {
-  return userName.value
-    .split(' ')
-    .map(name => name[0])
-    .join('')
-    .toUpperCase()
-})
-
-// Methods
-const toggleTheme = () => {
-  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
-}
-
-const logout = () => {
-  showUserMenu.value = false
-  // Add logout logic here
-  console.log('Logout clicked')
-}
-
-// Close dropdown when clicking outside
-onMounted(() => {
-  document.addEventListener('click', (event) => {
-    const target = event.target as HTMLElement
-    if (!target.closest('.relative')) {
-      showUserMenu.value = false
-    }
-  })
-})
-</script>

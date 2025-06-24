@@ -42,40 +42,16 @@ const selectedSiteSchedules = computed(() => {
   return getSiteSchedules(selectedSiteId.value)
 })
 
-// Fallback data for charts when no site is selected
-const fallbackNoiseData = [
-  { x: '00:00', y: 45 },
-  { x: '01:00', y: 48 },
-  { x: '02:00', y: 52 },
-  { x: '03:00', y: 47 },
-  { x: '04:00', y: 50 },
-]
-
-const fallbackDustData = [
-  { x: '00:00', y: 0.3 },
-  { x: '01:00', y: 0.4 },
-  { x: '02:00', y: 0.2 },
-  { x: '03:00', y: 0.6 },
-  { x: '04:00', y: 0.8 },
-]
-
-// Use selected site data or fallback
+// Use selected site data directly
 const displayNoiseData = computed(() => {
-  if (selectedSiteNoiseChartData.value.length > 0) {
-    return selectedSiteNoiseChartData.value
-  }
-  return fallbackNoiseData
+  return selectedSiteNoiseChartData.value
 })
 
 const displayDustData = computed(() => {
-  if (selectedSiteDustChartData.value.length > 0) {
-    return selectedSiteDustChartData.value
-  }
-  return fallbackDustData
+  return selectedSiteDustChartData.value
 })
 
 function handleAcknowledge() {
-  console.log('Alert acknowledged')
   // Add logic to dismiss the alert
 }
 
