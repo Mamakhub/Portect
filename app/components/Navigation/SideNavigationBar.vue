@@ -37,6 +37,11 @@ const navigationItems: NavItem[] = [
     icon: 'heroicons:home',
   },
   {
+    name: 'Calendar',
+    href: '/calendar',
+    icon: 'heroicons:calendar',
+  },
+  {
     name: 'About',
     href: '/about',
     icon: 'heroicons:information-circle',
