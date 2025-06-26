@@ -163,9 +163,7 @@ function handleEventClick(info: any) {
     assignedTo: props.assignedTo,
     status: props.status,
   })
-
-  // You can implement a modal here to show event details
-  alert(`${event.title}\n\nDescription: ${props.description}\nType: ${props.type}\nPriority: ${props.priority}\nAssigned to: ${props.assignedTo}\nStatus: ${props.status}`)
+  // TODO: Implement a modal for event details if needed
 }
 
 function handleEventDidMount(info: any) {
@@ -263,81 +261,180 @@ onMounted(() => {
 <style scoped>
 .calendar-container {
   font-family: inherit;
+  background: transparent;
 }
 
 :deep(.fc) {
   font-family: inherit;
+  background: transparent;
+}
+
+/* Main calendar background */
+:deep(.fc) {
+  background: #fff;
+}
+:deep(.dark .fc) {
+  background: #111827;
+}
+
+/* Toolbar/Header */
+:deep(.fc-header-toolbar) {
+  background: #f9fafb;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.75rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+:deep(.dark .fc-header-toolbar) {
+  background: #1f2937;
+  border-bottom: 1px solid #374151;
 }
 
 :deep(.fc-toolbar-title) {
-  font-size: 1.25rem;
-  font-weight: 600;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+:deep(.dark .fc-toolbar-title) {
+  color: #f3f4f6;
 }
 
+/* Toolbar buttons */
 :deep(.fc-button) {
-  background-color: #3b82f6;
-  border-color: #3b82f6;
-  font-weight: 500;
+  background: #e5e7eb;
+  border: none;
+  color: #374151;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: none;
 }
-
+:deep(.fc-button-active), :deep(.fc-button-primary) {
+  background: #2563eb;
+  color: #fff;
+}
 :deep(.fc-button:hover) {
-  background-color: #2563eb;
-  border-color: #2563eb;
+  background: #3b82f6;
+  color: #fff;
+}
+:deep(.dark .fc-button) {
+  background: #374151;
+  color: #f3f4f6;
+}
+:deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
+  background: #2563eb;
+  color: #fff;
+}
+:deep(.dark .fc-button:hover) {
+  background: #3b82f6;
+  color: #fff;
 }
 
-:deep(.fc-button:focus) {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+/* Grid and cell backgrounds */
+:deep(.fc-scrollgrid) {
+  background: transparent;
+}
+:deep(.fc-daygrid-day), :deep(.fc-timegrid-slot) {
+  background: #fff;
+  border-color: #e5e7eb;
+}
+:deep(.dark .fc-daygrid-day), :deep(.dark .fc-timegrid-slot) {
+  background: #23272f;
+  border-color: #374151;
 }
 
-:deep(.fc-button-active) {
-  background-color: #1d4ed8;
-  border-color: #1d4ed8;
+:deep(.fc-col-header-cell) {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+}
+:deep(.dark .fc-col-header-cell) {
+  background: #23272f;
+  color: #f3f4f6;
+  border-bottom: 1px solid #374151;
 }
 
 :deep(.fc-daygrid-day-number) {
   color: #374151;
-}
-
-:deep(.fc-col-header-cell) {
-  background-color: #f9fafb;
   font-weight: 600;
 }
+:deep(.dark .fc-daygrid-day-number) {
+  color: #f3f4f6;
+}
 
+/* Event tiles */
 :deep(.fc-event) {
   cursor: pointer;
-  border-radius: 4px;
-  font-size: 0.875rem;
-  font-weight: 500;
+  border-radius: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.08);
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+:deep(.fc-event-enhanced) {
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.15);
+  border: none;
+}
+:deep(.dark .fc-event), :deep(.dark .fc-event-enhanced) {
+  background: #2563eb !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px 0 rgba(37,99,235,0.18);
+  border: none;
+}
+:deep(.fc-event-short-title) {
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
 }
 
 :deep(.fc-event:hover) {
-  opacity: 0.9;
+  opacity: 0.96;
+  filter: brightness(1.08);
 }
 
-:deep(.fc-event-title) {
+/* Today highlight */
+:deep(.fc-day-today) {
+  background: #dbeafe;
+}
+:deep(.dark .fc-day-today) {
+  background: #1e293b;
+  border: 1.5px solid #2563eb;
+}
+
+/* More link */
+:deep(.fc-more-link) {
+  color: #2563eb;
   font-weight: 600;
 }
-
-:deep(.fc-timegrid-slot) {
-  height: 40px;
+:deep(.dark .fc-more-link) {
+  color: #60a5fa;
 }
 
+/* Time labels */
 :deep(.fc-timegrid-slot-label) {
-  font-size: 0.75rem;
+  font-size: 0.85rem;
   color: #6b7280;
 }
-
-/* Dark mode styles */
-:deep(.dark .fc-daygrid-day-number) {
-  color: #d1d5db;
-}
-
-:deep(.dark .fc-col-header-cell) {
-  background-color: #374151;
-  color: #f9fafb;
-}
-
 :deep(.dark .fc-timegrid-slot-label) {
   color: #9ca3af;
+}
+
+/* Misc */
+:deep(.fc .fc-bg-event) {
+  opacity: 0.15;
+}
+:deep(.fc .fc-highlight) {
+  background: #2563eb33;
+}
+:deep(.dark .fc .fc-highlight) {
+  background: #2563eb55;
 }
 </style>
