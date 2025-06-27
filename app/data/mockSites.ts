@@ -1,11 +1,11 @@
 import type {
-  ConstructionSite,
-  DustDataPoint,
-  NoiseDataPoint,
-  SensorDevice,
-  SiteAlert,
-  SiteData,
-  SiteSchedule,
+    ConstructionSite,
+    DustDataPoint,
+    NoiseDataPoint,
+    SensorDevice,
+    SiteAlert,
+    SiteData,
+    SiteSchedule,
 } from '~/types/sites'
 
 // Helper function to generate time-based data
@@ -835,6 +835,56 @@ export function getSiteActiveAlerts(siteId: string): SiteAlert[] {
   return mockAlerts.filter(alert => alert.siteId === siteId && alert.status === 'active')
 }
 
+// Add a helper to generate time series for each sensor
+function generateSensorTimeSeries(type: 'dust' | 'noise', base: number, variance: number, count = 24) {
+  const now = new Date()
+  const trends = ['stable', 'increasing', 'decreasing', 'fluctuating'] as const
+  const trend = trends[Math.floor(Math.random() * trends.length)]
+  
+  return Array.from({ length: count }).map((_, i) => {
+    const timestamp = new Date(now.getTime() - (count - i - 1) * 60 * 60 * 1000) // hourly
+    let value = base
+
+    // Apply trend patterns
+    switch (trend) {
+      case 'increasing':
+        value += (i / count) * variance * 0.8
+        break
+      case 'decreasing':
+        value -= (i / count) * variance * 0.8
+        break
+      case 'fluctuating':
+        value += Math.sin(i * 0.8) * variance * 0.6
+        break
+      default:
+        // stable - just add random variance
+        break
+    }
+
+    // Add random variance and time-based patterns
+    const timeOfDay = timestamp.getHours()
+    let timeMultiplier = 1
+    
+    // Simulate higher readings during work hours (8-18)
+    if (timeOfDay >= 8 && timeOfDay <= 18) {
+      timeMultiplier = 1.2
+    } else if (timeOfDay >= 22 || timeOfDay <= 6) {
+      timeMultiplier = 0.7 // Lower readings at night
+    }
+    
+    value = value * timeMultiplier + (Math.random() - 0.5) * variance * 0.5
+    
+    // Ensure realistic bounds
+    if (type === 'dust') {
+      value = Math.max(0.01, Math.min(2.0, Math.round(value * 100) / 100))
+    } else {
+      value = Math.max(20, Math.min(120, Math.round(value * 10) / 10))
+    }
+    
+    return { timestamp: timestamp.toISOString(), value }
+  })
+}
+
 // Mock sensor devices for each site
 export const mockSensorDevices: SensorDevice[] = [
   // Site 001 - KLCC Tower Extension (8 devices)
@@ -849,18 +899,28 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:30:00Z',
     location: 'North Tower',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 68, 8),
   },
   {
     id: 'dev-001-002',
     name: 'Noise Sensor 2',
     type: 'noise',
-    status: 'active',
-    batteryLevel: 78,
-    signalStrength: 88,
+    status: 'maintenance',
+    batteryLevel: 45,
+    signalStrength: 78,
     lastReading: 72,
-    lastReadingTime: '2024-01-24T08:30:00Z',
+    lastReadingTime: '2024-01-24T06:15:00Z',
     location: 'South Tower',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 72, 8),
   },
   {
     id: 'dev-001-003',
@@ -873,18 +933,28 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:30:00Z',
     location: 'East Wing',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 65, 8),
   },
   {
     id: 'dev-001-004',
     name: 'Noise Sensor 4',
     type: 'noise',
-    status: 'active',
-    batteryLevel: 67,
-    signalStrength: 85,
+    status: 'offline',
+    batteryLevel: 12,
+    signalStrength: 25,
     lastReading: 70,
-    lastReadingTime: '2024-01-24T08:30:00Z',
+    lastReadingTime: '2024-01-24T02:45:00Z',
     location: 'West Wing',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 70, 8),
   },
   {
     id: 'dev-001-005',
@@ -897,6 +967,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:30:00Z',
     location: 'North Tower',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.28, 0.05),
   },
   {
     id: 'dev-001-006',
@@ -909,18 +984,28 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:30:00Z',
     location: 'South Tower',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.32, 0.05),
   },
   {
     id: 'dev-001-007',
     name: 'Dust Sensor 3',
     type: 'dust',
-    status: 'active',
-    batteryLevel: 94,
-    signalStrength: 93,
+    status: 'maintenance',
+    batteryLevel: 34,
+    signalStrength: 62,
     lastReading: 0.25,
-    lastReadingTime: '2024-01-24T08:30:00Z',
+    lastReadingTime: '2024-01-24T07:20:00Z',
     location: 'East Wing',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.25, 0.05),
   },
   {
     id: 'dev-001-008',
@@ -933,6 +1018,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:30:00Z',
     location: 'West Wing',
     siteId: 'site-001',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.29, 0.05),
   },
 
   // Site 002 - Putrajaya Bridge Project (6 devices)
@@ -947,18 +1037,28 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:25:00Z',
     location: 'Bridge North',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 72, 8),
   },
   {
     id: 'dev-002-002',
     name: 'Noise Sensor 2',
     type: 'noise',
-    status: 'active',
-    batteryLevel: 88,
-    signalStrength: 94,
+    status: 'maintenance',
+    batteryLevel: 52,
+    signalStrength: 68,
     lastReading: 75,
-    lastReadingTime: '2024-01-24T08:25:00Z',
+    lastReadingTime: '2024-01-24T05:30:00Z',
     location: 'Bridge South',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 75, 8),
   },
   {
     id: 'dev-002-003',
@@ -971,6 +1071,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:25:00Z',
     location: 'Bridge Center',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 69, 8),
   },
   {
     id: 'dev-002-004',
@@ -983,18 +1088,28 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:25:00Z',
     location: 'Bridge North',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.42, 0.05),
   },
   {
     id: 'dev-002-005',
     name: 'Dust Sensor 2',
     type: 'dust',
-    status: 'active',
-    batteryLevel: 79,
-    signalStrength: 88,
+    status: 'offline',
+    batteryLevel: 8,
+    signalStrength: 15,
     lastReading: 0.45,
-    lastReadingTime: '2024-01-24T08:25:00Z',
+    lastReadingTime: '2024-01-24T01:15:00Z',
     location: 'Bridge South',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.45, 0.05),
   },
   {
     id: 'dev-002-006',
@@ -1007,6 +1122,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:25:00Z',
     location: 'Bridge Center',
     siteId: 'site-002',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.38, 0.05),
   },
 
   // Site 003 - Subang Jaya Residential Complex (4 devices)
@@ -1021,6 +1141,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:20:00Z',
     location: 'Building A',
     siteId: 'site-003',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 45, 8),
   },
   {
     id: 'dev-003-002',
@@ -1033,6 +1158,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:20:00Z',
     location: 'Building B',
     siteId: 'site-003',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 43, 8),
   },
   {
     id: 'dev-003-003',
@@ -1045,6 +1175,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:20:00Z',
     location: 'Building A',
     siteId: 'site-003',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.15, 0.05),
   },
   {
     id: 'dev-003-004',
@@ -1057,6 +1192,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:20:00Z',
     location: 'Building B',
     siteId: 'site-003',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.12, 0.05),
   },
 
   // Site 004 - Port Klang Industrial Zone (10 devices)
@@ -1071,6 +1211,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Warehouse A',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 85, 8),
   },
   {
     id: 'dev-004-002',
@@ -1083,6 +1228,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Warehouse B',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 88, 8),
   },
   {
     id: 'dev-004-003',
@@ -1095,6 +1245,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Loading Dock',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 82, 8),
   },
   {
     id: 'dev-004-004',
@@ -1107,6 +1262,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Factory Floor',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 86, 8),
   },
   {
     id: 'dev-004-005',
@@ -1119,6 +1279,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Office Area',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 84, 8),
   },
   {
     id: 'dev-004-006',
@@ -1131,6 +1296,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Warehouse A',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.65, 0.05),
   },
   {
     id: 'dev-004-007',
@@ -1143,6 +1313,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Warehouse B',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.68, 0.05),
   },
   {
     id: 'dev-004-008',
@@ -1155,6 +1330,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Loading Dock',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.62, 0.05),
   },
   {
     id: 'dev-004-009',
@@ -1167,6 +1347,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Factory Floor',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.70, 0.05),
   },
   {
     id: 'dev-004-010',
@@ -1179,6 +1364,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:15:00Z',
     location: 'Office Area',
     siteId: 'site-004',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.58, 0.05),
   },
 
   // Site 005 - Cyberjaya Tech Campus (3 devices - inactive site)
@@ -1193,6 +1383,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:10:00Z',
     location: 'Main Building',
     siteId: 'site-005',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 25, 8),
   },
   {
     id: 'dev-005-002',
@@ -1205,6 +1400,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:10:00Z',
     location: 'Parking Area',
     siteId: 'site-005',
+    manufacturer: 'Acme Sensors',
+    model: 'NS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('noise', 28, 8),
   },
   {
     id: 'dev-005-003',
@@ -1217,6 +1417,11 @@ export const mockSensorDevices: SensorDevice[] = [
     lastReadingTime: '2024-01-24T08:10:00Z',
     location: 'Main Building',
     siteId: 'site-005',
+    manufacturer: 'Acme Sensors',
+    model: 'DS-1000',
+    firmware: 'v1.2.3',
+    installDate: '2023-12-01',
+    history: generateSensorTimeSeries('dust', 0.08, 0.05),
   },
 ]
 

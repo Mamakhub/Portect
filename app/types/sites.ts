@@ -88,4 +88,9 @@ export interface SensorDevice {
   lastReadingTime?: string
   location?: string
   siteId: string
+  manufacturer?: string
+  model?: string
+  firmware?: string
+  installDate?: string
+  history?: Array<{ timestamp: string, value: number }>
 }

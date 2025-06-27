@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
+import { Icon } from '@iconify/vue';
 
 // Props
 interface Props {
@@ -40,6 +40,11 @@ const navigationItems: NavItem[] = [
     name: 'Calendar',
     href: '/calendar',
     icon: 'heroicons:calendar',
+  },
+  {
+    name: 'Sensor Control & Summary',
+    href: '/sensors',
+    icon: 'heroicons:cpu-chip',
   },
   {
     name: 'About',
