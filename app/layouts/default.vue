@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import Footer from '~/components/Footer.vue'
+
 const isSidebarExpanded = ref(true)
 const showMobileSidebar = ref(false)
 

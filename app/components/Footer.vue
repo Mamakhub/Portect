@@ -18,3 +18,7 @@
 <script setup lang="ts">
 const config = useRuntimeConfig()
 </script>
+
+export default {
+  name: 'Footer'
+}

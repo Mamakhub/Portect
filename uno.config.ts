@@ -27,6 +27,7 @@ export default defineConfig({
         800: '#1e40af',
         900: '#1e3a8a',
       },
+      'tenang-accent': '#84e4a8',
     },
   },
 })

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { SiteAlert } from '~/types/sites'
+import { Icon } from '@iconify/vue';
+import type { SiteAlert } from '~/types/sites';
 
 const props = defineProps<{
   alertCount: number

@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { SensorDevice } from '~/types/sites'
+import { Icon } from '@iconify/vue';
+import type { SensorDevice } from '~/types/sites';
 
 defineProps<{
   isOpen: boolean
