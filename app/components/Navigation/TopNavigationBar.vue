@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
+import { Icon } from '@iconify/vue'
 
 // Emits
 defineEmits<{
@@ -8,7 +8,6 @@ defineEmits<{
 
 // Composables
 const colorMode = useColorMode()
-const router = useRouter()
 
 // Reactive data
 const showUserMenu = ref(false)
@@ -30,12 +29,10 @@ function toggleTheme() {
 }
 
 function logout() {
-  console.log('Logout function called')
   showUserMenu.value = false
-  
+
   if (process.client) {
     localStorage.removeItem('mockLoggedIn')
-    console.log('localStorage cleared, navigating to login...')
     // Force navigation with window.location
     window.location.href = '/login'
   }
@@ -108,7 +105,7 @@ onMounted(() => {
           <ul class="py-2">
             <li>
               <NuxtLink
-                to="/settings"
+                to="/profile"
                 class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                 @click="showUserMenu = false"
               >
