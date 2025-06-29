@@ -99,5 +99,14 @@ import AppCard from '~/components/common/AppCard.vue'
         </div>
       </AppCard>
     </div>
+    <!-- Back to Home Button -->
+    <div class="flex justify-center pt-8">
+      <NuxtLink
+        to="/"
+        class="bg-[#017359] hover:bg-[#02684f] text-white px-6 py-3 rounded-lg font-medium transition-colors shadow"
+      >
+        Back to Home
+      </NuxtLink>
+    </div>
   </div>
 </template>
