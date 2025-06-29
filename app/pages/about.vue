@@ -70,46 +70,6 @@ function closeAllQrModal() {
 
 <template>
   <div class="max-w-6xl mx-auto py-12 px-4 space-y-10">
-    <!-- System Features & Functions Section -->
-    <AppCard>
-      <template #header>
-        <h2 class="text-2xl md:text-3xl font-bold text-[#017359] text-center w-full">
-          System Features & Functions
-        </h2>
-      </template>
-      <div>
-        <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto text-lg">
-          <span class="font-semibold text-[#017359]">Tenang Site</span> is your all-in-one digital platform for modern site management, monitoring, and scheduling. Designed for teams who value efficiency, safety, and data-driven decision making, Tenang Site empowers you to seamlessly oversee multiple project sites, monitor real-time environmental conditions, and optimize your workflow—all from a single, intuitive dashboard.<br><br>
-          Whether you're managing construction, industrial, or environmental projects, Tenang Site provides the tools you need to stay compliant, proactive, and connected. Our platform not only streamlines daily operations but also enhances collaboration, transparency, and accountability across your organization. Discover how Tenang Site can help you create safer, smarter, and more sustainable project environments.
-        </p>
-        <ul class="space-y-3 max-w-xl mx-auto">
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Real-time environmental monitoring (dust, noise, and more)</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Automated project scheduling and task optimization</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Multi-site management with centralized dashboard</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for site events</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Comprehensive reporting and analytics</span>
-          </li>
-          <li class="flex items-start gap-2">
-            <span class="text-[#017359] text-lg mt-1">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">User-friendly interface with dark mode support</span>
-          </li>
-        </ul>
-      </div>
-    </AppCard>
     <!-- Team Section (wider) -->
     <div class="max-w-6xl mx-auto">
       <AppCard>
@@ -229,6 +189,46 @@ function closeAllQrModal() {
         </div>
       </AppCard>
     </div>
+    <!-- System Features & Functions Section -->
+    <AppCard>
+      <template #header>
+        <h2 class="text-2xl md:text-3xl font-bold text-[#017359] text-center w-full">
+          System Features & Functions
+        </h2>
+      </template>
+      <div>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto text-lg">
+          <span class="font-semibold text-[#017359]">Tenang Site</span> is your all-in-one digital platform for modern site management, monitoring, and scheduling. Designed for teams who value efficiency, safety, and data-driven decision making, Tenang Site empowers you to seamlessly oversee multiple project sites, monitor real-time environmental conditions, and optimize your workflow—all from a single, intuitive dashboard.<br><br>
+          Whether you're managing construction, industrial, or environmental projects, Tenang Site provides the tools you need to stay compliant, proactive, and connected. Our platform not only streamlines daily operations but also enhances collaboration, transparency, and accountability across your organization. Discover how Tenang Site can help you create safer, smarter, and more sustainable project environments.
+        </p>
+        <ul class="space-y-3 max-w-xl mx-auto">
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Real-time environmental monitoring (dust, noise, and more)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Automated project scheduling and task optimization</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Multi-site management with centralized dashboard</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for site events</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Comprehensive reporting and analytics</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">User-friendly interface with dark mode support</span>
+          </li>
+        </ul>
+      </div>
+    </AppCard>
     <!-- QR Code Modal -->
     <Modal :is-open="showQrModal" :title="qrModalTitle" size="sm" @close="closeQrModal">
       <div class="flex flex-col items-center justify-center">
