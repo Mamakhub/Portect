@@ -2,7 +2,7 @@
 import { Icon } from '@iconify/vue'
 import QrcodeVue from 'qrcode.vue'
 import type { Ref } from 'vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import AppCard from '~/components/common/AppCard.vue'
 import Modal from '~/components/common/Modal.vue'
 
@@ -40,6 +40,10 @@ const qrModalTitle = ref('')
 const qrValue = ref('')
 const showAllQrModal = ref(false)
 const allQrMember: Ref<TeamMember | null> = ref(null)
+
+const colorMode = useColorMode()
+const qrBgColor = computed(() => '#ffffff')
+const qrFgColor = computed(() => '#000000')
 
 function handleSocialClick(name: TeamMember, type: SocialType) {
   const link = teamLinks[name][type]
@@ -232,7 +236,9 @@ function closeAllQrModal() {
     <!-- QR Code Modal -->
     <Modal :is-open="showQrModal" :title="qrModalTitle" size="sm" @close="closeQrModal">
       <div class="flex flex-col items-center justify-center">
-        <QrcodeVue :value="qrValue" :size="180" class="mb-4" />
+        <div :class="colorMode.value === 'dark' ? 'bg-white p-4 rounded-lg' : ''">
+          <QrcodeVue :value="qrValue" :size="180" class="mb-4" :background="qrBgColor" :foreground="qrFgColor" />
+        </div>
         <div class="text-xs text-gray-500 dark:text-gray-400 break-all text-center">
           {{ qrValue }}
         </div>
@@ -261,19 +267,25 @@ function closeAllQrModal() {
         </h2>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 w-full max-w-4xl">
           <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <QrcodeVue :value="teamLinks[allQrMember].linkedin" :size="140" />
+            <div :class="colorMode.value === 'dark' ? 'bg-white p-3 rounded-lg' : ''">
+              <QrcodeVue :value="teamLinks[allQrMember].linkedin" :size="140" :background="qrBgColor" :foreground="qrFgColor" />
+            </div>
             <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-tenang-primary dark:text-tenang-primary-dark">
               <Icon icon="mdi:linkedin" class="w-5 h-5" /> LinkedIn
             </div>
           </div>
           <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <QrcodeVue :value="teamLinks[allQrMember].instagram" :size="140" />
+            <div :class="colorMode.value === 'dark' ? 'bg-white p-3 rounded-lg' : ''">
+              <QrcodeVue :value="teamLinks[allQrMember].instagram" :size="140" :background="qrBgColor" :foreground="qrFgColor" />
+            </div>
             <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-tenang-primary dark:text-tenang-primary-dark">
               <Icon icon="mdi:instagram" class="w-5 h-5" /> Instagram
             </div>
           </div>
           <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
-            <QrcodeVue :value="teamLinks[allQrMember].gmail" :size="140" />
+            <div :class="colorMode.value === 'dark' ? 'bg-white p-3 rounded-lg' : ''">
+              <QrcodeVue :value="teamLinks[allQrMember].gmail" :size="140" :background="qrBgColor" :foreground="qrFgColor" />
+            </div>
             <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-tenang-primary dark:text-tenang-primary-dark">
               <Icon icon="mdi:gmail" class="w-5 h-5" /> Gmail
             </div>
