@@ -20,7 +20,9 @@ const emit = defineEmits<{
 
 // Composables
 const route = useRoute()
-const config = useRuntimeConfig()
+
+// Mock user data (replace with actual user data)
+const userName = ref('John Doe')
 
 // Navigation items - only user-accessible pages
 interface NavItem {
@@ -85,21 +87,24 @@ function closeMobileSidebar() {
         isExpanded ? 'w-64' : 'w-16',
       ]"
     >
-      <!-- Logo/Brand -->
+      <!-- Toggle Button and Greeting -->
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center w-full">
-          <img
-            src="~/assets/icon.png"
-            alt="App Icon"
-            class="w-8 h-8 cursor-pointer object-contain"
+          <button
+            class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             @click="toggleSidebar"
           >
+            <Icon
+              :icon="isExpanded ? 'heroicons:chevron-left' : 'heroicons:chevron-right'"
+              class="w-5 h-5"
+            />
+          </button>
           <transition name="slide-fade">
             <span
               v-if="isExpanded"
-              class="ml-3 text-lg font-semibold text-gray-900 dark:text-white whitespace-nowrap"
+              class="ml-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap"
             >
-              {{ config.public.appName }}
+              Hello, {{ userName }}
             </span>
           </transition>
         </div>
@@ -170,14 +175,8 @@ function closeMobileSidebar() {
       <!-- Mobile Header -->
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
-          <img
-            src="~/assets/icon.png"
-            alt="App Icon"
-            class="w-8 h-8 cursor-pointer object-contain"
-            @click="toggleSidebar"
-          >
-          <span class="ml-3 text-lg font-semibold text-gray-900 dark:text-white">
-            {{ config.public.appName }}
+          <span class="text-lg font-semibold text-gray-900 dark:text-white">
+            Hello, {{ userName }}
           </span>
         </div>
         <button

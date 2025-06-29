@@ -51,8 +51,17 @@ onMounted(() => {
 
 <template>
   <div class="flex justify-between items-center bg-white dark:bg-gray-800 py-3 px-6 border-b border-gray-200 dark:border-gray-700">
-    <!-- Left side - Mobile menu button -->
+    <!-- Left side - App Icon, Title, and Mobile menu button -->
     <div class="flex items-center">
+      <!-- App Icon and Title -->
+      <div class="flex items-center space-x-3">
+        <img src="/assets/icon.png" alt="Tenang Site" class="h-8 w-8 drop-shadow-sm">
+        <h1 class="text-xl font-bold text-[#017359] tracking-tight drop-shadow-sm">
+          Tenang Site
+        </h1>
+      </div>
+
+      <!-- Mobile menu button -->
       <button
         class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
         @click="$emit('toggleSidebar')"
