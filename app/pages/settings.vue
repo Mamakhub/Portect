@@ -86,23 +86,25 @@ definePageMeta({
       </div>
       <div class="p-6 space-y-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name</label>
           <input
             v-model="userName"
             type="text"
-            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            placeholder="Enter your full name"
+            class="block w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm transition-colors duration-200 focus:border-tenang-primary dark:focus:border-tenang-primary-dark focus:ring-2 focus:ring-tenang-primary/20 dark:focus:ring-tenang-primary-dark/20 focus:outline-none"
           >
         </div>
         <div>
-          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+          <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
           <input
             v-model="userEmail"
             type="email"
-            class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-primary-500 focus:ring-primary-500"
+            placeholder="Enter your email address"
+            class="block w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm transition-colors duration-200 focus:border-tenang-primary dark:focus:border-tenang-primary-dark focus:ring-2 focus:ring-tenang-primary/20 dark:focus:ring-tenang-primary-dark/20 focus:outline-none"
           >
         </div>
-        <div class="flex justify-end">
-          <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+        <div class="flex justify-end pt-4">
+          <button class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-6 py-3 rounded-lg text-sm font-medium transition-colors duration-200 shadow-sm hover:shadow-md">
             Save Changes
           </button>
         </div>
