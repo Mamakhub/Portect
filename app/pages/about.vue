@@ -122,18 +122,20 @@ function closeAllQrModal() {
         </template>
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
           <!-- Leon Then (CEO) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
-            <img src="/assets/Leon Then _ Portrait.png" alt="Leon Then" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Leon Then')">
-            <h2 class="text-xl font-semibold text-[#017359] mb-1">
-              Leon Then
-            </h2>
-            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-              CEO
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-              Leading the vision and strategy to deliver innovative, reliable, and user-centric site management solutions.
-            </p>
-            <div class="flex gap-4 mt-2">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col p-6">
+            <div class="flex flex-col items-center flex-1">
+              <img src="/assets/Leon Then _ Portrait.png" alt="Leon Then" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Leon Then')">
+              <h2 class="text-xl font-semibold text-[#017359] mb-1">
+                Leon Then
+              </h2>
+              <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
+                CEO
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
+                Leading the vision and strategy to deliver innovative, reliable, and user-centric site management solutions.
+              </p>
+            </div>
+            <div class="flex gap-4 mt-auto justify-center pt-2">
               <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Leon Then', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
@@ -146,18 +148,20 @@ function closeAllQrModal() {
             </div>
           </div>
           <!-- Anson Kiu (CIO) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
-            <img src="/assets/Anson Kiu.jpg" alt="Anson Kiu" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Anson Kiu')">
-            <h2 class="text-xl font-semibold text-[#017359] mb-1">
-              Anson Kiu
-            </h2>
-            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-              CIO
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-              Driving information strategy and digital transformation to empower smarter, data-driven decisions.
-            </p>
-            <div class="flex gap-4 mt-2">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col p-6">
+            <div class="flex flex-col items-center flex-1">
+              <img src="/assets/Anson Kiu.jpg" alt="Anson Kiu" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Anson Kiu')">
+              <h2 class="text-xl font-semibold text-[#017359] mb-1">
+                Anson Kiu
+              </h2>
+              <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
+                CIO
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
+                Driving information strategy and digital transformation to empower smarter, data-driven decisions.
+              </p>
+            </div>
+            <div class="flex gap-4 mt-auto justify-center pt-2">
               <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Anson Kiu', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
@@ -170,18 +174,20 @@ function closeAllQrModal() {
             </div>
           </div>
           <!-- Chong Yi Jian (CTO) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
-            <img src="/assets/Chong Yi Jian.png" alt="Chong Yi Jian" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Chong Yi Jian')">
-            <h2 class="text-xl font-semibold text-[#017359] mb-1">
-              Chong Yi Jian
-            </h2>
-            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-              CTO
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-              Spearheading technological innovation and ensuring seamless integration of advanced monitoring and scheduling systems.
-            </p>
-            <div class="flex gap-4 mt-2">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col p-6">
+            <div class="flex flex-col items-center flex-1">
+              <img src="/assets/Chong Yi Jian.png" alt="Chong Yi Jian" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Chong Yi Jian')">
+              <h2 class="text-xl font-semibold text-[#017359] mb-1">
+                Chong Yi Jian
+              </h2>
+              <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
+                CTO
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
+                Spearheading technological innovation and ensuring seamless integration of advanced monitoring and scheduling systems.
+              </p>
+            </div>
+            <div class="flex gap-4 mt-auto justify-center pt-2">
               <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Chong Yi Jian', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
@@ -194,18 +200,20 @@ function closeAllQrModal() {
             </div>
           </div>
           <!-- Go Yao Xiang (CMO) -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
-            <img src="/assets/Go Yao Xiang.png" alt="Go Yao Xiang" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Go Yao Xiang')">
-            <h2 class="text-xl font-semibold text-[#017359] mb-1">
-              Go Yao Xiang
-            </h2>
-            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
-              CMO
-            </h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-              Crafting and executing creative marketing strategies to communicate the value and impact of our platform.
-            </p>
-            <div class="flex gap-4 mt-2">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col p-6">
+            <div class="flex flex-col items-center flex-1">
+              <img src="/assets/Go Yao Xiang.png" alt="Go Yao Xiang" class="w-32 h-32 object-cover rounded-xl mb-4 shadow-md cursor-pointer" @click="openAllQrModal('Go Yao Xiang')">
+              <h2 class="text-xl font-semibold text-[#017359] mb-1">
+                Go Yao Xiang
+              </h2>
+              <h3 class="text-base font-medium text-gray-900 dark:text-white mb-1">
+                CMO
+              </h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
+                Crafting and executing creative marketing strategies to communicate the value and impact of our platform.
+              </p>
+            </div>
+            <div class="flex gap-4 mt-auto justify-center pt-2">
               <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Go Yao Xiang', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
@@ -233,36 +241,39 @@ function closeAllQrModal() {
       </div>
     </Modal>
     <!-- All Contact QR Modal -->
-    <Modal :is-open="showAllQrModal" :title="allQrMember ? `${allQrMember} - Contact Info` : ''" size="md" @close="closeAllQrModal">
-      <div v-if="allQrMember" class="flex flex-col items-center">
-        <img
-          :src="
-            allQrMember === 'Leon Then' ? '/assets/Leon Then _ Portrait.png'
-            : allQrMember === 'Anson Kiu' ? '/assets/Anson Kiu.jpg'
-              : allQrMember === 'Chong Yi Jian' ? '/assets/Chong Yi Jian.png'
-                : '/assets/Go Yao Xiang.png'"
-          :alt="allQrMember"
-          class="w-24 h-24 object-cover rounded-xl mb-2 shadow-md"
-        >
-        <h2 class="text-lg font-semibold text-[#017359] mb-4">
+    <Modal :is-open="showAllQrModal" :title="allQrMember ? `${allQrMember} - Contact Info` : ''" size="xl" @close="closeAllQrModal">
+      <div v-if="allQrMember" class="flex flex-col items-center p-8">
+        <!-- Enhanced image section with background -->
+        <div class="bg-[#017359]/10 rounded-2xl p-6 mb-6 shadow-lg">
+          <img
+            :src="
+              allQrMember === 'Leon Then' ? '/_nuxt/assets/Leon Then _ Portrait.png'
+              : allQrMember === 'Anson Kiu' ? '/_nuxt/assets/Anson Kiu.jpg'
+                : allQrMember === 'Chong Yi Jian' ? '/_nuxt/assets/Chong Yi Jian.png'
+                  : '/_nuxt/assets/Go Yao Xiang.png'"
+            :alt="allQrMember"
+            class="w-36 h-36 object-cover rounded-xl shadow-lg border-4 border-white"
+          >
+        </div>
+        <h2 class="text-2xl font-bold text-[#017359] mb-12">
           {{ allQrMember }}
         </h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
-          <div class="flex flex-col items-center">
-            <QrcodeVue :value="teamLinks[allQrMember].linkedin" :size="110" />
-            <div class="flex items-center gap-1 mt-2 text-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-12 w-full max-w-4xl">
+          <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+            <QrcodeVue :value="teamLinks[allQrMember].linkedin" :size="140" />
+            <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-[#017359]">
               <Icon icon="mdi:linkedin" class="w-5 h-5" /> LinkedIn
             </div>
           </div>
-          <div class="flex flex-col items-center">
-            <QrcodeVue :value="teamLinks[allQrMember].instagram" :size="110" />
-            <div class="flex items-center gap-1 mt-2 text-sm">
+          <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+            <QrcodeVue :value="teamLinks[allQrMember].instagram" :size="140" />
+            <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-[#017359]">
               <Icon icon="mdi:instagram" class="w-5 h-5" /> Instagram
             </div>
           </div>
-          <div class="flex flex-col items-center">
-            <QrcodeVue :value="teamLinks[allQrMember].gmail" :size="110" />
-            <div class="flex items-center gap-1 mt-2 text-sm">
+          <div class="flex flex-col items-center bg-gray-50 dark:bg-gray-800 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow">
+            <QrcodeVue :value="teamLinks[allQrMember].gmail" :size="140" />
+            <div class="flex items-center gap-2 mt-4 text-sm font-semibold text-[#017359]">
               <Icon icon="mdi:gmail" class="w-5 h-5" /> Gmail
             </div>
           </div>
