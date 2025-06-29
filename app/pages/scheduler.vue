@@ -207,6 +207,23 @@ function handleEventDidMount(info: any) {
 function handleEventDidUnmount(info: any) {
   console.log('Event unmounted:', info.event.title)
 }
+
+function openDatePicker(event: Event) {
+  // Programmatically open the date picker
+  const input = event.target as HTMLInputElement
+  try {
+    if (input.showPicker) {
+      input.showPicker()
+    }
+    else {
+      input.click()
+    }
+  }
+  catch {
+    // Fallback to click if showPicker is not supported
+    input.click()
+  }
+}
 </script>
 
 <template>
@@ -247,7 +264,15 @@ function handleEventDidUnmount(info: any) {
           </div>
           <div class="flex-1">
             <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Due Date</label>
-            <input v-model="dueDate" type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <input
+              v-model="dueDate"
+              type="date"
+              placeholder="Select due date"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors cursor-pointer"
+              :min="new Date().toISOString().split('T')[0]"
+              @click="openDatePicker"
+              @focus="openDatePicker"
+            >
           </div>
         </div>
       </div>
@@ -419,23 +444,20 @@ function handleEventDidUnmount(info: any) {
       </div>
 
       <!-- Calendar Modal -->
-      <div v-if="showCalendarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl w-full relative">
-          <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 dark:hover:text-white text-2xl" @click="closeCalendarModal">
-            &times;
-          </button>
-          <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
-            Schedule Calendar
-          </h2>
-          <client-only>
-            <FullCalendar
-              v-if="showSchedule"
-              ref="calendarRef"
-              :options="calendarOptions"
-            />
-          </client-only>
-        </div>
-      </div>
+      <CommonModal
+        :is-open="showCalendarModal"
+        title="Schedule Calendar"
+        size="full"
+        @close="closeCalendarModal"
+      >
+        <client-only>
+          <FullCalendar
+            v-if="showSchedule"
+            ref="calendarRef"
+            :options="calendarOptions"
+          />
+        </client-only>
+      </CommonModal>
     </div>
   </div>
 </template>
@@ -614,5 +636,106 @@ function handleEventDidUnmount(info: any) {
 }
 :deep(.dark .fc .fc-highlight) {
   background: #2563eb55;
+}
+
+/* Date input styling for better dark mode support */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+  cursor: pointer;
+}
+
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  color: inherit;
+}
+
+input[type="date"]::-webkit-datetime-edit-text {
+  color: inherit;
+}
+
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: inherit;
+}
+
+/* Ensure date input placeholder works */
+input[type="date"]:not([value])::-webkit-datetime-edit {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.dark input[type="date"]:not([value])::-webkit-datetime-edit {
+  color: #d1d5db;
+  font-weight: 500;
+}
+
+/* Make placeholder more visible */
+input[type="date"]::placeholder {
+  color: #6b7280;
+  font-weight: 500;
+  opacity: 1;
+}
+
+.dark input[type="date"]::placeholder {
+  color: #9ca3af;
+  font-weight: 500;
+  opacity: 1;
+}
+
+/* Ensure input doesn't look disabled when empty */
+input[type="date"]:not([value]) {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.dark input[type="date"]:not([value]) {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+/* Make placeholder text non-selectable and non-focusable */
+input[type="date"]::placeholder {
+  color: #6b7280;
+  font-weight: 500;
+  opacity: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+.dark input[type="date"]::placeholder {
+  color: #9ca3af;
+  font-weight: 500;
+  opacity: 1;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
+}
+
+/* Prevent text selection on empty date inputs */
+input[type="date"]:not([value]) {
+  color: #6b7280;
+  font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.dark input[type="date"]:not([value]) {
+  color: #9ca3af;
+  font-weight: 500;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 </style>
