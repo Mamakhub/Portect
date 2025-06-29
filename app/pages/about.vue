@@ -78,8 +78,9 @@ function closeAllQrModal() {
         </h2>
       </template>
       <div>
-        <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-          Our platform is designed to streamline site management, monitoring, and scheduling for modern teams. Here are some of the key features and functions that make our system powerful and user-friendly:
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto text-lg">
+          <span class="font-semibold text-[#017359]">Tenang Site</span> is your all-in-one digital platform for modern site management, monitoring, and scheduling. Designed for teams who value efficiency, safety, and data-driven decision making, Tenang Site empowers you to seamlessly oversee multiple project sites, monitor real-time environmental conditions, and optimize your workflow—all from a single, intuitive dashboard.<br><br>
+          Whether you're managing construction, industrial, or environmental projects, Tenang Site provides the tools you need to stay compliant, proactive, and connected. Our platform not only streamlines daily operations but also enhances collaboration, transparency, and accountability across your organization. Discover how Tenang Site can help you create safer, smarter, and more sustainable project environments.
         </p>
         <ul class="space-y-3 max-w-xl mx-auto">
           <li class="flex items-start gap-2">
