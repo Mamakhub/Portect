@@ -55,9 +55,9 @@ onMounted(() => {
     <div class="flex items-center">
       <!-- App Icon and Title -->
       <div class="flex items-center space-x-3">
-        <img src="/assets/icon.png" alt="Tenang Site" class="h-8 w-8 drop-shadow-sm">
+        <img src="/assets/icon_2.png" alt="TenangSite" class="h-10 w-10 drop-shadow-sm">
         <h1 class="text-xl font-bold text-[#017359] tracking-tight drop-shadow-sm">
-          Tenang Site
+          TenangSite
         </h1>
       </div>
 

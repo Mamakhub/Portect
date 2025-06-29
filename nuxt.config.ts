@@ -51,7 +51,7 @@ export default defineNuxtConfig({
 
   app: {
     head: {
-      title: 'Tenang Site',
+      title: 'TenangSite',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -65,7 +65,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      appName: 'Tenang Site',
+      appName: 'TenangSite',
     },
   },
 })

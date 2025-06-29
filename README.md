@@ -1,4 +1,4 @@
-# Tenang Site
+# TenangSite
 
 A modern Nuxt.js frontend application built with Vue 3, TypeScript, and UnoCSS.
 
