@@ -1,12 +1,21 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
+import { Icon } from '@iconify/vue'
+import { computed } from 'vue'
+// @ts-expect-error: PNG imports for Vite/webpack
+import happyImg from '~/assets/happy.png'
+// @ts-expect-error: PNG imports for Vite/webpack
+import neutralImg from '~/assets/neutral.png'
+// @ts-expect-error: PNG imports for Vite/webpack
+import sadImg from '~/assets/sad.png'
 
-defineProps<{
+const props = defineProps<{
   dustActive: number
   dustInactive: number
   noiseActive: number
   noiseInactive: number
   lastUpdated: string
+  averageNoise: number
+  averageDust: number
 }>()
 
 const emit = defineEmits<{
@@ -16,6 +25,18 @@ const emit = defineEmits<{
 function handleViewDetails() {
   emit('viewDetails')
 }
+
+const workerImage = computed(() => {
+  if (props.averageNoise >= 70 || props.averageDust >= 0.35) {
+    return sadImg
+  }
+  else if (props.averageNoise >= 50 || props.averageDust >= 0.15) {
+    return neutralImg
+  }
+  else {
+    return happyImg
+  }
+})
 </script>
 
 <template>
@@ -63,7 +84,7 @@ function handleViewDetails() {
       </div>
       <div>
         <img
-          src="~/assets/worker.png"
+          :src="workerImage"
           alt="Worker"
           class="w-24 h-24 rounded-full object-cover"
         >

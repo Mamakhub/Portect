@@ -200,6 +200,8 @@ function handleScheduleMarkAsDone(scheduleId: string) {
             :dust-inactive="selectedSiteSensorSummary.dustInactive"
             :noise-active="selectedSiteSensorSummary.noiseActive"
             :noise-inactive="selectedSiteSensorSummary.noiseInactive"
+            :average-noise="selectedSiteStats?.averageNoise ?? averageNoiseLevel"
+            :average-dust="selectedSiteStats?.averageDust ?? averageDustLevel"
             last-updated="18 May 2025, 11:05AM (GMT+8)"
             @view-details="openSensorSummaryModal"
           />
