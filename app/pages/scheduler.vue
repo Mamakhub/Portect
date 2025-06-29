@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { CalendarOptions } from '@fullcalendar/core'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import timeGridPlugin from '@fullcalendar/timegrid'
@@ -106,12 +107,21 @@ function generateSchedule() {
     })
     // Calendar events
     calendarEvents.value = optimizedSchedule.value.map(task => ({
+      id: `task-${Math.random().toString(36).substr(2, 9)}`,
       title: task.name,
       start: `${formatDateForCalendar(task.day)}T${task.time.padStart(5, '0')}`,
       end: `${formatDateForCalendar(task.day)}T${(Number.parseInt(task.time) + Number.parseInt(task.duration)).toString().padStart(2, '0')}:00`,
       backgroundColor: getPriorityColor(task.priority),
       borderColor: getPriorityColor(task.priority),
       textColor: '#fff',
+      extendedProps: {
+        description: `Task: ${task.name}`,
+        type: task.category,
+        priority: task.priority,
+        assignedTo: 'Project Team',
+        status: 'pending',
+        duration: task.duration,
+      },
     }))
     isLoading.value = false
     showSchedule.value = true
@@ -128,6 +138,8 @@ function getPriorityColor(priority: string) {
 
 // Calendar Modal
 const showCalendarModal = ref(false)
+const calendarRef = ref()
+
 function openCalendarModal() {
   showCalendarModal.value = true
 }
@@ -135,7 +147,66 @@ function closeCalendarModal() {
   showCalendarModal.value = false
 }
 
-const calendarPlugins = [dayGridPlugin, timeGridPlugin, interactionPlugin]
+// Calendar options for modal
+const calendarOptions = computed<CalendarOptions>(() => ({
+  plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
+  initialView: 'timeGridWeek',
+  headerToolbar: {
+    left: 'prev,next today',
+    center: 'title',
+    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+  },
+  events: calendarEvents.value,
+  height: 500,
+  aspectRatio: 1.35,
+  editable: false,
+  selectable: false,
+  dayMaxEvents: true,
+  weekends: true,
+  eventClick: handleEventClick,
+  eventDidMount: handleEventDidMount,
+  eventDidUnmount: handleEventDidUnmount,
+  slotMinTime: '06:00:00',
+  slotMaxTime: '20:00:00',
+  allDaySlot: false,
+  slotDuration: '00:30:00',
+  slotLabelInterval: '01:00:00',
+  nowIndicator: true,
+  businessHours: {
+    daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday - Saturday
+    startTime: '06:00',
+    endTime: '18:00',
+  },
+}))
+
+// Event handlers
+function handleEventClick(info: any) {
+  const event = info.event
+  const props = event.extendedProps
+
+  console.log('Event clicked:', {
+    title: event.title,
+    description: props.description,
+    type: props.type,
+    priority: props.priority,
+    assignedTo: props.assignedTo,
+    status: props.status,
+    duration: props.duration,
+  })
+}
+
+function handleEventDidMount(info: any) {
+  const event = info.event
+  const props = event.extendedProps
+
+  // Add title attribute for tooltip
+  const element = info.el
+  element.title = `${event.title}\n${props.description}\nPriority: ${props.priority}\nDuration: ${props.duration} hours`
+}
+
+function handleEventDidUnmount(info: any) {
+  console.log('Event unmounted:', info.event.title)
+}
 </script>
 
 <template>
@@ -352,19 +423,188 @@ const calendarPlugins = [dayGridPlugin, timeGridPlugin, interactionPlugin]
         <client-only>
           <FullCalendar
             v-if="showSchedule"
-            :plugins="calendarPlugins"
-            initial-view="timeGridWeek"
-            :events="calendarEvents"
-            :header-toolbar="{ left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,timeGridDay' }"
-            :height="500"
-            :aspect-ratio="1.35"
-            :editable="false"
-            :selectable="false"
-            :day-max-events="true"
-            :weekends="true"
+            ref="calendarRef"
+            :options="calendarOptions"
           />
         </client-only>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+/* Calendar styling for the modal */
+:deep(.fc) {
+  font-family: inherit;
+  background: transparent;
+}
+
+/* Main calendar background */
+:deep(.fc) {
+  background: #fff;
+}
+:deep(.dark .fc) {
+  background: #111827;
+}
+
+/* Toolbar/Header */
+:deep(.fc-header-toolbar) {
+  background: #f9fafb;
+  border-radius: 0.75rem 0.75rem 0 0;
+  padding: 0.75rem 1.5rem 0.5rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+:deep(.dark .fc-header-toolbar) {
+  background: #1f2937;
+  border-bottom: 1px solid #374151;
+}
+
+:deep(.fc-toolbar-title) {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+}
+:deep(.dark .fc-toolbar-title) {
+  color: #f3f4f6;
+}
+
+/* Toolbar buttons */
+:deep(.fc-button) {
+  background: #e5e7eb;
+  border: none;
+  color: #374151;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  margin-right: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: none;
+}
+:deep(.fc-button-active), :deep(.fc-button-primary) {
+  background: #2563eb;
+  color: #fff;
+}
+:deep(.fc-button:hover) {
+  background: #3b82f6;
+  color: #fff;
+}
+:deep(.dark .fc-button) {
+  background: #374151;
+  color: #f3f4f6;
+}
+:deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
+  background: #2563eb;
+  color: #fff;
+}
+:deep(.dark .fc-button:hover) {
+  background: #3b82f6;
+  color: #fff;
+}
+
+/* Grid and cell backgrounds */
+:deep(.fc-scrollgrid) {
+  background: transparent;
+}
+:deep(.fc-daygrid-day), :deep(.fc-timegrid-slot) {
+  background: #fff;
+  border-color: #e5e7eb;
+}
+:deep(.dark .fc-daygrid-day), :deep(.dark .fc-timegrid-slot) {
+  background: #23272f;
+  border-color: #374151;
+}
+
+:deep(.fc-col-header-cell) {
+  background: #f3f4f6;
+  color: #374151;
+  font-weight: 700;
+  border-bottom: 1px solid #e5e7eb;
+}
+:deep(.dark .fc-col-header-cell) {
+  background: #23272f;
+  color: #f3f4f6;
+  border-bottom: 1px solid #374151;
+}
+
+:deep(.fc-daygrid-day-number) {
+  color: #374151;
+  font-weight: 600;
+}
+:deep(.dark .fc-daygrid-day-number) {
+  color: #f3f4f6;
+}
+
+/* Event tiles */
+:deep(.fc-event) {
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  margin-bottom: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.08);
+  border: none;
+  transition: background 0.2s, color 0.2s;
+}
+:deep(.fc-event-enhanced) {
+  box-shadow: 0 2px 8px 0 rgba(59,130,246,0.15);
+  border: none;
+}
+:deep(.dark .fc-event), :deep(.dark .fc-event-enhanced) {
+  background: #2563eb !important;
+  color: #fff !important;
+  box-shadow: 0 2px 8px 0 rgba(37,99,235,0.18);
+  border: none;
+}
+:deep(.fc-event-short-title) {
+  color: inherit;
+  font-weight: 600;
+  font-size: 0.92rem;
+  letter-spacing: 0.01em;
+}
+
+:deep(.fc-event:hover) {
+  opacity: 0.96;
+  filter: brightness(1.08);
+}
+
+/* Today highlight */
+:deep(.fc-day-today) {
+  background: #dbeafe;
+}
+:deep(.dark .fc-day-today) {
+  background: #1e293b;
+  border: 1.5px solid #2563eb;
+}
+
+/* More link */
+:deep(.fc-more-link) {
+  color: #2563eb;
+  font-weight: 600;
+}
+:deep(.dark .fc-more-link) {
+  color: #60a5fa;
+}
+
+/* Time labels */
+:deep(.fc-timegrid-slot-label) {
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+:deep(.dark .fc-timegrid-slot-label) {
+  color: #9ca3af;
+}
+
+/* Misc */
+:deep(.fc .fc-bg-event) {
+  opacity: 0.15;
+}
+:deep(.fc .fc-highlight) {
+  background: #2563eb33;
+}
+:deep(.dark .fc .fc-highlight) {
+  background: #2563eb55;
+}
+</style>
