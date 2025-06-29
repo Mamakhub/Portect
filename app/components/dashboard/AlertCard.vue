@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
-import type { SiteAlert } from '~/types/sites';
+import { Icon } from '@iconify/vue'
+import type { SiteAlert } from '~/types/sites'
 
 const props = defineProps<{
   alertCount: number
@@ -51,7 +51,7 @@ function getTypeIcon(type: string): string {
         </div>
         <div class="flex items-center space-x-4">
           <button
-            class="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            class="px-3 py-1 text-sm bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded-md hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 transition-colors"
             @click.stop="handleViewDetails"
           >
             View Details

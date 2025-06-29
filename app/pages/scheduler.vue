@@ -268,7 +268,7 @@ function openDatePicker(event: Event) {
               v-model="dueDate"
               type="date"
               placeholder="Select due date"
-              class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors cursor-pointer"
+              class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors cursor-pointer"
               :min="new Date().toISOString().split('T')[0]"
               @click="openDatePicker"
               @focus="openDatePicker"
@@ -306,7 +306,7 @@ function openDatePicker(event: Event) {
           </select>
         </div>
         <div class="flex gap-2">
-          <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded transition-colors" @click="addTask">
+          <button class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded transition-colors" @click="addTask">
             Add Task
           </button>
           <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors" @click="() => generateRandomTasks(5)">
@@ -362,25 +362,25 @@ function openDatePicker(event: Event) {
             </tbody>
           </table>
         </div>
-        <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4 mt-4" @click="openCalendarModal">
+        <button v-if="showSchedule" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded mb-4 mt-4 transition-colors" @click="openCalendarModal">
           View in Calendar
         </button>
       </div>
 
       <!-- Generate Schedule Button -->
       <div class="mb-6">
-        <button :disabled="!tasks.length || isLoading || !dueDate" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" @click="generateSchedule">
+        <button :disabled="!tasks.length || isLoading || !dueDate" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-6 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" @click="generateSchedule">
           Generate Optimized Schedule
         </button>
       </div>
 
       <!-- Loading Spinner -->
       <div v-if="isLoading" class="flex flex-col items-center justify-center py-10">
-        <svg class="animate-spin h-10 w-10 text-primary-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <svg class="animate-spin h-10 w-10 text-tenang-primary dark:text-tenang-primary-dark mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
           <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
         </svg>
-        <div class="text-primary-700 dark:text-primary-400 font-medium">
+        <div class="text-tenang-primary dark:text-tenang-primary-dark font-medium">
           Generating optimized schedule...
         </div>
       </div>
@@ -438,7 +438,7 @@ function openDatePicker(event: Event) {
             </tbody>
           </table>
         </div>
-        <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4" @click="openCalendarModal">
+        <button v-if="showSchedule" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded mb-4 transition-colors" @click="openCalendarModal">
           View in Calendar
         </button>
       </div>
@@ -510,11 +510,11 @@ function openDatePicker(event: Event) {
   box-shadow: none;
 }
 :deep(.fc-button-active), :deep(.fc-button-primary) {
-  background: #2563eb;
+  background: #017359;
   color: #fff;
 }
 :deep(.fc-button:hover) {
-  background: #3b82f6;
+  background: #015a47;
   color: #fff;
 }
 :deep(.dark .fc-button) {
@@ -522,12 +522,12 @@ function openDatePicker(event: Event) {
   color: #f3f4f6;
 }
 :deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
-  background: #2563eb;
-  color: #fff;
+  background: #BED9D2;
+  color: #000;
 }
 :deep(.dark .fc-button:hover) {
-  background: #3b82f6;
-  color: #fff;
+  background: #a8c9c0;
+  color: #000;
 }
 
 /* Grid and cell backgrounds */
@@ -602,20 +602,20 @@ function openDatePicker(event: Event) {
 
 /* Today highlight */
 :deep(.fc-day-today) {
-  background: #dbeafe;
+  background: #f0f9f6;
 }
 :deep(.dark .fc-day-today) {
   background: #1e293b;
-  border: 1.5px solid #2563eb;
+  border: 1.5px solid #BED9D2;
 }
 
 /* More link */
 :deep(.fc-more-link) {
-  color: #2563eb;
+  color: #017359;
   font-weight: 600;
 }
 :deep(.dark .fc-more-link) {
-  color: #60a5fa;
+  color: #BED9D2;
 }
 
 /* Time labels */
@@ -632,10 +632,10 @@ function openDatePicker(event: Event) {
   opacity: 0.15;
 }
 :deep(.fc .fc-highlight) {
-  background: #2563eb33;
+  background: #01735933;
 }
 :deep(.dark .fc .fc-highlight) {
-  background: #2563eb55;
+  background: #BED9D255;
 }
 
 /* Date input styling for better dark mode support */

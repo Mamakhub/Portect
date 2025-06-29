@@ -269,7 +269,7 @@ definePageMeta({
         </h2>
         <button
           v-if="!isEditing"
-          class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:ring-offset-2"
           @click="startEditing"
         >
           Edit Profile
@@ -282,7 +282,7 @@ definePageMeta({
             Cancel
           </button>
           <button
-            class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:ring-offset-2"
             :disabled="isLoading"
             @click="saveProfile"
           >
@@ -304,7 +304,7 @@ definePageMeta({
               />
               <div
                 v-else
-                class="w-20 h-20 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold text-xl"
+                class="w-20 h-20 bg-tenang-primary dark:bg-tenang-primary-dark rounded-full flex items-center justify-center text-white dark:text-black font-semibold text-xl"
               >
                 {{ userInitials }}
               </div>
@@ -365,12 +365,12 @@ definePageMeta({
               />
               <div
                 v-else
-                class="w-20 h-20 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold text-xl"
+                class="w-20 h-20 bg-tenang-primary dark:bg-tenang-primary-dark rounded-full flex items-center justify-center text-white dark:text-black font-semibold text-xl"
               >
                 {{ userInitials }}
               </div>
               <label
-                class="absolute bottom-0 right-0 bg-primary-600 text-white rounded-full p-1 cursor-pointer hover:bg-primary-700"
+                class="absolute bottom-0 right-0 bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded-full p-1 cursor-pointer hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90"
               >
                 <Icon icon="heroicons:camera" class="w-4 h-4" />
                 <input
@@ -395,7 +395,7 @@ definePageMeta({
               <input
                 v-model="editForm.firstName"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.firstName }"
                 placeholder="Enter your first name"
               >
@@ -409,7 +409,7 @@ definePageMeta({
               <input
                 v-model="editForm.lastName"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.lastName }"
                 placeholder="Enter your last name"
               >
@@ -423,7 +423,7 @@ definePageMeta({
               <input
                 v-model="editForm.email"
                 type="email"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.email }"
                 placeholder="Enter your email address"
               >
@@ -437,7 +437,7 @@ definePageMeta({
               <input
                 v-model="editForm.phone"
                 type="tel"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 placeholder="Enter your phone number"
               >
             </div>
@@ -447,7 +447,7 @@ definePageMeta({
               <input
                 v-model="editForm.company"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 placeholder="Enter your company name"
               >
             </div>
@@ -457,7 +457,7 @@ definePageMeta({
               <input
                 v-model="editForm.position"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 placeholder="Enter your job title"
               >
             </div>
@@ -467,7 +467,7 @@ definePageMeta({
               <input
                 v-model="editForm.location"
                 type="text"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
                 placeholder="Enter your location"
               >
             </div>
@@ -476,7 +476,7 @@ definePageMeta({
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Timezone</label>
               <select
                 v-model="editForm.timezone"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
               >
                 <option value="Asia/Kuala_Lumpur">
                   Asia/Kuala_Lumpur (UTC+8)
@@ -501,7 +501,7 @@ definePageMeta({
               <textarea
                 v-model="editForm.bio"
                 rows="4"
-                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors resize-none"
+                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors resize-none"
                 placeholder="Tell us about yourself..."
               />
             </div>
@@ -518,7 +518,7 @@ definePageMeta({
         </h2>
         <button
           v-if="!isChangingPassword"
-          class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+          class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:ring-offset-2"
           @click="startPasswordChange"
         >
           Change Password
@@ -531,7 +531,7 @@ definePageMeta({
             Cancel
           </button>
           <button
-            class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:ring-offset-2"
             :disabled="isLoading"
             @click="changePassword"
           >
@@ -548,7 +548,7 @@ definePageMeta({
             <input
               v-model="passwordForm.currentPassword"
               type="password"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
               :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': passwordErrors.currentPassword }"
               placeholder="Enter your current password"
             >
@@ -562,7 +562,7 @@ definePageMeta({
             <input
               v-model="passwordForm.newPassword"
               type="password"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
               :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': passwordErrors.newPassword }"
               placeholder="Enter your new password"
             >
@@ -576,7 +576,7 @@ definePageMeta({
             <input
               v-model="passwordForm.confirmPassword"
               type="password"
-              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors"
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-tenang-primary focus:border-tenang-primary transition-colors"
               :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': passwordErrors.confirmPassword }"
               placeholder="Confirm your new password"
             >

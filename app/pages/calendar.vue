@@ -213,7 +213,7 @@ onMounted(() => {
             </label>
             <select
               v-model="selectedSite"
-              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors"
               @change="filterEvents"
             >
               <option value="">
@@ -237,8 +237,8 @@ onMounted(() => {
               class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
               :class="[
                 currentView === view.value
-                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700',
+                  ? 'bg-tenang-100 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-50 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
               ]"
               @click="changeView(view.value)"
             >
@@ -312,11 +312,11 @@ onMounted(() => {
   box-shadow: none;
 }
 :deep(.fc-button-active), :deep(.fc-button-primary) {
-  background: #2563eb;
+  background: #017359;
   color: #fff;
 }
 :deep(.fc-button:hover) {
-  background: #3b82f6;
+  background: #015a47;
   color: #fff;
 }
 :deep(.dark .fc-button) {
@@ -324,12 +324,12 @@ onMounted(() => {
   color: #f3f4f6;
 }
 :deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
-  background: #2563eb;
-  color: #fff;
+  background: #BED9D2;
+  color: #000;
 }
 :deep(.dark .fc-button:hover) {
-  background: #3b82f6;
-  color: #fff;
+  background: #a8c9c0;
+  color: #000;
 }
 
 /* Grid and cell backgrounds */
@@ -404,20 +404,20 @@ onMounted(() => {
 
 /* Today highlight */
 :deep(.fc-day-today) {
-  background: #dbeafe;
+  background: #f0f9f6;
 }
 :deep(.dark .fc-day-today) {
   background: #1e293b;
-  border: 1.5px solid #2563eb;
+  border: 1.5px solid #BED9D2;
 }
 
 /* More link */
 :deep(.fc-more-link) {
-  color: #2563eb;
+  color: #017359;
   font-weight: 600;
 }
 :deep(.dark .fc-more-link) {
-  color: #60a5fa;
+  color: #BED9D2;
 }
 
 /* Time labels */
@@ -434,9 +434,9 @@ onMounted(() => {
   opacity: 0.15;
 }
 :deep(.fc .fc-highlight) {
-  background: #2563eb33;
+  background: #01735933;
 }
 :deep(.dark .fc .fc-highlight) {
-  background: #2563eb55;
+  background: #BED9D255;
 }
 </style>

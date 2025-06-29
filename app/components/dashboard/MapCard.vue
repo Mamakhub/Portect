@@ -139,7 +139,7 @@ function addMarkers(L: any) {
             Select Site
           </button>
           <button 
-            class="w-full px-2 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
+            class="w-full px-2 py-1 text-xs bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 transition-colors"
             onclick="window.viewSiteDetails('${markerData.id}')"
           >
             View Details
@@ -294,7 +294,7 @@ onMounted(() => {
       <div class="mt-3 flex space-x-2">
         <NuxtLink
           :to="`/site/${selectedSite.id}`"
-          class="flex-1 px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-center"
+          class="flex-1 px-3 py-1 text-xs bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 transition-colors text-center"
         >
           View Details
         </NuxtLink>

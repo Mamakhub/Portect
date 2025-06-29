@@ -18,7 +18,7 @@ function handleViewDetails() {
           Today's Schedule
         </h3>
         <button
-          class="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 font-medium"
+          class="text-sm text-tenang-primary dark:text-tenang-primary-dark hover:text-tenang-primary/80 dark:hover:text-tenang-primary-dark/80 font-medium transition-colors"
           @click="handleViewDetails"
         >
           View Details

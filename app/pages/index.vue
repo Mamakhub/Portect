@@ -165,7 +165,7 @@ function handleScheduleMarkAsDone(scheduleId: string) {
           <NuxtLink
             v-if="selectedSiteId"
             :to="`/site/${selectedSiteId}`"
-            class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
+            class="px-4 py-2 bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded-md hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 transition-colors"
           >
             View Details
           </NuxtLink>
