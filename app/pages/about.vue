@@ -206,28 +206,28 @@ function closeAllQrModal() {
           Whether you're managing construction, industrial, or environmental projects, TenangSite provides the tools you need to stay compliant, proactive, and connected. Our platform not only streamlines daily operations but also enhances collaboration, transparency, and accountability across your organization. Discover how TenangSite can help you create safer, smarter, and more sustainable project environments.
         </p>
         <ul class="space-y-3 max-w-xl mx-auto">
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">Real-time environmental monitoring (dust, noise, and more)</span>
           </li>
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">Automated project scheduling and task optimization</span>
           </li>
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">Multi-site management with centralized dashboard</span>
           </li>
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for site events</span>
           </li>
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">Comprehensive reporting and analytics</span>
           </li>
-          <li class="flex items-start gap-2">
-            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg mt-1">✔</span>
+          <li class="flex items-center gap-2">
+            <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
             <span class="text-gray-800 dark:text-gray-200">User-friendly interface with dark mode support</span>
           </li>
         </ul>
