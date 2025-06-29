@@ -55,12 +55,16 @@ onMounted(() => {
     <div class="flex items-center">
       <!-- App Icon and Title -->
       <div class="flex items-center space-x-3">
-        <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-transparent dark:bg-[#BED9D2] dark:border dark:border-white/20 dark:shadow-md">
-          <img src="/assets/icon_2.png" alt="TenangSite" class="h-8 w-8 drop-shadow-sm">
-        </div>
-        <h1 class="text-xl font-bold text-[#017359] dark:text-[#BED9D2] tracking-tight drop-shadow-sm">
-          TenangSite
-        </h1>
+        <NuxtLink to="/">
+          <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-transparent dark:bg-[#BED9D2] dark:border dark:border-white/20 dark:shadow-md">
+            <img src="/assets/icon_2.png" alt="TenangSite" class="h-8 w-8 drop-shadow-sm">
+          </div>
+        </NuxtLink>
+        <NuxtLink to="/">
+          <h1 class="text-xl font-bold text-[#017359] dark:text-[#BED9D2] tracking-tight drop-shadow-sm cursor-pointer">
+            TenangSite
+          </h1>
+        </NuxtLink>
       </div>
 
       <!-- Mobile menu button -->
