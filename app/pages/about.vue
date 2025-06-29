@@ -136,13 +136,13 @@ function closeAllQrModal() {
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
-              <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Leon Then', 'linkedin')">
+              <button title="Copy LinkedIn & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Leon Then', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
-              <button title="Copy Instagram & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Leon Then', 'instagram')">
+              <button title="Copy Instagram & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Leon Then', 'instagram')">
                 <Icon icon="mdi:instagram" class="w-6 h-6" />
               </button>
-              <button title="Copy Gmail & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Leon Then', 'gmail')">
+              <button title="Copy Gmail & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Leon Then', 'gmail')">
                 <Icon icon="mdi:gmail" class="w-6 h-6" />
               </button>
             </div>
@@ -162,13 +162,13 @@ function closeAllQrModal() {
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
-              <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Anson Kiu', 'linkedin')">
+              <button title="Copy LinkedIn & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Anson Kiu', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
-              <button title="Copy Instagram & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Anson Kiu', 'instagram')">
+              <button title="Copy Instagram & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Anson Kiu', 'instagram')">
                 <Icon icon="mdi:instagram" class="w-6 h-6" />
               </button>
-              <button title="Copy Gmail & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Anson Kiu', 'gmail')">
+              <button title="Copy Gmail & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Anson Kiu', 'gmail')">
                 <Icon icon="mdi:gmail" class="w-6 h-6" />
               </button>
             </div>
@@ -188,13 +188,13 @@ function closeAllQrModal() {
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
-              <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Chong Yi Jian', 'linkedin')">
+              <button title="Copy LinkedIn & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Chong Yi Jian', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
-              <button title="Copy Instagram & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Chong Yi Jian', 'instagram')">
+              <button title="Copy Instagram & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Chong Yi Jian', 'instagram')">
                 <Icon icon="mdi:instagram" class="w-6 h-6" />
               </button>
-              <button title="Copy Gmail & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Chong Yi Jian', 'gmail')">
+              <button title="Copy Gmail & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Chong Yi Jian', 'gmail')">
                 <Icon icon="mdi:gmail" class="w-6 h-6" />
               </button>
             </div>
@@ -214,13 +214,13 @@ function closeAllQrModal() {
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
-              <button title="Copy LinkedIn & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Go Yao Xiang', 'linkedin')">
+              <button title="Copy LinkedIn & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Go Yao Xiang', 'linkedin')">
                 <Icon icon="mdi:linkedin" class="w-6 h-6" />
               </button>
-              <button title="Copy Instagram & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Go Yao Xiang', 'instagram')">
+              <button title="Copy Instagram & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Go Yao Xiang', 'instagram')">
                 <Icon icon="mdi:instagram" class="w-6 h-6" />
               </button>
-              <button title="Copy Gmail & Show QR" class="hover:text-[#017359]" @click="handleSocialClick('Go Yao Xiang', 'gmail')">
+              <button title="Copy Gmail & Show QR" class="text-gray-700 dark:text-gray-200 hover:text-[#017359] transition-colors" @click="handleSocialClick('Go Yao Xiang', 'gmail')">
                 <Icon icon="mdi:gmail" class="w-6 h-6" />
               </button>
             </div>
