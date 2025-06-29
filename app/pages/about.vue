@@ -1,119 +1,103 @@
 <script setup lang="ts">
-const config = useRuntimeConfig()
-
-definePageMeta({
-  title: 'About',
-})
+import AppCard from '~/components/common/AppCard.vue'
+// No runtime config needed for team page
 </script>
 
 <template>
-  <div class="space-y-8">
-    <div class="text-center">
-      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-        About {{ config.public.appName }}
-      </h1>
-      <p class="text-lg text-gray-600 dark:text-gray-300">
-        Learn more about our project and technology stack
-      </p>
-    </div>
-
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-        Technology Stack
-      </h2>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div>
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            Frontend Framework
-          </h3>
-          <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-            <li>• Nuxt.js 3 - Full-stack Vue framework</li>
-            <li>• Vue 3 - Progressive JavaScript framework</li>
-            <li>• TypeScript - Type-safe JavaScript</li>
-            <li>• UnoCSS - Atomic CSS engine</li>
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
-            Development Tools
-          </h3>
-          <ul class="space-y-2 text-gray-600 dark:text-gray-300">
-            <li>• ESLint - Code linting</li>
-            <li>• Vite - Fast build tool</li>
-            <li>• Headless UI - Accessible UI components</li>
-            <li>• VueUse - Vue composition utilities</li>
-          </ul>
-        </div>
+  <div class="max-w-6xl mx-auto py-12 px-4 space-y-10">
+    <!-- System Features & Functions Section -->
+    <AppCard>
+      <template #header>
+        <h2 class="text-2xl md:text-3xl font-bold text-[#017359] text-center w-full">
+          System Features & Functions
+        </h2>
+      </template>
+      <div>
+        <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
+          Our platform is designed to streamline site management, monitoring, and scheduling for modern teams. Here are some of the key features and functions that make our system powerful and user-friendly:
+        </p>
+        <ul class="space-y-3 max-w-xl mx-auto">
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Real-time environmental monitoring (dust, noise, and more)</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Automated project scheduling and task optimization</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Multi-site management with centralized dashboard</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for site events</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">Comprehensive reporting and analytics</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-[#017359] text-lg mt-1">✔</span>
+            <span class="text-gray-800 dark:text-gray-200">User-friendly interface with dark mode support</span>
+          </li>
+        </ul>
       </div>
-    </div>
-
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-        Features
-      </h2>
-      <div class="space-y-4">
-        <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">
-            ✓
-          </div>
-          <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">
-              Server-Side Rendering
+    </AppCard>
+    <!-- Team Section (narrower) -->
+    <div class="max-w-4xl mx-auto">
+      <AppCard>
+        <template #header>
+          <h1 class="text-3xl md:text-4xl font-bold text-[#017359] text-center w-full">
+            Meet the Team
+          </h1>
+          <p class="text-lg text-gray-600 dark:text-gray-300 text-center mt-2">
+            Get to know the people behind this project
+          </p>
+        </template>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-4">
+          <!-- Leon Then (CEO) -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
+            <img src="/assets/Leon Then _ Portrait.png" alt="Leon Then" class="w-32 h-32 object-cover rounded-full mb-4 shadow-md">
+            <h2 class="text-xl font-semibold text-[#017359] mb-1">
+              Leon Then
+            </h2>
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-0">
+              CEO
             </h3>
-            <p class="text-gray-600 dark:text-gray-300">
-              SEO-friendly with Nuxt.js SSR capabilities
-            </p>
+          </div>
+          <!-- Anson Kiu (CIO) -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
+            <img src="/assets/Anson Kiu.jpg" alt="Anson Kiu" class="w-32 h-32 object-cover rounded-full mb-4 shadow-md">
+            <h2 class="text-xl font-semibold text-[#017359] mb-1">
+              Anson Kiu
+            </h2>
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-0">
+              CIO
+            </h3>
+          </div>
+          <!-- Chong Yi Jian (CTO) -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
+            <img src="/assets/Chong Yi Jian.png" alt="Chong Yi Jian" class="w-32 h-32 object-cover rounded-full mb-4 shadow-md">
+            <h2 class="text-xl font-semibold text-[#017359] mb-1">
+              Chong Yi Jian
+            </h2>
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-0">
+              CTO
+            </h3>
+          </div>
+          <!-- Go Yao Xiang (CMO) -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 flex flex-col items-center p-6">
+            <img src="/assets/Go Yao Xiang.png" alt="Go Yao Xiang" class="w-32 h-32 object-cover rounded-full mb-4 shadow-md">
+            <h2 class="text-xl font-semibold text-[#017359] mb-1">
+              Go Yao Xiang
+            </h2>
+            <h3 class="text-base font-medium text-gray-900 dark:text-white mb-0">
+              CMO
+            </h3>
           </div>
         </div>
-        <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">
-            ✓
-          </div>
-          <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">
-              Dark Mode Support
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300">
-              Automatic dark/light theme switching
-            </p>
-          </div>
-        </div>
-        <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">
-            ✓
-          </div>
-          <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">
-              Responsive Design
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300">
-              Mobile-first responsive layout
-            </p>
-          </div>
-        </div>
-        <div class="flex items-start space-x-3">
-          <div class="text-primary-600 text-xl">
-            ✓
-          </div>
-          <div>
-            <h3 class="font-medium text-gray-900 dark:text-white">
-              Type Safety
-            </h3>
-            <p class="text-gray-600 dark:text-gray-300">
-              Full TypeScript support for better development experience
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="text-center">
-      <NuxtLink
-        to="/"
-        class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-      >
-        Back to Home
-      </NuxtLink>
+      </AppCard>
     </div>
   </div>
 </template>
