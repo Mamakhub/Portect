@@ -15,7 +15,7 @@ export default defineConfig({
   ],
   theme: {
     colors: {
-      primary: {
+      'primary': {
         50: '#eff6ff',
         100: '#dbeafe',
         200: '#bfdbfe',
@@ -28,6 +28,8 @@ export default defineConfig({
         900: '#1e3a8a',
       },
       'tenang-accent': '#84e4a8',
+      'tenang-primary': '#017359',
+      'tenang-primary-dark': '#BED9D2',
     },
   },
 })
