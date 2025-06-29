@@ -50,7 +50,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-between items-center bg-white dark:bg-gray-800 py-3 px-6 border-b border-gray-200 dark:border-gray-700">
+  <div class="flex justify-between items-center bg-tenang-50 dark:bg-gray-800 py-3 px-6 border-b border-gray-200 dark:border-gray-700">
     <!-- Left side - App Icon, Title, and Mobile menu button -->
     <div class="flex items-center">
       <!-- App Icon and Title -->
@@ -69,7 +69,7 @@ onMounted(() => {
 
       <!-- Mobile menu button -->
       <button
-        class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 lg:hidden"
+        class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-gray-700 lg:hidden transition-colors"
         @click="$emit('toggleSidebar')"
       >
         <Icon icon="heroicons:bars-3" class="w-6 h-6" />
@@ -80,7 +80,7 @@ onMounted(() => {
     <div class="flex items-center gap-x-4">
       <!-- Theme Toggle -->
       <button
-        class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+        class="p-2 rounded-lg bg-tenang-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-tenang-200 dark:hover:bg-gray-600 transition-colors"
         @click="toggleTheme"
       >
         <Icon
@@ -92,10 +92,10 @@ onMounted(() => {
       <!-- User Profile Dropdown -->
       <div class="relative">
         <button
-          class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+          class="flex items-center space-x-2 p-2 rounded-lg hover:bg-tenang-100 dark:hover:bg-gray-700 transition-colors"
           @click="showUserMenu = !showUserMenu"
         >
-          <div class="w-8 h-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-semibold">
+          <div class="w-8 h-8 bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black rounded-full flex items-center justify-center font-semibold">
             {{ userInitials }}
           </div>
           <span class="hidden md:block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -121,7 +121,7 @@ onMounted(() => {
             <li>
               <NuxtLink
                 to="/profile"
-                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-tenang-50 dark:hover:bg-gray-700"
                 @click="showUserMenu = false"
               >
                 <Icon icon="heroicons:user-circle" class="w-4 h-4 mr-3" />
@@ -131,7 +131,7 @@ onMounted(() => {
             <li>
               <NuxtLink
                 to="/settings"
-                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                class="flex items-center px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-tenang-50 dark:hover:bg-gray-700"
                 @click="showUserMenu = false"
               >
                 <Icon icon="heroicons:cog-6-tooth" class="w-4 h-4 mr-3" />

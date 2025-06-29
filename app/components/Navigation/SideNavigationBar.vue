@@ -83,7 +83,7 @@ function closeMobileSidebar() {
   <div>
     <!-- Desktop Sidebar -->
     <aside
-      class="hidden lg:block h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out" :class="[
+      class="hidden lg:block h-full bg-tenang-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-300 ease-in-out" :class="[
         isExpanded ? 'w-64' : 'w-16',
       ]"
     >
@@ -91,7 +91,7 @@ function closeMobileSidebar() {
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center w-full">
           <button
-            class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            class="p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 transition-colors"
             @click="toggleSidebar"
           >
             <Icon
@@ -102,7 +102,7 @@ function closeMobileSidebar() {
           <transition name="slide-fade">
             <span
               v-if="isExpanded"
-              class="ml-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap"
+              class="ml-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap font-medium"
             >
               Hello, {{ userName }}
             </span>
@@ -119,8 +119,8 @@ function closeMobileSidebar() {
               :to="item.href"
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors" :class="[
                 isActiveRoute(item.href)
-                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
+                  ? 'bg-tenang-200 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
               ]"
             >
               <Icon :icon="item.icon" class="w-5 h-5 flex-shrink-0" />
@@ -134,8 +134,8 @@ function closeMobileSidebar() {
                   :to="child.href"
                   class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors" :class="[
                     isActiveRoute(child.href)
-                      ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/10 dark:text-primary-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700',
+                      ? 'bg-tenang-100 text-tenang-600 dark:bg-tenang-light-100 dark:text-tenang-primary-dark'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-100/50 dark:hover:bg-tenang-light-50 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
                   ]"
                 >
                   <Icon :icon="child.icon" class="w-4 h-4 flex-shrink-0" />
@@ -150,7 +150,7 @@ function closeMobileSidebar() {
       <!-- Version Info -->
       <div class="absolute bottom-4 left-4 right-4">
         <div
-          class="text-xs text-gray-500 dark:text-gray-400 text-center" :class="[
+          class="text-xs text-gray-500 dark:text-gray-400 text-center font-medium" :class="[
             isExpanded ? 'block' : 'hidden',
           ]"
         >
@@ -168,19 +168,19 @@ function closeMobileSidebar() {
 
     <!-- Mobile Sidebar -->
     <aside
-      class="fixed top-0 left-0 h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 z-50 transition-transform duration-300 ease-in-out lg:hidden w-64" :class="[
+      class="fixed top-0 left-0 h-full bg-tenang-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 z-50 transition-transform duration-300 ease-in-out lg:hidden w-64" :class="[
         showMobileSidebar ? 'translate-x-0' : '-translate-x-full',
       ]"
     >
       <!-- Mobile Header -->
       <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
         <div class="flex items-center">
-          <span class="text-lg font-semibold text-gray-900 dark:text-white">
+          <span class="text-lg font-semibold text-gray-900 dark:text-white text-tenang-primary dark:text-tenang-primary-dark">
             Hello, {{ userName }}
           </span>
         </div>
         <button
-          class="p-1 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700"
+          class="p-1 rounded-lg text-gray-500 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark transition-colors"
           @click="closeMobileSidebar"
         >
           <Icon icon="heroicons:x-mark" class="w-6 h-6" />
@@ -195,8 +195,8 @@ function closeMobileSidebar() {
               :to="item.href"
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors" :class="[
                 isActiveRoute(item.href)
-                  ? 'bg-primary-100 text-primary-700 dark:bg-primary-900/20 dark:text-primary-400'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700',
+                  ? 'bg-tenang-200 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
               ]"
               @click="closeMobileSidebar"
             >
@@ -211,8 +211,8 @@ function closeMobileSidebar() {
                   :to="child.href"
                   class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors" :class="[
                     isActiveRoute(child.href)
-                      ? 'bg-primary-50 text-primary-600 dark:bg-primary-900/10 dark:text-primary-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700',
+                      ? 'bg-tenang-100 text-tenang-600 dark:bg-tenang-light-100 dark:text-tenang-primary-dark'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-100/50 dark:hover:bg-tenang-light-50 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
                   ]"
                   @click="closeMobileSidebar"
                 >
