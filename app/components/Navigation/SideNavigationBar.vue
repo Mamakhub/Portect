@@ -119,8 +119,8 @@ function closeMobileSidebar() {
               :to="item.href"
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors" :class="[
                 isActiveRoute(item.href)
-                  ? 'bg-tenang-200 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
+                  ? 'bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black shadow-sm'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-primary/10 dark:hover:bg-tenang-primary-dark/10 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
               ]"
             >
               <Icon :icon="item.icon" class="w-5 h-5 flex-shrink-0" />
@@ -134,8 +134,8 @@ function closeMobileSidebar() {
                   :to="child.href"
                   class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors" :class="[
                     isActiveRoute(child.href)
-                      ? 'bg-tenang-100 text-tenang-600 dark:bg-tenang-light-100 dark:text-tenang-primary-dark'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-100/50 dark:hover:bg-tenang-light-50 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
+                      ? 'bg-tenang-primary/20 dark:bg-tenang-primary-dark/20 text-tenang-primary dark:text-tenang-primary-dark font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-primary/10 dark:hover:bg-tenang-primary-dark/10 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
                   ]"
                 >
                   <Icon :icon="child.icon" class="w-4 h-4 flex-shrink-0" />
@@ -195,8 +195,8 @@ function closeMobileSidebar() {
               :to="item.href"
               class="flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-colors" :class="[
                 isActiveRoute(item.href)
-                  ? 'bg-tenang-200 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
-                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-100 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
+                  ? 'bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black shadow-sm'
+                  : 'text-gray-700 dark:text-gray-300 hover:bg-tenang-primary/10 dark:hover:bg-tenang-primary-dark/10 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
               ]"
               @click="closeMobileSidebar"
             >
@@ -211,8 +211,8 @@ function closeMobileSidebar() {
                   :to="child.href"
                   class="flex items-center px-3 py-2 rounded-lg text-sm transition-colors" :class="[
                     isActiveRoute(child.href)
-                      ? 'bg-tenang-100 text-tenang-600 dark:bg-tenang-light-100 dark:text-tenang-primary-dark'
-                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-100/50 dark:hover:bg-tenang-light-50 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
+                      ? 'bg-tenang-primary/20 dark:bg-tenang-primary-dark/20 text-tenang-primary dark:text-tenang-primary-dark font-medium'
+                      : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-primary/10 dark:hover:bg-tenang-primary-dark/10 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
                   ]"
                   @click="closeMobileSidebar"
                 >

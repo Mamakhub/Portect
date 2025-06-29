@@ -205,15 +205,15 @@ onMounted(() => {
 
       <!-- Calendar Controls -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
           <!-- Site Filter -->
-          <div class="flex items-center gap-4">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
               Filter by Site:
             </label>
             <select
               v-model="selectedSite"
-              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors"
+              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors min-w-[200px]"
               @change="filterEvents"
             >
               <option value="">
@@ -230,15 +230,15 @@ onMounted(() => {
           </div>
 
           <!-- View Controls -->
-          <div class="flex items-center gap-2">
+          <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-700 p-1 rounded-lg">
             <button
               v-for="view in calendarViews"
               :key="view.value"
-              class="px-3 py-2 text-sm font-medium rounded-md transition-colors"
+              class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
               :class="[
                 currentView === view.value
-                  ? 'bg-tenang-100 text-tenang-700 dark:bg-tenang-light-200 dark:text-tenang-primary-dark'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-tenang-50 dark:hover:bg-tenang-light-100 hover:text-tenang-600 dark:hover:text-tenang-primary-dark',
+                  ? 'bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black shadow-sm'
+                  : 'text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-600 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
               ]"
               @click="changeView(view.value)"
             >
