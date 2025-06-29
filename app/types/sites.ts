@@ -35,6 +35,8 @@ export interface SiteSchedule {
   assignedTo: string
   status: 'pending' | 'in-progress' | 'completed' | 'cancelled'
   color: string
+  // Optional: for mock/demo data to allow scheduling on different days
+  dateOffset?: number
 }
 
 export interface SiteAlert {

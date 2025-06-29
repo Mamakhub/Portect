@@ -1,11 +1,11 @@
 import type {
-    ConstructionSite,
-    DustDataPoint,
-    NoiseDataPoint,
-    SensorDevice,
-    SiteAlert,
-    SiteData,
-    SiteSchedule,
+  ConstructionSite,
+  DustDataPoint,
+  NoiseDataPoint,
+  SensorDevice,
+  SiteAlert,
+  SiteData,
+  SiteSchedule,
 } from '~/types/sites'
 
 // Helper function to generate time-based data
@@ -543,6 +543,251 @@ export const mockSchedules: SiteSchedule[] = [
     status: 'pending',
     color: 'gray',
   },
+
+  // Additional schedules for more realistic calendar
+  {
+    id: 'sch-031',
+    siteId: 'site-001',
+    time: '9:00 AM',
+    title: 'Tower Glass Installation',
+    description: 'Glass panel installation for tower facade',
+    type: 'maintenance',
+    priority: 'medium',
+    assignedTo: 'Facade Team',
+    status: 'pending',
+    color: 'blue',
+    // Scheduled for tomorrow
+    dateOffset: 1,
+  },
+  {
+    id: 'sch-032',
+    siteId: 'site-001',
+    time: '4:00 PM',
+    title: 'Fire Drill',
+    description: 'Monthly fire safety drill for all site staff',
+    type: 'meeting',
+    priority: 'high',
+    assignedTo: 'Safety Officer',
+    status: 'pending',
+    color: 'orange',
+    // Scheduled for 3 days from now
+    dateOffset: 3,
+  },
+  {
+    id: 'sch-033',
+    siteId: 'site-002',
+    time: '7:30 AM',
+    title: 'Bridge Cable Tensioning',
+    description: 'Tensioning of main bridge cables',
+    type: 'maintenance',
+    priority: 'critical',
+    assignedTo: 'Cable Team',
+    status: 'pending',
+    color: 'red',
+    // Scheduled for yesterday
+    dateOffset: -1,
+  },
+  {
+    id: 'sch-034',
+    siteId: 'site-002',
+    time: '1:00 PM',
+    title: 'Site Tour for Stakeholders',
+    description: 'Guided tour for project stakeholders and local authorities',
+    type: 'meeting',
+    priority: 'medium',
+    assignedTo: 'Project Manager',
+    status: 'pending',
+    color: 'purple',
+    // Scheduled for 5 days from now
+    dateOffset: 5,
+  },
+  {
+    id: 'sch-035',
+    siteId: 'site-003',
+    time: '10:00 AM',
+    title: 'Block B Roof Inspection',
+    description: 'Inspection of completed roof structure for Block B',
+    type: 'inspection',
+    priority: 'high',
+    assignedTo: 'Inspection Team',
+    status: 'pending',
+    color: 'blue',
+    // Scheduled for 2 days ago
+    dateOffset: -2,
+  },
+  {
+    id: 'sch-036',
+    siteId: 'site-003',
+    time: '3:00 PM',
+    title: 'Landscaping Planning Meeting',
+    description: 'Meeting to discuss landscaping and green areas',
+    type: 'meeting',
+    priority: 'low',
+    assignedTo: 'Landscape Architect',
+    status: 'pending',
+    color: 'green',
+    // Scheduled for 7 days from now
+    dateOffset: 7,
+  },
+  {
+    id: 'sch-037',
+    siteId: 'site-004',
+    time: '8:00 AM',
+    title: 'Warehouse Floor Polishing',
+    description: 'Polishing and cleaning of warehouse floors',
+    type: 'maintenance',
+    priority: 'medium',
+    assignedTo: 'Cleaning Team',
+    status: 'pending',
+    color: 'orange',
+    // Scheduled for 4 days from now
+    dateOffset: 4,
+  },
+  {
+    id: 'sch-038',
+    siteId: 'site-004',
+    time: '5:00 PM',
+    title: 'Monthly Safety Audit',
+    description: 'Comprehensive safety audit for all industrial zones',
+    type: 'inspection',
+    priority: 'high',
+    assignedTo: 'Audit Team',
+    status: 'pending',
+    color: 'blue',
+    // Scheduled for 10 days from now
+    dateOffset: 10,
+  },
+  // More upcoming schedules for a realistic, populated calendar
+  {
+    id: 'sch-039',
+    siteId: 'site-001',
+    time: '8:00 AM',
+    title: 'Tower Lighting System Test',
+    description: 'Testing of new lighting system for tower exterior',
+    type: 'maintenance',
+    priority: 'medium',
+    assignedTo: 'Electrical Team',
+    status: 'pending',
+    color: 'orange',
+    dateOffset: 2,
+  },
+  {
+    id: 'sch-040',
+    siteId: 'site-001',
+    time: '1:00 PM',
+    title: 'Stakeholder Progress Meeting',
+    description: 'Monthly progress meeting with stakeholders',
+    type: 'meeting',
+    priority: 'high',
+    assignedTo: 'Project Manager',
+    status: 'pending',
+    color: 'purple',
+    dateOffset: 4,
+  },
+  {
+    id: 'sch-041',
+    siteId: 'site-002',
+    time: '9:00 AM',
+    title: 'Bridge Deck Waterproofing',
+    description: 'Application of waterproofing membrane on bridge deck',
+    type: 'maintenance',
+    priority: 'medium',
+    assignedTo: 'Waterproofing Team',
+    status: 'pending',
+    color: 'green',
+    dateOffset: 3,
+  },
+  {
+    id: 'sch-042',
+    siteId: 'site-002',
+    time: '3:30 PM',
+    title: 'Safety Training Session',
+    description: 'Safety training for all site workers',
+    type: 'meeting',
+    priority: 'high',
+    assignedTo: 'Safety Officer',
+    status: 'pending',
+    color: 'blue',
+    dateOffset: 5,
+  },
+  {
+    id: 'sch-043',
+    siteId: 'site-003',
+    time: '10:30 AM',
+    title: 'Block C Window Installation',
+    description: 'Installation of windows for Block C',
+    type: 'maintenance',
+    priority: 'medium',
+    assignedTo: 'Window Team',
+    status: 'pending',
+    color: 'orange',
+    dateOffset: 7,
+  },
+  {
+    id: 'sch-044',
+    siteId: 'site-003',
+    time: '2:00 PM',
+    title: 'Fire Safety System Check',
+    description: 'Inspection and testing of fire safety systems',
+    type: 'inspection',
+    priority: 'high',
+    assignedTo: 'Fire Safety Team',
+    status: 'pending',
+    color: 'red',
+    dateOffset: 10,
+  },
+  {
+    id: 'sch-045',
+    siteId: 'site-004',
+    time: '7:00 AM',
+    title: 'Industrial Waste Audit',
+    description: 'Audit of industrial waste management and disposal',
+    type: 'inspection',
+    priority: 'medium',
+    assignedTo: 'Audit Team',
+    status: 'pending',
+    color: 'blue',
+    dateOffset: 3,
+  },
+  {
+    id: 'sch-046',
+    siteId: 'site-004',
+    time: '4:30 PM',
+    title: 'Machinery Lubrication',
+    description: 'Scheduled lubrication of all heavy machinery',
+    type: 'maintenance',
+    priority: 'low',
+    assignedTo: 'Maintenance Team',
+    status: 'pending',
+    color: 'green',
+    dateOffset: 5,
+  },
+  {
+    id: 'sch-047',
+    siteId: 'site-004',
+    time: '11:00 AM',
+    title: 'Emergency Response Drill',
+    description: 'Quarterly emergency response drill for all staff',
+    type: 'meeting',
+    priority: 'high',
+    assignedTo: 'Safety Officer',
+    status: 'pending',
+    color: 'orange',
+    dateOffset: 7,
+  },
+  {
+    id: 'sch-048',
+    siteId: 'site-004',
+    time: '3:00 PM',
+    title: 'Annual Equipment Certification',
+    description: 'Certification and compliance check for all equipment',
+    type: 'inspection',
+    priority: 'critical',
+    assignedTo: 'Certification Team',
+    status: 'pending',
+    color: 'red',
+    dateOffset: 10,
+  },
 ]
 
 // Mock alerts for each site
@@ -840,7 +1085,7 @@ function generateSensorTimeSeries(type: 'dust' | 'noise', base: number, variance
   const now = new Date()
   const trends = ['stable', 'increasing', 'decreasing', 'fluctuating'] as const
   const trend = trends[Math.floor(Math.random() * trends.length)]
-  
+
   return Array.from({ length: count }).map((_, i) => {
     const timestamp = new Date(now.getTime() - (count - i - 1) * 60 * 60 * 1000) // hourly
     let value = base
@@ -864,23 +1109,25 @@ function generateSensorTimeSeries(type: 'dust' | 'noise', base: number, variance
     // Add random variance and time-based patterns
     const timeOfDay = timestamp.getHours()
     let timeMultiplier = 1
-    
+
     // Simulate higher readings during work hours (8-18)
     if (timeOfDay >= 8 && timeOfDay <= 18) {
       timeMultiplier = 1.2
-    } else if (timeOfDay >= 22 || timeOfDay <= 6) {
+    }
+    else if (timeOfDay >= 22 || timeOfDay <= 6) {
       timeMultiplier = 0.7 // Lower readings at night
     }
-    
+
     value = value * timeMultiplier + (Math.random() - 0.5) * variance * 0.5
-    
+
     // Ensure realistic bounds
     if (type === 'dust') {
       value = Math.max(0.01, Math.min(2.0, Math.round(value * 100) / 100))
-    } else {
+    }
+    else {
       value = Math.max(20, Math.min(120, Math.round(value * 10) / 10))
     }
-    
+
     return { timestamp: timestamp.toISOString(), value }
   })
 }

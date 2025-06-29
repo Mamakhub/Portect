@@ -95,8 +95,10 @@ const calendarOptions = computed<CalendarOptions>(() => ({
 
 // Methods
 function getEventDate(schedule: SiteSchedule): string {
-  // Convert time string to today's date with the specified time
+  // Use dateOffset if present, otherwise use today
   const today = new Date()
+  const offset = (schedule as any).dateOffset || 0
+  const eventDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() + offset)
   const [hours, minutes] = schedule.time.replace(/\s*(AM|PM)/i, '').split(':')
   let hour = Number.parseInt(hours)
 
@@ -108,8 +110,8 @@ function getEventDate(schedule: SiteSchedule): string {
     hour = 0
   }
 
-  const date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hour, Number.parseInt(minutes))
-  return date.toISOString()
+  eventDate.setHours(hour, Number.parseInt(minutes))
+  return eventDate.toISOString()
 }
 
 function getEventEndDate(schedule: SiteSchedule): string {
