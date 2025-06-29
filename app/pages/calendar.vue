@@ -195,7 +195,7 @@ onMounted(() => {
     <div class="container mx-auto px-4 py-8">
       <!-- Page Header -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+        <h1 class="text-3xl font-bold text-tenang-primary dark:text-tenang-primary-dark mb-2">
           Site Calendar
         </h1>
         <p class="text-gray-600 dark:text-gray-400">

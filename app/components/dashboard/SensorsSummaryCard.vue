@@ -43,7 +43,7 @@ const workerImage = computed(() => {
   <CommonAppCard class="cursor-pointer hover:shadow-lg transition-shadow" @click="handleViewDetails">
     <template #header>
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+        <h3 class="text-lg font-medium text-tenang-primary dark:text-tenang-primary-dark">
           Sensors' Summary
         </h3>
         <div class="flex items-center space-x-4">
