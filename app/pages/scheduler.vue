@@ -210,223 +210,231 @@ function handleEventDidUnmount(info: any) {
 </script>
 
 <template>
-  <div class="p-6 max-w-5xl mx-auto">
-    <h1 class="text-2xl font-bold mb-6 text-primary-700">
-      Project Scheduler
-    </h1>
-    <!-- Site & Project Selection -->
-    <div class="flex flex-col md:flex-row gap-4 mb-6">
-      <div class="flex-1">
-        <label class="block text-sm font-medium mb-1">Site</label>
-        <select v-model="selectedSiteId" class="w-full border rounded px-3 py-2" @change="showCustomSite = selectedSiteId === 'custom'">
-          <option value="" disabled>
-            Select site
-          </option>
-          <option v-for="site in sites" :key="site.id" :value="site.id">
-            {{ site.name }}
-          </option>
-          <option value="custom">
-            Other (Custom)
-          </option>
-        </select>
-        <input v-if="showCustomSite" v-model="customSite" type="text" placeholder="Enter custom site name" class="mt-2 w-full border rounded px-3 py-2">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-6">
+        Project Scheduler
+      </h1>
+      <!-- Site & Project Selection -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div class="flex flex-col md:flex-row gap-4">
+          <div class="flex-1">
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Site</label>
+            <select v-model="selectedSiteId" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" @change="showCustomSite = selectedSiteId === 'custom'">
+              <option value="" disabled>
+                Select site
+              </option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+              <option value="custom">
+                Other (Custom)
+              </option>
+            </select>
+            <input v-if="showCustomSite" v-model="customSite" type="text" placeholder="Enter custom site name" class="mt-2 w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Project</label>
+            <select v-model="selectedProject" :disabled="!selectedSiteId" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" @change="showCustomProject = selectedProject === 'Other (Custom)'">
+              <option value="" disabled>
+                Select project
+              </option>
+              <option v-for="project in projectOptions" :key="project">
+                {{ project }}
+              </option>
+            </select>
+            <input v-if="showCustomProject" v-model="customProject" type="text" placeholder="Enter custom project name" class="mt-2 w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          </div>
+          <div class="flex-1">
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Due Date</label>
+            <input v-model="dueDate" type="date" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          </div>
+        </div>
       </div>
-      <div class="flex-1">
-        <label class="block text-sm font-medium mb-1">Project</label>
-        <select v-model="selectedProject" :disabled="!selectedSiteId" class="w-full border rounded px-3 py-2" @change="showCustomProject = selectedProject === 'Other (Custom)'">
-          <option value="" disabled>
-            Select project
-          </option>
-          <option v-for="project in projectOptions" :key="project">
-            {{ project }}
-          </option>
-        </select>
-        <input v-if="showCustomProject" v-model="customProject" type="text" placeholder="Enter custom project name" class="mt-2 w-full border rounded px-3 py-2">
-      </div>
-      <div class="flex-1">
-        <label class="block text-sm font-medium mb-1">Due Date</label>
-        <input v-model="dueDate" type="date" class="w-full border rounded px-3 py-2">
-      </div>
-    </div>
 
-    <!-- Task Addition -->
-    <div class="bg-white rounded shadow border p-4 mb-6">
-      <h2 class="font-semibold mb-2">
-        Add Task
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
-        <input v-model="taskForm.name" type="text" placeholder="Task name" class="border rounded px-3 py-2">
-        <div>
-          <select v-model="taskForm.category" class="border rounded px-3 py-2" @change="showCustomCategory = taskForm.category === 'Other (Custom)'">
+      <!-- Task Addition -->
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <h2 class="font-semibold mb-4 text-gray-900 dark:text-white">
+          Add Task
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+          <input v-model="taskForm.name" type="text" placeholder="Task name" class="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          <div>
+            <select v-model="taskForm.category" class="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" @change="showCustomCategory = taskForm.category === 'Other (Custom)'">
+              <option value="" disabled>
+                Select category
+              </option>
+              <option v-for="cat in taskCategories" :key="cat">
+                {{ cat }}
+              </option>
+            </select>
+            <input v-if="showCustomCategory" v-model="customCategory" type="text" placeholder="Enter custom category" class="mt-2 w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          </div>
+          <input v-model="taskForm.duration" type="number" min="1" placeholder="Duration (hr)" class="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+          <select v-model="taskForm.priority" class="border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
             <option value="" disabled>
-              Select category
+              Priority
             </option>
-            <option v-for="cat in taskCategories" :key="cat">
-              {{ cat }}
+            <option v-for="p in priorities" :key="p">
+              {{ p }}
             </option>
           </select>
-          <input v-if="showCustomCategory" v-model="customCategory" type="text" placeholder="Enter custom category" class="mt-2 w-full border rounded px-3 py-2">
         </div>
-        <input v-model="taskForm.duration" type="number" min="1" placeholder="Duration (hr)" class="border rounded px-3 py-2">
-        <select v-model="taskForm.priority" class="border rounded px-3 py-2">
-          <option value="" disabled>
-            Priority
-          </option>
-          <option v-for="p in priorities" :key="p">
-            {{ p }}
-          </option>
-        </select>
+        <div class="flex gap-2">
+          <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded transition-colors" @click="addTask">
+            Add Task
+          </button>
+          <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors" @click="() => generateRandomTasks(5)">
+            Generate Random Tasks
+          </button>
+        </div>
       </div>
-      <div class="flex gap-2">
-        <button class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded transition-colors" @click="addTask">
-          Add Task
-        </button>
-        <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded transition-colors" @click="() => generateRandomTasks(5)">
-          Generate Random Tasks
-        </button>
-      </div>
-    </div>
 
-    <!-- Task List -->
-    <div v-if="tasks.length" class="mb-6">
-      <h2 class="font-semibold mb-2">
-        Task List
-      </h2>
-      <table class="w-full border text-sm">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="p-2 border">
-              #
-            </th>
-            <th class="p-2 border">
-              Task
-            </th>
-            <th class="p-2 border">
-              Category
-            </th>
-            <th class="p-2 border">
-              Duration (hr)
-            </th>
-            <th class="p-2 border">
-              Priority
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(task, i) in tasks" :key="i">
-            <td class="p-2 border">
-              {{ i + 1 }}
-            </td>
-            <td class="p-2 border">
-              {{ task.name }}
-            </td>
-            <td class="p-2 border">
-              {{ task.category }}
-            </td>
-            <td class="p-2 border">
-              {{ task.duration }}
-            </td>
-            <td class="p-2 border">
-              {{ task.priority }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4" @click="openCalendarModal">
-        View in Calendar
-      </button>
-    </div>
-
-    <!-- Generate Schedule Button -->
-    <div class="mb-6">
-      <button :disabled="!tasks.length || isLoading || !dueDate" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" @click="generateSchedule">
-        Generate Optimized Schedule
-      </button>
-    </div>
-
-    <!-- Loading Spinner -->
-    <div v-if="isLoading" class="flex flex-col items-center justify-center py-10">
-      <svg class="animate-spin h-10 w-10 text-primary-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-      </svg>
-      <div class="text-primary-700 font-medium">
-        Generating optimized schedule...
-      </div>
-    </div>
-
-    <!-- Optimized Schedule Table -->
-    <div v-if="showSchedule" class="mt-6">
-      <h2 class="font-semibold mb-2">
-        Optimized Schedule (Mock)
-      </h2>
-      <table class="w-full border text-sm mb-8">
-        <thead>
-          <tr class="bg-gray-100">
-            <th class="p-2 border">
-              Task
-            </th>
-            <th class="p-2 border">
-              Category
-            </th>
-            <th class="p-2 border">
-              Duration (hr)
-            </th>
-            <th class="p-2 border">
-              Priority
-            </th>
-            <th class="p-2 border">
-              Day
-            </th>
-            <th class="p-2 border">
-              Start Time
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(task, i) in optimizedSchedule" :key="i">
-            <td class="p-2 border">
-              {{ task.name }}
-            </td>
-            <td class="p-2 border">
-              {{ task.category }}
-            </td>
-            <td class="p-2 border">
-              {{ task.duration }}
-            </td>
-            <td class="p-2 border">
-              {{ task.priority }}
-            </td>
-            <td class="p-2 border">
-              {{ task.day }}
-            </td>
-            <td class="p-2 border">
-              {{ task.time }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4" @click="openCalendarModal">
-        View in Calendar
-      </button>
-    </div>
-
-    <!-- Calendar Modal -->
-    <div v-if="showCalendarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl w-full relative">
-        <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 dark:hover:text-white text-2xl" @click="closeCalendarModal">
-          &times;
-        </button>
-        <h2 class="text-xl font-semibold mb-4">
-          Schedule Calendar
+      <!-- Task List -->
+      <div v-if="tasks.length" class="mb-6">
+        <h2 class="font-semibold mb-4 text-gray-900 dark:text-white">
+          Task List
         </h2>
-        <client-only>
-          <FullCalendar
-            v-if="showSchedule"
-            ref="calendarRef"
-            :options="calendarOptions"
-          />
-        </client-only>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 dark:bg-gray-700">
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  #
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Task
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Category
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Duration (hr)
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Priority
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, i) in tasks" :key="i" class="border-b border-gray-200 dark:border-gray-600">
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ i + 1 }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.name }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.category }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.duration }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.priority }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4 mt-4" @click="openCalendarModal">
+          View in Calendar
+        </button>
+      </div>
+
+      <!-- Generate Schedule Button -->
+      <div class="mb-6">
+        <button :disabled="!tasks.length || isLoading || !dueDate" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed" @click="generateSchedule">
+          Generate Optimized Schedule
+        </button>
+      </div>
+
+      <!-- Loading Spinner -->
+      <div v-if="isLoading" class="flex flex-col items-center justify-center py-10">
+        <svg class="animate-spin h-10 w-10 text-primary-600 mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+        </svg>
+        <div class="text-primary-700 dark:text-primary-400 font-medium">
+          Generating optimized schedule...
+        </div>
+      </div>
+
+      <!-- Optimized Schedule Table -->
+      <div v-if="showSchedule" class="mt-6">
+        <h2 class="font-semibold mb-4 text-gray-900 dark:text-white">
+          Optimized Schedule (Mock)
+        </h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden mb-8">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-gray-50 dark:bg-gray-700">
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Task
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Category
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Duration (hr)
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Priority
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Day
+                </th>
+                <th class="p-3 border-b border-gray-200 dark:border-gray-600 text-left text-gray-700 dark:text-gray-300">
+                  Start Time
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(task, i) in optimizedSchedule" :key="i" class="border-b border-gray-200 dark:border-gray-600">
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.name }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.category }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.duration }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.priority }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.day }}
+                </td>
+                <td class="p-3 text-gray-900 dark:text-white">
+                  {{ task.time }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <button v-if="showSchedule" class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded mb-4" @click="openCalendarModal">
+          View in Calendar
+        </button>
+      </div>
+
+      <!-- Calendar Modal -->
+      <div v-if="showCalendarModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-4xl w-full relative">
+          <button class="absolute top-2 right-2 text-gray-500 hover:text-gray-900 dark:hover:text-white text-2xl" @click="closeCalendarModal">
+            &times;
+          </button>
+          <h2 class="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
+            Schedule Calendar
+          </h2>
+          <client-only>
+            <FullCalendar
+              v-if="showSchedule"
+              ref="calendarRef"
+              :options="calendarOptions"
+            />
+          </client-only>
+        </div>
       </div>
     </div>
   </div>
