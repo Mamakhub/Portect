@@ -17,18 +17,10 @@ definePageMeta({
 // Reactive data
 const calendarRef = ref()
 const selectedSite = ref('')
-const currentView = ref('dayGridMonth')
 
 // Get sites and schedules data
 const sites = ref(mockSites)
 const schedules = ref(mockSchedules)
-
-// Calendar views
-const calendarViews = [
-  { label: 'Month', value: 'dayGridMonth' },
-  { label: 'Week', value: 'timeGridWeek' },
-  { label: 'Day', value: 'timeGridDay' },
-]
 
 // Filtered events based on selected site
 const filteredEvents = computed(() => {
@@ -63,7 +55,7 @@ const filteredEvents = computed(() => {
 // Calendar options
 const calendarOptions = computed<CalendarOptions>(() => ({
   plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-  initialView: currentView.value,
+  initialView: 'dayGridMonth',
   headerToolbar: {
     left: 'prev,next today',
     center: 'title',
@@ -136,14 +128,6 @@ function getEventColor(schedule: SiteSchedule): string {
   return colorMap[schedule.color] || '#3b82f6'
 }
 
-function changeView(view: string) {
-  currentView.value = view
-  if (calendarRef.value) {
-    const calendarApi = calendarRef.value.getApi()
-    calendarApi.changeView(view)
-  }
-}
-
 function filterEvents() {
   // The events will be automatically updated through the computed property
   if (calendarRef.value) {
@@ -205,46 +189,27 @@ onMounted(() => {
 
       <!-- Calendar Controls -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
-        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-          <!-- Site Filter -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-              Filter by Site:
-            </label>
-            <select
-              v-model="selectedSite"
-              class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors min-w-[200px]"
-              @change="filterEvents"
+        <!-- Site Filter -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <label class="text-sm font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
+            Filter by Site:
+          </label>
+          <select
+            v-model="selectedSite"
+            class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-tenang-primary/50 dark:focus:ring-tenang-primary-dark/50 focus:border-tenang-primary dark:focus:border-tenang-primary-dark transition-colors min-w-[200px]"
+            @change="filterEvents"
+          >
+            <option value="">
+              All Sites
+            </option>
+            <option
+              v-for="site in sites"
+              :key="site.id"
+              :value="site.id"
             >
-              <option value="">
-                All Sites
-              </option>
-              <option
-                v-for="site in sites"
-                :key="site.id"
-                :value="site.id"
-              >
-                {{ site.name }}
-              </option>
-            </select>
-          </div>
-
-          <!-- View Controls -->
-          <div class="flex items-center gap-2 bg-gray-50 dark:bg-gray-700 p-1 rounded-lg">
-            <button
-              v-for="view in calendarViews"
-              :key="view.value"
-              class="px-4 py-2 text-sm font-medium rounded-md transition-all duration-200"
-              :class="[
-                currentView === view.value
-                  ? 'bg-tenang-primary dark:bg-tenang-primary-dark text-white dark:text-black shadow-sm'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-gray-600 hover:text-tenang-primary dark:hover:text-tenang-primary-dark',
-              ]"
-              @click="changeView(view.value)"
-            >
-              {{ view.label }}
-            </button>
-          </div>
+              {{ site.name }}
+            </option>
+          </select>
         </div>
       </div>
 
@@ -300,36 +265,89 @@ onMounted(() => {
   color: #f3f4f6;
 }
 
-/* Toolbar buttons */
-:deep(.fc-button) {
-  background: #e5e7eb;
-  border: none;
-  color: #374151;
-  font-weight: 600;
+/* Toolbar buttons container */
+:deep(.fc-button-group) {
+  background: #f9fafb;
   border-radius: 0.5rem;
-  margin-right: 0.5rem;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.25rem;
+  border: none;
   box-shadow: none;
 }
-:deep(.fc-button-active), :deep(.fc-button-primary) {
-  background: #017359;
-  color: #fff;
-}
-:deep(.fc-button:hover) {
-  background: #015a47;
-  color: #fff;
-}
-:deep(.dark .fc-button) {
+:deep(.dark .fc-button-group) {
   background: #374151;
-  color: #f3f4f6;
 }
-:deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
-  background: #BED9D2;
-  color: #000;
+
+/* Individual toolbar buttons - default state */
+:deep(.fc-button) {
+  background: transparent !important;
+  border: none !important;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+  margin: 0 !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s !important;
+  box-shadow: none !important;
+  text-transform: none !important;
 }
-:deep(.dark .fc-button:hover) {
-  background: #a8c9c0;
-  color: #000;
+
+:deep(.dark .fc-button) {
+  color: #9ca3af !important;
+}
+
+/* Active/Primary button state - ONLY these should be green */
+:deep(.fc-button-active) {
+  background: #017359 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+:deep(.dark .fc-button-active) {
+  background: #BED9D2 !important;
+  color: #000000 !important;
+}
+
+/* Hover states for NON-active buttons */
+:deep(.fc-button:hover:not(.fc-button-active)) {
+  background: #ffffff !important;
+  color: #017359 !important;
+}
+
+:deep(.dark .fc-button:hover:not(.fc-button-active)) {
+  background: #4b5563 !important;
+  color: #BED9D2 !important;
+}
+
+/* Navigation buttons (prev/next/today) styling */
+:deep(.fc-prev-button),
+:deep(.fc-next-button),
+:deep(.fc-today-button) {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  border-radius: 0.375rem !important;
+  margin-right: 0.25rem !important;
+}
+
+:deep(.dark .fc-prev-button),
+:deep(.dark .fc-next-button),
+:deep(.dark .fc-today-button) {
+  background: #4b5563 !important;
+  color: #f3f4f6 !important;
+}
+
+:deep(.fc-prev-button:hover),
+:deep(.fc-next-button:hover),
+:deep(.fc-today-button:hover) {
+  background: #017359 !important;
+  color: #ffffff !important;
+}
+
+:deep(.dark .fc-prev-button:hover),
+:deep(.dark .fc-next-button:hover),
+:deep(.dark .fc-today-button:hover) {
+  background: #BED9D2 !important;
+  color: #000000 !important;
 }
 
 /* Grid and cell backgrounds */
