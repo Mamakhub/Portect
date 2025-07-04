@@ -46,7 +46,35 @@ const taskForm = ref({
 })
 const tasks = ref<any[]>([])
 
+// Check if required fields are completed
+const isRequiredFieldsCompleted = computed(() => {
+  const siteSelected = selectedSiteId.value && (selectedSiteId.value !== 'custom' || customSite.value.trim())
+  const projectSelected = selectedProject.value && (selectedProject.value !== 'Other (Custom)' || customProject.value.trim())
+  const dueDateSelected = dueDate.value
+  return siteSelected && projectSelected && dueDateSelected
+})
+
+// Scroll to and highlight incomplete fields
+function scrollToIncompleteFields() {
+  // Find the site selection section
+  const siteSection = document.querySelector('.container .bg-white.rounded-lg.shadow-sm')
+  if (siteSection) {
+    siteSection.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+    // Add highlight effect
+    siteSection.classList.add('ring-2', 'ring-red-500', 'ring-opacity-50')
+    setTimeout(() => {
+      siteSection.classList.remove('ring-2', 'ring-red-500', 'ring-opacity-50')
+    }, 3000)
+  }
+}
+
 function addTask() {
+  if (!isRequiredFieldsCompleted.value) {
+    scrollToIncompleteFields()
+    return
+  }
+
   let category = taskForm.value.category
   if (category === 'Other (Custom)') {
     category = customCategory.value
@@ -64,6 +92,11 @@ function addTask() {
 
 // Random Task Generator
 function generateRandomTasks(count = 5) {
+  if (!isRequiredFieldsCompleted.value) {
+    scrollToIncompleteFields()
+    return
+  }
+
   const randomNames = ['Check Sensors', 'Install Device', 'Calibrate Meter', 'Inspect Area', 'Replace Filter', 'Noise Survey', 'Dust Sampling', 'Safety Briefing', 'Site Cleaning', 'Equipment Test']
   const randomCategories = baseTaskCategories.slice(0, -1)
   const randomPriorities = priorities
@@ -234,9 +267,17 @@ function openDatePicker(event: Event) {
       </h1>
       <!-- Site & Project Selection -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="font-semibold text-gray-900 dark:text-white">
+            Project Configuration
+          </h2>
+          <span v-if="!isRequiredFieldsCompleted" class="text-sm text-red-600 dark:text-red-400 font-medium">
+            * All fields required to add tasks
+          </span>
+        </div>
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex-1">
-            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Site</label>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Site <span class="text-red-500">*</span></label>
             <select v-model="selectedSiteId" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" @change="showCustomSite = selectedSiteId === 'custom'">
               <option value="" disabled>
                 Select site
@@ -251,7 +292,7 @@ function openDatePicker(event: Event) {
             <input v-if="showCustomSite" v-model="customSite" type="text" placeholder="Enter custom site name" class="mt-2 w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
           </div>
           <div class="flex-1">
-            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Project</label>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Project <span class="text-red-500">*</span></label>
             <select v-model="selectedProject" :disabled="!selectedSiteId" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" @change="showCustomProject = selectedProject === 'Other (Custom)'">
               <option value="" disabled>
                 Select project
@@ -263,7 +304,7 @@ function openDatePicker(event: Event) {
             <input v-if="showCustomProject" v-model="customProject" type="text" placeholder="Enter custom project name" class="mt-2 w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
           </div>
           <div class="flex-1">
-            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Due Date</label>
+            <label class="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Due Date <span class="text-red-500">*</span></label>
             <input
               v-model="dueDate"
               type="date"
@@ -306,11 +347,19 @@ function openDatePicker(event: Event) {
           </select>
         </div>
         <div class="flex gap-2">
-          <button class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded transition-colors" @click="addTask">
+          <button
+            :disabled="!isRequiredFieldsCompleted"
+            class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-tenang-primary dark:disabled:hover:bg-tenang-primary-dark"
+            @click="addTask"
+          >
             Add Task
           </button>
-          <button class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors" @click="() => generateRandomTasks(5)">
-            Generate Random Tasks
+          <button
+            :disabled="!isRequiredFieldsCompleted"
+            class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-200 dark:disabled:hover:bg-gray-600"
+            @click="() => generateRandomTasks(5)"
+          >
+            Auto-Generate Project Tasks
           </button>
         </div>
       </div>
