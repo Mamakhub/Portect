@@ -433,9 +433,6 @@ function openDatePicker(event: Event) {
             </tbody>
           </table>
         </div>
-        <button v-if="showSchedule" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded mb-4 mt-4 transition-colors" @click="openCalendarModal">
-          View in Calendar
-        </button>
       </div>
 
       <!-- Generate Schedule Button -->
@@ -569,36 +566,89 @@ function openDatePicker(event: Event) {
   color: #f3f4f6;
 }
 
-/* Toolbar buttons */
-:deep(.fc-button) {
-  background: #e5e7eb;
-  border: none;
-  color: #374151;
-  font-weight: 600;
+/* Toolbar buttons container */
+:deep(.fc-button-group) {
+  background: #f9fafb;
   border-radius: 0.5rem;
-  margin-right: 0.5rem;
-  transition: background 0.2s, color 0.2s;
+  padding: 0.25rem;
+  border: none;
   box-shadow: none;
 }
-:deep(.fc-button-active), :deep(.fc-button-primary) {
-  background: #017359;
-  color: #fff;
-}
-:deep(.fc-button:hover) {
-  background: #015a47;
-  color: #fff;
-}
-:deep(.dark .fc-button) {
+:deep(.dark .fc-button-group) {
   background: #374151;
-  color: #f3f4f6;
 }
-:deep(.dark .fc-button-active), :deep(.dark .fc-button-primary) {
-  background: #BED9D2;
-  color: #000;
+
+/* Individual toolbar buttons - default state */
+:deep(.fc-button) {
+  background: transparent !important;
+  border: none !important;
+  color: #6b7280 !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+  margin: 0 !important;
+  padding: 0.5rem 1rem !important;
+  transition: all 0.2s !important;
+  box-shadow: none !important;
+  text-transform: none !important;
 }
-:deep(.dark .fc-button:hover) {
-  background: #a8c9c0;
-  color: #000;
+
+:deep(.dark .fc-button) {
+  color: #9ca3af !important;
+}
+
+/* Active/Primary button state - ONLY these should be green */
+:deep(.fc-button-active) {
+  background: #017359 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+:deep(.dark .fc-button-active) {
+  background: #BED9D2 !important;
+  color: #000000 !important;
+}
+
+/* Hover states for NON-active buttons */
+:deep(.fc-button:hover:not(.fc-button-active)) {
+  background: #ffffff !important;
+  color: #017359 !important;
+}
+
+:deep(.dark .fc-button:hover:not(.fc-button-active)) {
+  background: #4b5563 !important;
+  color: #BED9D2 !important;
+}
+
+/* Navigation buttons (prev/next/today) styling */
+:deep(.fc-prev-button),
+:deep(.fc-next-button),
+:deep(.fc-today-button) {
+  background: #f3f4f6 !important;
+  color: #374151 !important;
+  border-radius: 0.375rem !important;
+  margin-right: 0.25rem !important;
+}
+
+:deep(.dark .fc-prev-button),
+:deep(.dark .fc-next-button),
+:deep(.dark .fc-today-button) {
+  background: #4b5563 !important;
+  color: #f3f4f6 !important;
+}
+
+:deep(.fc-prev-button:hover),
+:deep(.fc-next-button:hover),
+:deep(.fc-today-button:hover) {
+  background: #017359 !important;
+  color: #ffffff !important;
+}
+
+:deep(.dark .fc-prev-button:hover),
+:deep(.dark .fc-next-button:hover),
+:deep(.dark .fc-today-button:hover) {
+  background: #BED9D2 !important;
+  color: #000000 !important;
 }
 
 /* Grid and cell backgrounds */
