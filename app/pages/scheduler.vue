@@ -45,6 +45,7 @@ const taskForm = ref({
   priority: '',
 })
 const tasks = ref<any[]>([])
+const isGeneratingTasks = ref(false)
 
 // Check if required fields are completed
 const isRequiredFieldsCompleted = computed(() => {
@@ -97,16 +98,22 @@ function generateRandomTasks(count = 5) {
     return
   }
 
-  const randomNames = ['Check Sensors', 'Install Device', 'Calibrate Meter', 'Inspect Area', 'Replace Filter', 'Noise Survey', 'Dust Sampling', 'Safety Briefing', 'Site Cleaning', 'Equipment Test']
-  const randomCategories = baseTaskCategories.slice(0, -1)
-  const randomPriorities = priorities
-  for (let i = 0; i < count; i++) {
-    const name = randomNames[Math.floor(Math.random() * randomNames.length)]
-    const category = randomCategories[Math.floor(Math.random() * randomCategories.length)]
-    const duration = (Math.floor(Math.random() * 4) + 1).toString()
-    const priority = randomPriorities[Math.floor(Math.random() * randomPriorities.length)]
-    tasks.value.push({ name, category, duration, priority })
-  }
+  isGeneratingTasks.value = true
+
+  // Simulate async task generation with loading delay
+  setTimeout(() => {
+    const randomNames = ['Check Sensors', 'Install Device', 'Calibrate Meter', 'Inspect Area', 'Replace Filter', 'Noise Survey', 'Dust Sampling', 'Safety Briefing', 'Site Cleaning', 'Equipment Test']
+    const randomCategories = baseTaskCategories.slice(0, -1)
+    const randomPriorities = priorities
+    for (let i = 0; i < count; i++) {
+      const name = randomNames[Math.floor(Math.random() * randomNames.length)]
+      const category = randomCategories[Math.floor(Math.random() * randomCategories.length)]
+      const duration = (Math.floor(Math.random() * 4) + 1).toString()
+      const priority = randomPriorities[Math.floor(Math.random() * randomPriorities.length)]
+      tasks.value.push({ name, category, duration, priority })
+    }
+    isGeneratingTasks.value = false
+  }, 1200) // 1.2 second delay for loading animation
 }
 
 const isLoading = ref(false)
@@ -355,12 +362,27 @@ function openDatePicker(event: Event) {
             Add Task
           </button>
           <button
-            :disabled="!isRequiredFieldsCompleted"
-            class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-200 dark:disabled:hover:bg-gray-600"
+            :disabled="!isRequiredFieldsCompleted || isGeneratingTasks"
+            class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 text-gray-800 dark:text-white px-4 py-2 rounded transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-200 dark:disabled:hover:bg-gray-600 flex items-center gap-2"
             @click="() => generateRandomTasks(5)"
           >
-            Auto-Generate Project Tasks
+            <svg v-if="isGeneratingTasks" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+            </svg>
+            <span>{{ isGeneratingTasks ? 'Generating Tasks...' : 'Auto-Generate Project Tasks' }}</span>
           </button>
+        </div>
+      </div>
+
+      <!-- Task Generation Loading Spinner -->
+      <div v-if="isGeneratingTasks" class="flex flex-col items-center justify-center py-6">
+        <svg class="animate-spin h-8 w-8 text-tenang-primary dark:text-tenang-primary-dark mb-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+        </svg>
+        <div class="text-tenang-primary dark:text-tenang-primary-dark font-medium">
+          Generating project-specific tasks...
         </div>
       </div>
 
