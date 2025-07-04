@@ -50,6 +50,12 @@ export default defineNuxtConfig({
   ],
 
   app: {
+    // Global page transition configuration
+    pageTransition: {
+      name: 'page',
+      mode: 'out-in',
+      duration: 300,
+    },
     head: {
       title: 'TenangSite',
       meta: [
