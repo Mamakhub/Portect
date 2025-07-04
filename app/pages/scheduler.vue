@@ -127,7 +127,7 @@ function generateSchedule() {
   isLoading.value = true
   showSchedule.value = false
   setTimeout(() => {
-    // Mock: assign tasks to days before due date
+    // Improved task scheduling algorithm
     const start = new Date()
     const end = new Date(dueDate.value)
     const days: Date[] = []
@@ -137,12 +137,32 @@ function generateSchedule() {
       d = new Date(d)
       d.setDate(d.getDate() + 1)
     }
-    optimizedSchedule.value = tasks.value.map((task, i) => {
-      const day = days[i % days.length]
+
+    // More comprehensive time slots from 6:00 to 18:00
+    const timeSlots: string[] = []
+    for (let hour = 6; hour <= 18; hour++) {
+      timeSlots.push(`${hour.toString().padStart(2, '0')}:00`)
+      if (hour < 18) {
+        timeSlots.push(`${hour.toString().padStart(2, '0')}:30`)
+      }
+    }
+
+    // Sort tasks by priority (High -> Medium -> Low)
+    const priorityOrder: Record<string, number> = { High: 3, Medium: 2, Low: 1 }
+    const sortedTasks = [...tasks.value].sort((a, b) =>
+      (priorityOrder[b.priority] || 0) - (priorityOrder[a.priority] || 0),
+    )
+
+    optimizedSchedule.value = sortedTasks.map((task, i) => {
+      const dayIndex = Math.floor(i / timeSlots.length) % days.length
+      const timeSlotIndex = i % timeSlots.length
+      const day = days[dayIndex]
+      const time = timeSlots[timeSlotIndex]
+
       return {
         ...task,
         day: day.toLocaleDateString(),
-        time: `${8 + (i % 4) * 2}:00`,
+        time,
       }
     })
     // Calendar events
@@ -506,7 +526,7 @@ function openDatePicker(event: Event) {
             </tbody>
           </table>
         </div>
-        <button v-if="showSchedule" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded mb-4 transition-colors" @click="openCalendarModal">
+        <button v-if="showSchedule" class="bg-tenang-primary dark:bg-tenang-primary-dark hover:bg-tenang-primary/90 dark:hover:bg-tenang-primary-dark/90 text-white dark:text-black px-4 py-2 rounded mb-4 mt-4 transition-colors" @click="openCalendarModal">
           View in Calendar
         </button>
       </div>
