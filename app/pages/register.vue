@@ -25,11 +25,11 @@ function handleRegister() {
     <!-- Left: Logo, Title, Description -->
     <div class="hidden md:flex w-1/2 h-screen bg-tenang-green flex-col items-center justify-center p-0 m-0">
       <div class="flex flex-col items-center justify-center w-full h-full px-16">
-        <img src="~/assets/logo.png" alt="TenangSite Logo" class="mb-12 mt-8 max-w-[320px] w-2/3 h-auto mx-auto">
+        <img src="~/assets/logo.png" alt="Portect Logo" class="mb-12 mt-8 max-w-[320px] w-2/3 h-auto mx-auto">
         <div class="w-48 border-t-4 mb-8 self-start" style="border-color: #84e4a8;" />
         <div class="mt-6 w-full">
           <h1 class="text-5xl font-bold mb-4 text-left w-full" style="color: #84e4a8;">
-            TenangSite
+            Portect
           </h1>
           <p class="text-lg text-left max-w-xl" style="color: #84e4a8;">
             A smart management platform that ensures a calm, organized construction environment for everyone — from workers on-site to people nearby.

@@ -1,4 +1,4 @@
-# TenangSite
+# Portect
 
 A modern Nuxt.js frontend application built with Vue 3, TypeScript, and UnoCSS.
 
@@ -61,7 +61,7 @@ A modern Nuxt.js frontend application built with Vue 3, TypeScript, and UnoCSS.
 ## Project Structure
 
 ```
-TenangSite/
+Portect/
 ├── app.vue                 # Main app component
 ├── nuxt.config.ts         # Nuxt configuration
 ├── uno.config.ts          # UnoCSS configuration

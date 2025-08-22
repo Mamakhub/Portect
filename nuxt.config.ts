@@ -57,7 +57,7 @@ export default defineNuxtConfig({
       duration: 300,
     },
     head: {
-      title: 'TenangSite',
+      title: 'Portect',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -71,7 +71,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      appName: 'TenangSite',
+      appName: 'Portect',
     },
   },
 })
