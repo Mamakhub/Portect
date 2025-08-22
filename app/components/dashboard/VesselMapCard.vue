@@ -33,9 +33,9 @@ const map = ref<any>(null)
 const vesselMarkers = ref<any[]>([])
 const zoneLayers = ref<any[]>([])
 
-// Map configuration - centered on Port Klang
+// Map configuration - centered on Port Melaka area
 const mapConfig = {
-  center: [3.0014, 101.3897] as [number, number], // Port Klang center
+  center: [2.1350, 102.2250] as [number, number], // Port Melaka center - shows both port and sea
   zoom: 12,
   minZoom: 10,
   maxZoom: 18,

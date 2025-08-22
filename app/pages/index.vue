@@ -4,7 +4,7 @@ import type { Vessel } from '~/types/vessels'
 
 // Page metadata
 definePageMeta({
-  title: 'Port Vessel GPS Tracking',
+  title: 'Port Melaka Vessel GPS Tracking',
 })
 
 // Vessel data
@@ -63,7 +63,7 @@ function handleVesselChange(event: Event) {
       <div class="flex items-center justify-between">
         <div>
           <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-            Port Klang Vessel GPS Tracking
+            Port Melaka Vessel GPS Tracking
           </h1>
           <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
             Real-time monitoring and management of vessels in port waters
