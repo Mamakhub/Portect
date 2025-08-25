@@ -43,11 +43,11 @@ const navigationItems: NavItem[] = [
     href: '/calendar',
     icon: 'heroicons:calendar',
   },
-  {
+/*   {
     name: 'Project Scheduler',
     href: '/scheduler',
     icon: 'mdi:calendar-clock',
-  },
+  }, */
   {
     name: 'Sensor Control & Summary',
     href: '/sensors',

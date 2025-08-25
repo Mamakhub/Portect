@@ -10,8 +10,8 @@ import type { SiteSchedule } from '~/types/sites'
 
 // Page metadata
 definePageMeta({
-  title: 'Site Calendar',
-  description: 'View and manage all site schedules and activities',
+  title: 'Port Activity Calendar',
+  description: 'View and manage all port activities and schedules',
 })
 
 // Reactive data
@@ -298,25 +298,25 @@ onMounted(() => {
 
 /* Active/Primary button state - ONLY these should be green */
 :deep(.fc-button-active) {
-  background: #017359 !important;
+  background: #1e40af !important;
   color: #ffffff !important;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
 }
 
 :deep(.dark .fc-button-active) {
-  background: #BED9D2 !important;
+  background: #1e40af !important;
   color: #000000 !important;
 }
 
 /* Hover states for NON-active buttons */
 :deep(.fc-button:hover:not(.fc-button-active)) {
   background: #ffffff !important;
-  color: #017359 !important;
+  color: #1e40af !important;
 }
 
 :deep(.dark .fc-button:hover:not(.fc-button-active)) {
   background: #4b5563 !important;
-  color: #BED9D2 !important;
+  color: #1e40af !important;
 }
 
 /* Navigation buttons (prev/next/today) styling */
@@ -339,14 +339,14 @@ onMounted(() => {
 :deep(.fc-prev-button:hover),
 :deep(.fc-next-button:hover),
 :deep(.fc-today-button:hover) {
-  background: #017359 !important;
+  background: #1e40af !important;
   color: #ffffff !important;
 }
 
 :deep(.dark .fc-prev-button:hover),
 :deep(.dark .fc-next-button:hover),
 :deep(.dark .fc-today-button:hover) {
-  background: #BED9D2 !important;
+  background: #1e40af !important;
   color: #000000 !important;
 }
 
@@ -426,16 +426,16 @@ onMounted(() => {
 }
 :deep(.dark .fc-day-today) {
   background: #1e293b;
-  border: 1.5px solid #BED9D2;
+  border: 1.5px solid #1e40af;
 }
 
 /* More link */
 :deep(.fc-more-link) {
-  color: #017359;
+  color: #1e40af;
   font-weight: 600;
 }
 :deep(.dark .fc-more-link) {
-  color: #BED9D2;
+  color: #1e40af;
 }
 
 /* Time labels */
@@ -452,9 +452,9 @@ onMounted(() => {
   opacity: 0.15;
 }
 :deep(.fc .fc-highlight) {
-  background: #01735933;
+  background: #1e40af33;
 }
 :deep(.dark .fc .fc-highlight) {
-  background: #BED9D255;
+  background: #1e40af55;
 }
 </style>
