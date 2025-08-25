@@ -44,7 +44,7 @@ const navigationItems: NavItem[] = [
     icon: 'hugeicons:boat',
   },
   {
-    name: 'Calendar',
+    name: 'Port Activities',
     href: '/calendar',
     icon: 'heroicons:calendar',
   },

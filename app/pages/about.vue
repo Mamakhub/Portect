@@ -97,7 +97,7 @@ function closeAllQrModal() {
                 CEO
               </h3>
               <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-                Leading the vision and strategy to deliver innovative, reliable, and user-centric site management solutions.
+                Leading the vision and strategy to deliver innovative, reliable, and user-centric port and vessel management solutions.
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
@@ -123,7 +123,7 @@ function closeAllQrModal() {
                 CIO
               </h3>
               <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-                Driving information strategy and digital transformation to empower smarter, data-driven decisions.
+                Driving information strategy and digital transformation to empower smarter, data-driven maritime operations decisions.
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
@@ -149,7 +149,7 @@ function closeAllQrModal() {
                 CTO
               </h3>
               <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-                Spearheading technological innovation and ensuring seamless integration of advanced monitoring and scheduling systems.
+                Spearheading technological innovation and ensuring seamless integration of advanced vessel tracking and port management systems.
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
@@ -175,7 +175,7 @@ function closeAllQrModal() {
                 CMO
               </h3>
               <p class="text-sm text-gray-600 dark:text-gray-300 text-center mb-3">
-                Crafting and executing creative marketing strategies to communicate the value and impact of our platform.
+                Crafting and executing creative marketing strategies to communicate the value and impact of our maritime connectivity platform.
               </p>
             </div>
             <div class="flex gap-4 mt-auto justify-center pt-2">
@@ -202,28 +202,28 @@ function closeAllQrModal() {
       </template>
       <div>
         <p class="text-center text-gray-700 dark:text-gray-300 mb-6 max-w-2xl mx-auto text-lg">
-          <span class="font-semibold text-tenang-primary dark:text-tenang-primary-dark">Portect</span> is your all-in-one digital platform for modern site management, monitoring, and scheduling. Designed for teams who value efficiency, safety, and data-driven decision making, Portect empowers you to seamlessly oversee multiple project sites, monitor real-time environmental conditions, and optimize your workflow—all from a single, intuitive dashboard.<br><br>
+          <span class="font-semibold text-tenang-primary dark:text-tenang-primary-dark">Portect</span> is your all-in-one digital platform for modern port and vessel management, connectivity, and tracking. Designed for maritime professionals who value efficiency, safety, and data-driven decision making, Portect empowers you to seamlessly oversee multiple vessels, monitor real-time GPS tracking, and optimize port operations—all from a single, intuitive dashboard.<br><br>
         </p>
         <ul class="space-y-3 max-w-xl mx-auto">
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Real-time environmental monitoring (dust, noise, and more)</span>
+            <span class="text-gray-800 dark:text-gray-200">Real-time vessel GPS tracking and location monitoring</span>
           </li>
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Automated project scheduling and task optimization</span>
+            <span class="text-gray-800 dark:text-gray-200">Automated port scheduling and berth optimization</span>
           </li>
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Multi-site management with centralized dashboard</span>
+            <span class="text-gray-800 dark:text-gray-200">Multi-vessel management with centralized dashboard</span>
           </li>
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for site events</span>
+            <span class="text-gray-800 dark:text-gray-200">Customizable alerts and notifications for maritime events</span>
           </li>
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
-            <span class="text-gray-800 dark:text-gray-200">Comprehensive reporting and analytics</span>
+            <span class="text-gray-800 dark:text-gray-200">Comprehensive maritime reporting and analytics</span>
           </li>
           <li class="flex items-center gap-2">
             <span class="text-tenang-primary dark:text-tenang-primary-dark text-lg">✔</span>
