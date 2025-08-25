@@ -30,15 +30,15 @@ function handleLogin() {
 <template>
   <div class="min-h-screen w-full flex">
     <!-- Left: Logo, Title, Description -->
-    <div class="hidden md:flex w-1/2 h-screen bg-tenang-900 flex-col items-center justify-center p-0 m-0">
+    <div class="hidden md:flex w-1/2 h-screen bg-tenang-200 flex-col items-center justify-center p-0 m-0">
       <div class="flex flex-col items-center justify-center w-full h-full px-16">
-        <img src="~/assets/logo.png" alt="Portect Logo" class="mb-12 mt-8 max-w-[320px] w-2/3 h-auto mx-auto">
-        <div class="w-48 border-t-4 mb-8 self-start border-tenang-accent" />
+        <img src="~/assets/logo.png" alt="Portect Logo" class="mb-12 mt-8 max-w-[640px] w-2/3 h-auto mx-auto">
+        <div class="w-48 border-t-4 mb-8 self-start border-tenang-primary" />
         <div class="mt-6 w-full">
-          <h1 class="text-5xl font-bold mb-4 text-left w-full text-tenang-accent">
+          <h1 class="text-5xl font-bold mb-4 text-left w-full text-tenang-primary">
             Portect
           </h1>
-          <p class="text-lg text-left max-w-xl text-tenang-accent">
+          <p class="text-lg text-left max-w-xl text-tenang-primary">
             A comprehensive administration panel for port and vessel connectivity, ensuring secure communication and efficient maritime operations management.
           </p>
         </div>
