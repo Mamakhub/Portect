@@ -32,7 +32,7 @@ function handleRegister() {
             Portect
           </h1>
           <p class="text-lg text-left max-w-xl text-tenang-accent">
-            A smart management platform that ensures a calm, organized construction environment for everyone — from workers on-site to people nearby.
+            A comprehensive administration panel for port and vessel connectivity, ensuring secure communication and efficient maritime operations management.
           </p>
         </div>
       </div>

@@ -39,7 +39,7 @@ function handleLogin() {
             Portect
           </h1>
           <p class="text-lg text-left max-w-xl text-tenang-accent">
-            An inteliggence communication bridge between port and vessels. Safe guaranteed.
+            A comprehensive administration panel for port and vessel connectivity, ensuring secure communication and efficient maritime operations management.
           </p>
         </div>
       </div>
