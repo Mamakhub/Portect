@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
 import { computed, ref } from 'vue'
-import SensorDetailModal from '~/components/common/SensorDetailModal.vue'
+import VesselDetailModal from '~/components/common/VesselDetailModal.vue'
 import { mockVesselGPSModules } from '~/data/mockVessels'
 import type { VesselGPSModule } from '~/types/vessels'
 
@@ -374,9 +374,9 @@ function openVessel(vessel: VesselGPSModule) {
       </div>
 
       <!-- Vessel Detail Modal -->
-      <SensorDetailModal
+      <VesselDetailModal
         v-if="selectedVessel"
-        :sensor="selectedVessel"
+        :vessel="selectedVessel"
         @close="selectedVessel = null"
       />
     </div>
