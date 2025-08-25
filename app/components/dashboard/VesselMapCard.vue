@@ -33,10 +33,10 @@ const map = ref<any>(null)
 const vesselMarkers = ref<any[]>([])
 const zoneLayers = ref<any[]>([])
 
-// Map configuration - centered on Port Melaka area
+// Map configuration - centered on Port Klang area
 const mapConfig = {
-  center: [2.1350, 102.2250] as [number, number], // Port Melaka center - shows both port and sea
-  zoom: 12,
+  center: [2.8500, 101.3000] as [number, number], // Port Klang center
+  zoom: 10,
   minZoom: 10,
   maxZoom: 18,
 }
@@ -45,7 +45,7 @@ const mapConfig = {
 const mapMarkers = computed(() => {
   return allVessels.value.map(vessel => ({
     id: vessel.id,
-    position: vessel.lastKnownPosition,
+    position: vessel.coordinates,
     title: vessel.name,
     status: vessel.status,
     vesselType: vessel.vesselType,
@@ -161,7 +161,7 @@ function addVesselMarkers(L: any) {
     const popupContent = `
       <div class="p-3 min-w-[250px]">
         <h3 class="font-semibold text-gray-900 text-sm mb-1">${markerData.title}</h3>
-        <p class="text-xs text-gray-600 mb-2">${markerData.data.vesselType.toUpperCase()} • ${markerData.data.flag}</p>
+        <p class="text-xs text-gray-600 mb-2">${markerData.data.vesselType.toUpperCase()}</p>
         <div class="space-y-1 text-xs">
           <div class="flex justify-between">
             <span class="text-gray-500">Status:</span>
@@ -186,8 +186,12 @@ function addVesselMarkers(L: any) {
             <span class="font-medium">${new Date(markerData.data.eta).toLocaleString()}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-500">GPS Devices:</span>
-            <span class="font-medium">${markerData.data.gpsDevices.length}</span>
+            <span class="text-gray-500">Battery:</span>
+            <span class="font-medium">${markerData.data.batteryLevel}%</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-gray-500">Signal:</span>
+            <span class="font-medium">${markerData.data.signalStrength}%</span>
           </div>
         </div>
         <div class="mt-3 space-y-1">

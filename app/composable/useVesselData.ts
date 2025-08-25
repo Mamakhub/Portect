@@ -1,13 +1,13 @@
 import { computed, ref } from 'vue'
 import { portZones, vesselAlerts, vessels, vesselSchedules } from '~/data/mockVessels'
-import type { GpsDevice, PortZone, Vessel, VesselAlert, VesselSchedule } from '~/types/vessels'
+import type { Vessel, VesselAlert, VesselSchedule } from '~/types/vessels'
 
 export function useVesselData() {
   // Reactive state
-  const allVessels = ref<Vessel[]>(vessels)
-  const allAlerts = ref<VesselAlert[]>(vesselAlerts)
-  const allSchedules = ref<VesselSchedule[]>(vesselSchedules)
-  const allPortZones = ref<PortZone[]>(portZones)
+  const allVessels = ref<any[]>(vessels)
+  const allAlerts = ref<any[]>(vesselAlerts)
+  const allSchedules = ref<any[]>(vesselSchedules)
+  const allPortZones = ref<any[]>(portZones)
   const selectedVesselId = ref<string | null>(null)
 
   // Computed properties
@@ -74,7 +74,7 @@ export function useVesselData() {
     selectedVesselId.value = null
   }
 
-  function getVesselById(vesselId: string): Vessel | null {
+  function getVesselById(vesselId: string): any | null {
     return allVessels.value.find(vessel => vessel.id === vesselId) || null
   }
 
@@ -86,9 +86,10 @@ export function useVesselData() {
     return allSchedules.value.filter(schedule => schedule.vesselId === vesselId)
   }
 
-  function getVesselGpsDevices(vesselId: string): GpsDevice[] {
+  function getVesselGpsDevices(vesselId: string): any[] {
     const vessel = getVesselById(vesselId)
-    return vessel ? vessel.gpsDevices : []
+    // For VesselGPSModule, treat the vessel itself as a GPS device
+    return vessel ? [vessel] : []
   }
 
   function getStatusColor(status: string): string {
@@ -190,12 +191,8 @@ export function useVesselData() {
       pendingSchedules: schedules.filter(s => s.status === 'pending').length,
       totalGpsDevices: gpsDevices.length,
       activeGpsDevices: gpsDevices.filter(d => d.status === 'active').length,
-      averageBatteryLevel: gpsDevices.length > 0 
-        ? gpsDevices.reduce((sum, device) => sum + device.batteryLevel, 0) / gpsDevices.length 
-        : 0,
-      averageSignalStrength: gpsDevices.length > 0 
-        ? gpsDevices.reduce((sum, device) => sum + device.signalStrength, 0) / gpsDevices.length 
-        : 0,
+      averageBatteryLevel: vessel.batteryLevel || 0,
+      averageSignalStrength: vessel.signalStrength || 0,
     }
   }
 

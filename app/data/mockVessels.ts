@@ -54,16 +54,16 @@ function generateGPSTimeSeries(
 // Mock vessel GPS modules
 export const mockVesselGPSModules: VesselGPSModule[] = [
   // Container Ships
-  {
-    id: 'vessel-001',
-    name: 'MV Port Klang Star',
-    vesselType: 'container',
-    status: 'active',
-    batteryLevel: 85,
-    signalStrength: 92,
-    lastReading: '2024-01-24T08:30:00Z',
-    location: 'Port Klang Terminal 1',
-    coordinates: [2.9800, 101.3800],
+     {
+     id: 'vessel-001',
+     name: 'MV Port Klang Star',
+     vesselType: 'container',
+     status: 'active',
+     batteryLevel: 85,
+     signalStrength: 92,
+     lastReading: '2024-01-24T08:30:00Z',
+     location: 'Port Klang Terminal 1',
+     coordinates: [2.8500, 101.2500],
     speed: 0,
     heading: 180,
     destination: 'Singapore',
@@ -75,9 +75,9 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     manufacturer: 'MarineGPS Pro',
     model: 'GPS-2000',
     firmware: 'v2.1.3',
-    installDate: '2023-06-15',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9800, 101.3800, 0.001, 'docked'),
-  },
+         installDate: '2023-06-15',
+     history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8500, 101.2500, 0.001, 'docked'),
+   },
   {
     id: 'vessel-002',
     name: 'MV Singapore Express',
@@ -87,7 +87,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 89,
     lastReading: '2024-01-24T08:25:00Z',
     location: 'South China Sea',
-    coordinates: [2.4500, 101.8500],
+         coordinates: [2.4000, 101.9000],
     speed: 18.5,
     heading: 45,
     destination: 'Port Klang',
@@ -100,7 +100,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-08-20',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.4500, 101.8500, 0.01, 'moving'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.4000, 101.9000, 0.01, 'moving'),
   },
   {
     id: 'vessel-003',
@@ -111,7 +111,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 67,
     lastReading: '2024-01-24T07:15:00Z',
     location: 'Port Klang Anchorage',
-    coordinates: [2.9200, 101.3200],
+         coordinates: [2.8000, 101.2000],
     speed: 0.5,
     heading: 90,
     destination: 'Port Klang',
@@ -124,7 +124,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-07-10',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9200, 101.3200, 0.0001, 'anchored'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8000, 101.2000, 0.0001, 'anchored'),
   },
 
   // Bulk Carriers
@@ -137,7 +137,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 94,
     lastReading: '2024-01-24T08:20:00Z',
     location: 'Port Klang Terminal 2',
-    coordinates: [2.9700, 101.3700],
+         coordinates: [2.8200, 101.1800],
     speed: 0,
     heading: 270,
     destination: 'Australia',
@@ -150,7 +150,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-09-05',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9700, 101.3700, 0.001, 'docked'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.001, 'docked'),
   },
   {
     id: 'vessel-005',
@@ -161,7 +161,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 82,
     lastReading: '2024-01-24T08:15:00Z',
     location: 'Malacca Strait',
-    coordinates: [2.7500, 101.7500],
+    coordinates: [2.800, 101.300],
     speed: 12.3,
     heading: 135,
     destination: 'Port Klang',
@@ -187,7 +187,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 88,
     lastReading: '2024-01-24T08:10:00Z',
     location: 'Port Klang Terminal 3',
-    coordinates: [2.9900, 101.3900],
+         coordinates: [2.8200, 101.1800],
     speed: 0,
     heading: 0,
     destination: 'Middle East',
@@ -200,7 +200,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-11-18',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9900, 101.3900, 0.001, 'docked'),
+    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.001, 'docked'),
   },
   {
     id: 'vessel-007',
@@ -211,7 +211,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 25,
     lastReading: '2024-01-24T02:45:00Z',
     location: 'Port Klang Anchorage',
-    coordinates: [2.9000, 101.3000],
+         coordinates: [2.8000, 101.2000],
     speed: 0,
     heading: 180,
     destination: 'Port Klang',
@@ -224,7 +224,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-12-03',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9000, 101.3000, 0.0001, 'anchored'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8000, 101.2000, 0.0001, 'anchored'),
   },
 
   // Passenger Ships
@@ -237,7 +237,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 96,
     lastReading: '2024-01-24T08:05:00Z',
     location: 'Port Klang Cruise Terminal',
-    coordinates: [3.0100, 101.4100],
+         coordinates: [2.8200, 101.1800],
     speed: 0,
     heading: 90,
     destination: 'Thailand',
@@ -250,7 +250,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2024-01-05',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 3.0100, 101.4100, 0.001, 'docked'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.001, 'docked'),
   },
 
   // Fishing Vessels
@@ -287,7 +287,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 58,
     lastReading: '2024-01-24T06:30:00Z',
     location: 'Port Klang Marina',
-    coordinates: [3.0300, 101.4300],
+         coordinates: [2.8200, 101.1800],
     speed: 0,
     heading: 0,
     destination: 'Port Klang',
@@ -300,7 +300,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-04-15',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 3.0300, 101.4300, 0.001, 'docked'),
+         history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.001, 'docked'),
   },
 
   // Tugboats
@@ -313,7 +313,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 91,
     lastReading: '2024-01-24T07:55:00Z',
     location: 'Port Klang Harbor',
-    coordinates: [2.9600, 101.3600],
+    coordinates: [2.8200, 101.1800],
     speed: 5.2,
     heading: 45,
     destination: 'Port Klang',
@@ -326,7 +326,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-03-08',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9600, 101.3600, 0.01, 'moving'),
+    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.01, 'moving'),
   },
   {
     id: 'vessel-012',
@@ -337,7 +337,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     signalStrength: 73,
     lastReading: '2024-01-24T07:30:00Z',
     location: 'Port Klang Dock',
-    coordinates: [2.9800, 101.3800],
+    coordinates: [2.8200, 101.1800],
     speed: 0,
     heading: 180,
     destination: 'Port Klang',
@@ -350,7 +350,7 @@ export const mockVesselGPSModules: VesselGPSModule[] = [
     model: 'GPS-2000',
     firmware: 'v2.1.3',
     installDate: '2023-02-14',
-    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.9800, 101.3800, 0.001, 'docked'),
+    history: generateGPSTimeSeries('2024-01-24T00:00:00', 24, 2.8200, 101.1800, 0.001, 'docked'),
   },
 ]
 
@@ -373,3 +373,91 @@ export function getVesselGPSModulesByStatus(status: string): VesselGPSModule[] {
 export function getVesselGPSModuleById(id: string): VesselGPSModule | undefined {
   return mockVesselGPSModules.find(vessel => vessel.id === id)
 }
+
+// Mock data for compatibility with existing components
+export const vessels = mockVesselGPSModules
+export const vesselAlerts: any[] = [
+  {
+    id: 'alert-001',
+    vesselId: 'vessel-007',
+    title: 'Low Battery Alert',
+    message: 'Vessel GPS module battery level critically low (12%)',
+    severity: 'critical',
+    status: 'active',
+    createdAt: '2024-01-24T06:00:00Z',
+  },
+  {
+    id: 'alert-002',
+    vesselId: 'vessel-003',
+    title: 'Maintenance Required',
+    message: 'GPS module requires scheduled maintenance',
+    severity: 'medium',
+    status: 'active',
+    createdAt: '2024-01-24T07:00:00Z',
+  },
+  {
+    id: 'alert-003',
+    vesselId: 'vessel-010',
+    title: 'Signal Interference',
+    message: 'Weak GPS signal detected, possible interference',
+    severity: 'high',
+    status: 'active',
+    createdAt: '2024-01-24T08:00:00Z',
+  }
+]
+export const vesselSchedules: any[] = [
+  {
+    id: 'schedule-001',
+    vesselId: 'vessel-002',
+    title: 'Port Entry',
+    description: 'Scheduled port entry and docking procedures',
+    time: '2024-01-24T16:00:00Z',
+    priority: 'high',
+    status: 'pending',
+    assignedTo: 'Port Control',
+  },
+  {
+    id: 'schedule-002',
+    vesselId: 'vessel-005',
+    title: 'Cargo Loading',
+    description: 'Bulk cargo loading operations',
+    time: '2024-01-24T20:00:00Z',
+    priority: 'medium',
+    status: 'pending',
+    assignedTo: 'Cargo Operations',
+  },
+  {
+    id: 'schedule-003',
+    vesselId: 'vessel-008',
+    title: 'Passenger Disembarkation',
+    description: 'Cruise ship passenger disembarkation',
+    time: '2024-01-24T09:00:00Z',
+    priority: 'low',
+    status: 'pending',
+    assignedTo: 'Passenger Services',
+  },
+  {
+    id: 'schedule-004',
+    vesselId: 'vessel-011',
+    title: 'Tug Operations',
+    description: 'Assist vessel docking operations',
+    time: '2024-01-24T09:00:00Z',
+    priority: 'high',
+    status: 'pending',
+    assignedTo: 'Tug Operations',
+  }
+]
+export const portZones: any[] = [
+  {
+    id: 'zone-001',
+    name: 'Container Terminal',
+    coordinates: [[2.9700, 101.3700], [2.9900, 101.3900]],
+    type: 'operational',
+  },
+  {
+    id: 'zone-002',
+    name: 'Anchorage Area',
+    coordinates: [[2.9000, 101.3000], [2.9200, 101.3200]],
+    type: 'waiting',
+  }
+]
