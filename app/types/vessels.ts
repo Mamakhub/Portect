@@ -116,3 +116,28 @@ export interface PortZone {
   color: string
   description: string
 }
+
+export interface VesselGPSModule {
+  id: string
+  name: string
+  vesselType: 'container' | 'bulk' | 'tanker' | 'passenger' | 'fishing' | 'tug'
+  status: 'active' | 'inactive' | 'maintenance' | 'offline'
+  batteryLevel: number
+  signalStrength: number
+  lastReading: string
+  location: string
+  coordinates: [number, number]
+  speed: number
+  heading: number
+  destination: string
+  eta: string
+  captain: string
+  contactPhone: string
+  imo: string
+  mmsi: string
+  manufacturer: string
+  model: string
+  firmware: string
+  installDate: string
+  history: Array<{ timestamp: string, latitude: number, longitude: number, speed: number }>
+}

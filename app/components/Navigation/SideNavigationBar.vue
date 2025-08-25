@@ -34,9 +34,14 @@ interface NavItem {
 
 const navigationItems: NavItem[] = [
   {
-    name: 'Dashboard',
+    name: 'Port Module Dashboard',
     href: '/',
-    icon: 'heroicons:home',
+    icon: 'guidance:port',
+  },
+  {
+    name: 'Vessel Modules Dashboard',
+    href: '/sensors',
+    icon: 'hugeicons:boat',
   },
   {
     name: 'Calendar',
@@ -48,11 +53,6 @@ const navigationItems: NavItem[] = [
     href: '/scheduler',
     icon: 'mdi:calendar-clock',
   }, */
-  {
-    name: 'Sensor Control & Summary',
-    href: '/sensors',
-    icon: 'heroicons:cpu-chip',
-  },
   {
     name: 'About',
     href: '/about',
