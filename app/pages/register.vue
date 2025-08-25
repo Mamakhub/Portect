@@ -23,15 +23,15 @@ function handleRegister() {
 <template>
   <div class="min-h-screen w-full flex">
     <!-- Left: Logo, Title, Description -->
-    <div class="hidden md:flex w-1/2 h-screen bg-tenang-green flex-col items-center justify-center p-0 m-0">
+    <div class="hidden md:flex w-1/2 h-screen bg-tenang-900 flex-col items-center justify-center p-0 m-0">
       <div class="flex flex-col items-center justify-center w-full h-full px-16">
         <img src="~/assets/logo.png" alt="Portect Logo" class="mb-12 mt-8 max-w-[320px] w-2/3 h-auto mx-auto">
-        <div class="w-48 border-t-4 mb-8 self-start" style="border-color: #84e4a8;" />
+        <div class="w-48 border-t-4 mb-8 self-start border-tenang-accent" />
         <div class="mt-6 w-full">
-          <h1 class="text-5xl font-bold mb-4 text-left w-full" style="color: #84e4a8;">
+          <h1 class="text-5xl font-bold mb-4 text-left w-full text-tenang-accent">
             Portect
           </h1>
-          <p class="text-lg text-left max-w-xl" style="color: #84e4a8;">
+          <p class="text-lg text-left max-w-xl text-tenang-accent">
             A smart management platform that ensures a calm, organized construction environment for everyone — from workers on-site to people nearby.
           </p>
         </div>
@@ -62,7 +62,7 @@ function handleRegister() {
           <div v-if="error" class="text-red-400 text-sm">
             {{ error }}
           </div>
-          <button type="submit" class="w-full py-3 px-4 bg-tenang-accent hover:bg-[#6fd19a] text-[#136355] font-bold rounded-lg shadow-lg transition-all duration-150 text-lg mt-2">
+          <button type="submit" class="w-full py-3 px-4 bg-tenang-accent hover:bg-tenang-300 text-tenang-900 font-bold rounded-lg shadow-lg transition-all duration-150 text-lg mt-2">
             Register
           </button>
         </form>

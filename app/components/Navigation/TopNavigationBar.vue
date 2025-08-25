@@ -56,12 +56,12 @@ onMounted(() => {
       <!-- App Icon and Title -->
       <div class="flex items-center space-x-3">
         <NuxtLink to="/">
-          <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-transparent dark:bg-[#BED9D2] dark:border dark:border-white/20 dark:shadow-md">
+          <div class="h-10 w-10 rounded-xl flex items-center justify-center bg-transparent dark:bg-tenang-primary-dark dark:border dark:border-white/20 dark:shadow-md">
             <img src="/assets/icon_2.png" alt="Portect" class="h-8 w-8 drop-shadow-sm">
           </div>
         </NuxtLink>
         <NuxtLink to="/">
-          <h1 class="text-xl font-bold text-[#017359] dark:text-[#BED9D2] tracking-tight drop-shadow-sm cursor-pointer">
+          <h1 class="text-xl font-bold text-tenang-primary dark:text-tenang-primary-dark tracking-tight drop-shadow-sm cursor-pointer">
             Portect
           </h1>
         </NuxtLink>
