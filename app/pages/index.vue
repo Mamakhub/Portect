@@ -185,12 +185,6 @@ function handleVesselChange(event) {
               </span>
             </div>
             <div class="flex justify-between">
-              <span class="text-sm text-gray-600 dark:text-gray-400">Battery Level:</span>
-              <span class="text-sm font-medium text-gray-900 dark:text-white">
-                {{ Math.round(selectedVesselStats.averageBatteryLevel) }}%
-              </span>
-            </div>
-            <div class="flex justify-between">
               <span class="text-sm text-gray-600 dark:text-gray-400">Signal Strength:</span>
               <span class="text-sm font-medium text-gray-900 dark:text-white">
                 {{ Math.round(selectedVesselStats.averageSignalStrength) }}%

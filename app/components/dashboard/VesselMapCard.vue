@@ -186,10 +186,6 @@ function addVesselMarkers(L: any) {
             <span class="font-medium">${new Date(markerData.data.eta).toLocaleString()}</span>
           </div>
           <div class="flex justify-between">
-            <span class="text-gray-500">Battery:</span>
-            <span class="font-medium">${markerData.data.batteryLevel}%</span>
-          </div>
-          <div class="flex justify-between">
             <span class="text-gray-500">Signal:</span>
             <span class="font-medium">${markerData.data.signalStrength}%</span>
           </div>

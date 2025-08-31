@@ -159,10 +159,6 @@ useHead({
               </div>
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
-                  <span class="text-gray-500">Battery:</span>
-                  <span class="font-medium ml-1">{{ device.batteryLevel }}%</span>
-                </div>
-                <div>
                   <span class="text-gray-500">Signal:</span>
                   <span class="font-medium ml-1">{{ device.signalStrength }}%</span>
                 </div>
@@ -254,12 +250,6 @@ useHead({
               <span class="text-gray-500">GPS Devices:</span>
               <span class="font-medium text-gray-900 dark:text-white">
                 {{ vesselStats.activeGpsDevices }}/{{ vesselStats.totalGpsDevices }}
-              </span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-gray-500">Avg Battery:</span>
-              <span class="font-medium text-gray-900 dark:text-white">
-                {{ Math.round(vesselStats.averageBatteryLevel) }}%
               </span>
             </div>
             <div class="flex justify-between">

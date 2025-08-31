@@ -51,23 +51,6 @@
               </span>
             </div>
 
-            <!-- Battery Level -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Battery</span>
-                <span :class="batteryClass(sensor.batteryLevel)" class="text-sm font-semibold">
-                  {{ sensor.batteryLevel }}%
-                </span>
-              </div>
-              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                <div 
-                  class="h-2 rounded-full transition-all duration-300" 
-                  :class="batteryColorClass(sensor.batteryLevel)"
-                  :style="{ width: `${sensor.batteryLevel}%` }"
-                ></div>
-              </div>
-            </div>
-
             <!-- Signal Strength -->
             <div class="space-y-2">
               <div class="flex items-center justify-between">
@@ -165,18 +148,6 @@ function statusClass(status: string) {
     case 'offline': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
     default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
   }
-}
-
-function batteryClass(level: number) {
-  if (level >= 80) return 'text-green-600 dark:text-green-400'
-  if (level >= 50) return 'text-yellow-600 dark:text-yellow-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
-function batteryColorClass(level: number) {
-  if (level >= 80) return 'bg-green-500'
-  if (level >= 50) return 'bg-yellow-500'
-  return 'bg-red-500'
 }
 
 function signalClass(level: number) {

@@ -58,23 +58,6 @@
               </span>
             </div>
 
-            <!-- GPS Module Status -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">GPS Battery</span>
-                <span :class="batteryClass(vessel.batteryLevel)" class="text-sm font-semibold">
-                  {{ vessel.batteryLevel }}%
-                </span>
-              </div>
-              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                <div 
-                  class="h-2 rounded-full transition-all duration-300" 
-                  :class="batteryColorClass(vessel.batteryLevel)"
-                  :style="{ width: `${vessel.batteryLevel}%` }"
-                ></div>
-              </div>
-            </div>
-
             <!-- Signal Strength -->
             <div class="space-y-2">
               <div class="flex items-center justify-between">
@@ -215,18 +198,6 @@ function statusClass(status: string) {
   }
 }
 
-function batteryClass(level: number) {
-  if (level >= 80) return 'text-green-600 dark:text-green-400'
-  if (level >= 50) return 'text-yellow-600 dark:text-yellow-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
-function batteryColorClass(level: number) {
-  if (level >= 80) return 'bg-green-500'
-  if (level >= 50) return 'bg-yellow-500'
-  return 'bg-red-500'
-}
-
 function signalClass(level: number) {
   if (level >= 80) return 'text-green-600 dark:text-green-400'
   if (level >= 50) return 'text-yellow-600 dark:text-yellow-400'
@@ -316,10 +287,6 @@ function initializeMap() {
           <div class="flex justify-between">
             <span class="text-gray-500">Destination:</span>
             <span class="font-medium">${props.vessel.destination}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-500">GPS Battery:</span>
-            <span class="font-medium">${props.vessel.batteryLevel}%</span>
           </div>
           <div class="flex justify-between">
             <span class="text-gray-500">GPS Signal:</span>

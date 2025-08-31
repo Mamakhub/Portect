@@ -38,7 +38,6 @@ declare module '~/types/vessels' {
     vesselId: string
     deviceType: 'primary' | 'secondary' | 'backup'
     status: 'active' | 'inactive' | 'maintenance' | 'offline'
-    batteryLevel: number
     signalStrength: number
     lastReading: GpsReading
     manufacturer: string
@@ -68,7 +67,7 @@ declare module '~/types/vessels' {
     vesselId: string
     title: string
     message: string
-    type: 'gps_signal_lost' | 'low_battery' | 'speed_limit' | 'geofence_breach' | 'maintenance_due' | 'offline' | 'general'
+    type: 'gps_signal_lost' | 'speed_limit' | 'geofence_breach' | 'maintenance_due' | 'offline' | 'general'
     severity: 'low' | 'medium' | 'high' | 'critical'
     status: 'active' | 'acknowledged' | 'resolved' | 'archived'
     createdAt: string

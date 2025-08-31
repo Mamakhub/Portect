@@ -43,17 +43,6 @@ function getSensorIcon(type: string): string {
   }
 }
 
-// Get battery level color
-function getBatteryColor(level: number): string {
-  if (level > 80)
-    return 'text-green-600 dark:text-green-400'
-  if (level > 50)
-    return 'text-yellow-600 dark:text-yellow-400'
-  if (level > 20)
-    return 'text-orange-600 dark:text-orange-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
 // Get signal strength color
 function getSignalColor(strength: number): string {
   if (strength > 80)
@@ -157,9 +146,6 @@ function getSignalColor(strength: number): string {
             Device Information
           </div>
           <div class="col-span-2 text-center">
-            Battery Level
-          </div>
-          <div class="col-span-2 text-center">
             Signal Strength
           </div>
           <div class="col-span-2 text-center">
@@ -193,17 +179,6 @@ function getSignalColor(strength: number): string {
                   Location: {{ device.location }}
                 </p>
               </div>
-            </div>
-
-            <!-- Battery Level -->
-            <div class="col-span-2 flex flex-col items-center space-y-1">
-              <div class="flex items-center space-x-1">
-                <Icon icon="heroicons:battery-50" class="w-4 h-4" :class="getBatteryColor(device.batteryLevel)" />
-                <span class="text-xs font-medium" :class="getBatteryColor(device.batteryLevel)">
-                  {{ device.batteryLevel }}%
-                </span>
-              </div>
-              <span class="text-xs text-gray-500 dark:text-gray-400">Battery</span>
             </div>
 
             <!-- Signal Strength -->
@@ -264,17 +239,6 @@ function getSignalColor(strength: number): string {
 
             <!-- Data Row -->
             <div class="grid grid-cols-2 gap-4">
-              <!-- Battery Level -->
-              <div class="flex flex-col items-center space-y-1">
-                <div class="flex items-center space-x-1">
-                  <Icon icon="heroicons:battery-50" class="w-4 h-4" :class="getBatteryColor(device.batteryLevel)" />
-                  <span class="text-xs font-medium" :class="getBatteryColor(device.batteryLevel)">
-                    {{ device.batteryLevel }}%
-                  </span>
-                </div>
-                <span class="text-xs text-gray-500 dark:text-gray-400">Battery</span>
-              </div>
-
               <!-- Signal Strength -->
               <div class="flex flex-col items-center space-y-1">
                 <div class="flex items-center space-x-1">
