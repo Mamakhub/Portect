@@ -47,21 +47,6 @@ function statusClass(status: string) {
   }
 }
 
-function signalClass(level: number) {
-  if (level >= 80)
-    return 'text-green-600 dark:text-green-400'
-  if (level >= 50)
-    return 'text-yellow-600 dark:text-yellow-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
-function signalColorClass(level: number) {
-  if (level >= 80)
-    return 'bg-green-500'
-  if (level >= 50)
-    return 'bg-yellow-500'
-  return 'bg-red-500'
-}
 
 function formatTime(timestamp: string | undefined) {
   if (!timestamp)
@@ -237,9 +222,6 @@ function openVessel(vessel: VesselGPSModule) {
                   Status
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                  Signal
-                </th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                   Speed & Heading
                 </th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
@@ -290,20 +272,6 @@ function openVessel(vessel: VesselGPSModule) {
                   <span :class="statusClass(vessel.status)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
                     {{ vessel.status.charAt(0).toUpperCase() + vessel.status.slice(1) }}
                   </span>
-                </td>
-                <td class="px-6 py-4">
-                  <div class="flex items-center">
-                    <div class="w-16 bg-gray-200 dark:bg-gray-600 rounded-full h-2 mr-2">
-                      <div
-                        class="h-2 rounded-full transition-all duration-300"
-                        :class="signalColorClass(vessel.signalStrength)"
-                        :style="{ width: `${vessel.signalStrength}%` }"
-                      />
-                    </div>
-                    <span :class="signalClass(vessel.signalStrength)" class="text-sm font-medium">
-                      {{ vessel.signalStrength }}%
-                    </span>
-                  </div>
                 </td>
                 <td class="px-6 py-4">
                   <div class="text-sm text-gray-900 dark:text-white">

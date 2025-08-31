@@ -42,17 +42,6 @@ function getSensorIcon(type: string): string {
     default: return 'heroicons:cpu-chip'
   }
 }
-
-// Get signal strength color
-function getSignalColor(strength: number): string {
-  if (strength > 80)
-    return 'text-green-600 dark:text-green-400'
-  if (strength > 50)
-    return 'text-yellow-600 dark:text-yellow-400'
-  if (strength > 20)
-    return 'text-orange-600 dark:text-orange-400'
-  return 'text-red-600 dark:text-red-400'
-}
 </script>
 
 <template>
@@ -146,9 +135,6 @@ function getSignalColor(strength: number): string {
             Device Information
           </div>
           <div class="col-span-2 text-center">
-            Signal Strength
-          </div>
-          <div class="col-span-2 text-center">
             Status
           </div>
           <div class="col-span-2 text-center">
@@ -179,17 +165,6 @@ function getSignalColor(strength: number): string {
                   Location: {{ device.location }}
                 </p>
               </div>
-            </div>
-
-            <!-- Signal Strength -->
-            <div class="col-span-2 flex flex-col items-center space-y-1">
-              <div class="flex items-center space-x-1">
-                <Icon icon="heroicons:signal" class="w-4 h-4" :class="getSignalColor(device.signalStrength)" />
-                <span class="text-xs font-medium" :class="getSignalColor(device.signalStrength)">
-                  {{ device.signalStrength }}%
-                </span>
-              </div>
-              <span class="text-xs text-gray-500 dark:text-gray-400">Signal</span>
             </div>
 
             <!-- Status -->
@@ -239,16 +214,6 @@ function getSignalColor(strength: number): string {
 
             <!-- Data Row -->
             <div class="grid grid-cols-2 gap-4">
-              <!-- Signal Strength -->
-              <div class="flex flex-col items-center space-y-1">
-                <div class="flex items-center space-x-1">
-                  <Icon icon="heroicons:signal" class="w-4 h-4" :class="getSignalColor(device.signalStrength)" />
-                  <span class="text-xs font-medium" :class="getSignalColor(device.signalStrength)">
-                    {{ device.signalStrength }}%
-                  </span>
-                </div>
-                <span class="text-xs text-gray-500 dark:text-gray-400">Signal</span>
-              </div>
 
               <!-- Status -->
               <div class="flex flex-col items-center space-y-1">

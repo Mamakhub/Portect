@@ -84,7 +84,6 @@ export interface SensorDevice {
   name: string
   type: 'dust' | 'noise'
   status: 'active' | 'inactive' | 'maintenance' | 'offline'
-  signalStrength: number
   lastReading?: number
   lastReadingTime?: string
   location?: string

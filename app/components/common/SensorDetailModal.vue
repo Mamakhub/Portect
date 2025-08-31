@@ -50,22 +50,6 @@
                 {{ sensor.lastReading }} <span class="text-sm">{{ sensor.type === 'dust' ? 'mg/m³' : 'dB' }}</span>
               </span>
             </div>
-
-            <!-- Signal Strength -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Signal</span>
-                <span :class="signalClass(sensor.signalStrength)" class="text-sm font-semibold">
-                  {{ sensor.signalStrength }}%
-                </span>
-              </div>
-              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                <div 
-                  class="h-2 rounded-full transition-all duration-300" 
-                  :class="signalColorClass(sensor.signalStrength)"
-                  :style="{ width: `${sensor.signalStrength}%` }"
-                ></div>
-              </div>
             </div>
 
             <!-- Technical Details -->
@@ -148,18 +132,6 @@ function statusClass(status: string) {
     case 'offline': return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400'
     default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400'
   }
-}
-
-function signalClass(level: number) {
-  if (level >= 80) return 'text-green-600 dark:text-green-400'
-  if (level >= 50) return 'text-yellow-600 dark:text-yellow-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
-function signalColorClass(level: number) {
-  if (level >= 80) return 'bg-green-500'
-  if (level >= 50) return 'bg-yellow-500'
-  return 'bg-red-500'
 }
 
 function formatTime(timestamp: string) {

@@ -58,23 +58,6 @@
               </span>
             </div>
 
-            <!-- Signal Strength -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">GPS Signal</span>
-                <span :class="signalClass(vessel.signalStrength)" class="text-sm font-semibold">
-                  {{ vessel.signalStrength }}%
-                </span>
-              </div>
-              <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2">
-                <div 
-                  class="h-2 rounded-full transition-all duration-300" 
-                  :class="signalColorClass(vessel.signalStrength)"
-                  :style="{ width: `${vessel.signalStrength}%` }"
-                ></div>
-              </div>
-            </div>
-
             <!-- Technical Details -->
             <div class="pt-4 border-t border-gray-200 dark:border-gray-600 space-y-2">
               <div class="flex justify-between text-sm">
@@ -198,18 +181,6 @@ function statusClass(status: string) {
   }
 }
 
-function signalClass(level: number) {
-  if (level >= 80) return 'text-green-600 dark:text-green-400'
-  if (level >= 50) return 'text-yellow-600 dark:text-yellow-400'
-  return 'text-red-600 dark:text-red-400'
-}
-
-function signalColorClass(level: number) {
-  if (level >= 80) return 'bg-green-500'
-  if (level >= 50) return 'bg-yellow-500'
-  return 'bg-red-500'
-}
-
 function formatTime(timestamp: string) {
   return new Date(timestamp).toLocaleString('en-US', {
     year: 'numeric',
@@ -287,10 +258,6 @@ function initializeMap() {
           <div class="flex justify-between">
             <span class="text-gray-500">Destination:</span>
             <span class="font-medium">${props.vessel.destination}</span>
-          </div>
-          <div class="flex justify-between">
-            <span class="text-gray-500">GPS Signal:</span>
-            <span class="font-medium">${props.vessel.signalStrength}%</span>
           </div>
         </div>
       </div>

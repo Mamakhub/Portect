@@ -29,7 +29,6 @@ export interface GpsDevice {
   vesselId: string
   deviceType: 'primary' | 'secondary' | 'backup'
   status: 'active' | 'inactive' | 'maintenance' | 'offline'
-  signalStrength: number // percentage
   lastReading: GpsReading
   manufacturer: string
   model: string
@@ -58,7 +57,7 @@ export interface VesselAlert {
   vesselId: string
   title: string
   message: string
-  type: 'gps_signal_lost' | 'speed_limit' | 'geofence_breach' | 'maintenance_due' | 'offline' | 'general'
+  type:  'speed_limit' | 'geofence_breach' | 'maintenance_due' | 'offline' | 'general'
   severity: 'low' | 'medium' | 'high' | 'critical'
   status: 'active' | 'acknowledged' | 'resolved' | 'archived'
   createdAt: string
@@ -121,7 +120,6 @@ export interface VesselGPSModule {
   name: string
   vesselType: 'container' | 'bulk' | 'tanker' | 'passenger' | 'fishing' | 'tug'
   status: 'active' | 'inactive' | 'maintenance' | 'offline'
-  signalStrength: number
   lastReading: string
   location: string
   coordinates: [number, number]

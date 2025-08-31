@@ -191,7 +191,6 @@ export function useVesselData() {
       pendingSchedules: schedules.filter(s => s.status === 'pending').length,
       totalGpsDevices: gpsDevices.length,
       activeGpsDevices: gpsDevices.filter(d => d.status === 'active').length,
-      averageSignalStrength: vessel.signalStrength || 0,
     }
   }
 
