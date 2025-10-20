@@ -38,31 +38,31 @@ const navigationItems: NavItem[] = [
     href: '/',
     icon: 'guidance:port',
   },
-  {
-    name: 'Vessel Modules Dashboard',
-    href: '/sensors',
-    icon: 'hugeicons:boat',
-  },
-  {
-    name: 'Port Activities',
-    href: '/calendar',
-    icon: 'heroicons:calendar',
-  },
-/*   {
-    name: 'Project Scheduler',
-    href: '/scheduler',
-    icon: 'mdi:calendar-clock',
-  }, */
-  {
-    name: 'About',
-    href: '/about',
-    icon: 'heroicons:information-circle',
-  },
-  {
-    name: 'Settings',
-    href: '/settings',
-    icon: 'heroicons:cog-6-tooth',
-  },
+//   {
+//     name: 'Vessel Modules Dashboard',
+//     href: '/sensors',
+//     icon: 'hugeicons:boat',
+//   },
+//   {
+//     name: 'Port Activities',
+//     href: '/calendar',
+//     icon: 'heroicons:calendar',
+//   },
+// /*   {
+//     name: 'Project Scheduler',
+//     href: '/scheduler',
+//     icon: 'mdi:calendar-clock',
+//   }, */
+//   {
+//     name: 'About',
+//     href: '/about',
+//     icon: 'heroicons:information-circle',
+//   },
+//   {
+//     name: 'Settings',
+//     href: '/settings',
+//     icon: 'heroicons:cog-6-tooth',
+//   },
 ]
 
 // Methods
