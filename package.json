@@ -17,24 +17,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@fullcalendar/core": "^6.1.17",
-    "@fullcalendar/daygrid": "^6.1.17",
-    "@fullcalendar/interaction": "^6.1.17",
-    "@fullcalendar/timegrid": "^6.1.17",
-    "@fullcalendar/vue3": "^6.1.17",
     "@headlessui/vue": "^1.7.23",
     "@iconify/vue": "^4.1.1",
     "@unocss/reset": "^0.58.5",
     "@vueuse/core": "^10.7.2",
-    "chart.js": "^4.5.0",
-    "dayjs": "^1.11.10",
-    "leaflet": "^1.9.4",
     "nuxt": "^3.10.0",
     "pnpm": "^10.15.0",
-    "qrcode.vue": "^3.6.0",
     "vue": "^3.4.0",
-    "vue-chartjs": "^5.3.2",
-    "vue-leaflet": "^0.1.0",
     "vue-router": "4"
   },
   "devDependencies": {
@@ -42,7 +31,6 @@
     "@nuxt/eslint": "^1.0.0",
     "@nuxt/kit": "^3.10.0",
     "@nuxtjs/color-mode": "^3.3.2",
-    "@types/leaflet": "^1.9.18",
     "@unocss/nuxt": "^66.2.3",
     "@unocss/postcss": "^0.58.5",
     "@unocss/preset-web-fonts": "^0.58.5",

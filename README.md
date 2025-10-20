@@ -1,139 +1,126 @@
-# Portect
+# Port Monitoring Dashboard
 
-A modern Nuxt.js frontend application built with Vue 3, TypeScript, and UnoCSS.
+A simplified port monitoring dashboard that connects to InfluxDB for vessel GPS data and PostgreSQL for vessel information.
 
 ## Features
 
-- ⚡ **Fast Performance** - Built with Nuxt.js for optimal performance and SEO
-- 🎨 **Modern Design** - Beautiful UI with dark mode support and responsive design
-- 🔧 **Developer Friendly** - TypeScript support and excellent developer experience
-- 📱 **Responsive** - Mobile-first responsive layout
-- 🌙 **Dark Mode** - Automatic dark/light theme switching
-- 🎯 **Type Safe** - Full TypeScript support
+- **Real-time GPS Tracking**: Vessel GPS data with coordinates, altitude, and SOS signals
+- **Vessel Management**: Simple vessel information stored in PostgreSQL
+- **SOS Alert System**: Real-time monitoring of emergency signals
+- **Dashboard Overview**: Clean, modern dashboard showing vessel locations and status
+- **Responsive Design**: Works on desktop and mobile devices
 
-## Technology Stack
+## Architecture
 
-- **Framework**: Nuxt.js 3
-- **Language**: Vue 3 + TypeScript
-- **Styling**: UnoCSS (Atomic CSS)
-- **UI Components**: Headless UI
-- **Utilities**: VueUse
-- **Date Handling**: Day.js
-- **Linting**: ESLint + @antfu/eslint-config
+### Data Sources
 
-## Prerequisites
+1. **InfluxDB**: Time-series database for vessel GPS data
+   - Device ID (primary identifier)
+   - GPS coordinates (longitude, latitude, altitude)
+   - SOS signal (boolean flag)
+   - Timestamp
 
-- Node.js >= 18.0.0
-- npm, yarn, or pnpm
+2. **PostgreSQL**: Relational database for vessel information
+   - Device ID (primary key)
+   - Hull Identification Number
+   - Vessel Type (container, bulk, tanker, passenger, fishing, tug)
 
-## Getting Started
+## Setup
 
-1. **Install dependencies**
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- InfluxDB (running on localhost:8086)
+- PostgreSQL (running on localhost:5432)
+
+### Installation
+
+1. Install dependencies:
    ```bash
-   npm install
-   # or
-   yarn install
-   # or
    pnpm install
    ```
 
-2. **Start development server**
+2. Configure environment variables:
    ```bash
-   npm run dev
-   # or
-   yarn dev
-   # or
+   cp .env.example .env
+   # Edit .env with your database credentials
+   ```
+
+3. Start the development server:
+   ```bash
    pnpm dev
    ```
 
-3. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+### Environment Variables
 
-## Available Scripts
+```env
+# InfluxDB Configuration
+INFLUX_URL=http://localhost:8086
+INFLUX_TOKEN=your_influx_token_here
+INFLUX_ORG=portect
+INFLUX_BUCKET=sensor_data
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run generate` - Generate static site
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint errors
-
-## Project Structure
-
+# PostgreSQL Configuration
+POSTGRES_URL=postgresql://localhost:5432/portect
+POSTGRES_USER=portect
+POSTGRES_PASSWORD=portect
+POSTGRES_DB=portect
 ```
-Portect/
-├── app.vue                 # Main app component
-├── nuxt.config.ts         # Nuxt configuration
-├── uno.config.ts          # UnoCSS configuration
-├── tsconfig.json          # TypeScript configuration
-├── eslint.config.js       # ESLint configuration
-├── package.json           # Dependencies and scripts
-├── README.md              # Project documentation
-├── .gitignore             # Git ignore rules
-├── app/                   # App directory (Nuxt 3)
-├── pages/                 # Route pages
-│   ├── index.vue          # Home page
-│   └── about.vue          # About page
-├── components/            # Vue components
-│   └── Modal.vue          # Modal component
-├── layouts/               # Layout components
-│   └── default.vue        # Default layout
-├── composables/           # Vue composables
-│   └── useCounter.ts      # Counter composable
-├── utils/                 # Utility functions
-│   └── date.ts            # Date utilities
-├── types/                 # TypeScript types
-│   └── index.ts           # Common types
-├── public/                # Static assets
-│   └── favicon.ico        # Favicon
-└── assets/                # Source assets
-```
+
+## Database Schema
+
+### InfluxDB Bucket
+
+- **vessel_data**: Vessel GPS data
+  - Fields: `longitude`, `latitude`, `altitude`, `sos_signal`
+  - Tags: `device_id`
+
+### PostgreSQL Tables
+
+- **vessels**: Vessel information
+  - `device_id` (Primary Key)
+  - `hull_identification_number`
+  - `vessel_type`
+
+## API Endpoints
+
+- `POST /api/influx/query`: Query InfluxDB vessel GPS data
+- `POST /api/postgres/query`: Query PostgreSQL vessel data
 
 ## Development
 
-### Adding New Pages
+### Project Structure
 
-Create new `.vue` files in the `pages/` directory. Nuxt.js will automatically create routes based on the file structure.
+```
+app/
+├── components/          # Reusable UI components
+├── composable/         # Vue composables for data management
+├── pages/              # Application pages
+├── server/api/         # API endpoints
+├── types/              # TypeScript type definitions
+└── utils/              # Utility functions
+```
 
-### Adding Components
+### Key Files
 
-Create reusable components in the `components/` directory. They will be auto-imported throughout your application.
+- `app/pages/index.vue`: Main dashboard page with vessel GPS tracking
+- `app/composable/useInfluxData.ts`: InfluxDB vessel GPS data management
+- `app/composable/usePostgresData.ts`: PostgreSQL vessel data management
+- `app/types/influx.ts`: InfluxDB vessel GPS type definitions
+- `app/types/postgres.ts`: PostgreSQL vessel type definitions
 
-### Styling
+### Data Flow
 
-This project uses UnoCSS for styling. You can use utility classes directly in your templates or create custom styles in the `uno.config.ts` file.
-
-### TypeScript
-
-The project is fully configured with TypeScript. You can define types in the `types/` directory and they will be available throughout your application.
+1. **Vessel GPS Data**: Devices send GPS coordinates, altitude, and SOS status to InfluxDB
+2. **Vessel Information**: Static vessel data (HIN, type) stored in PostgreSQL
+3. **Dashboard**: Real-time display of vessel locations, SOS alerts, and vessel types
+4. **SOS Monitoring**: Automatic detection and highlighting of emergency signals
 
 ## Deployment
 
-### Static Site Generation
-
-```bash
-npm run generate
-```
-
-This will create a `dist/` directory with static files that can be deployed to any static hosting service.
-
-### Server-Side Rendering
-
-```bash
-npm run build
-npm run preview
-```
-
-This will build the application for SSR deployment.
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run tests and linting
-5. Submit a pull request
+The application can be deployed to any platform that supports Node.js applications. Make sure to configure the environment variables for your production databases.
 
 ## License
 
-This project is licensed under the MIT License.
+Private project - All rights reserved.
