@@ -1,10 +1,6 @@
 import { computed, ref } from 'vue'
 import type { PostgresQuery, PostgresResponse, Vessel } from '~/types/postgres'
 
-// Configuration
-const POSTGRES_URL = process.env.POSTGRES_URL || 'http://localhost:5432'
-const POSTGRES_DB = process.env.POSTGRES_DB || 'portect'
-
 // Reactive state
 const isLoading = ref(false)
 const error = ref<string | null>(null)
@@ -44,8 +40,8 @@ export function usePostgresData() {
   // Get all vessels
   async function getVessels(): Promise<Vessel[]> {
     const query: PostgresQuery = {
-      table: 'vessels',
-      order_by: 'hull_identification_number ASC'
+      table: 'Vessel',
+      order_by: 'hullidentificationnumber ASC'
     }
 
     const response = await fetchData(query)
@@ -55,8 +51,8 @@ export function usePostgresData() {
   // Get vessel by device ID
   async function getVesselByDeviceId(deviceId: string): Promise<Vessel | null> {
     const query: PostgresQuery = {
-      table: 'vessels',
-      where: { device_id: deviceId },
+      table: 'Vessel',
+      where: { deviceid: deviceId },
       limit: 1
     }
 
@@ -67,9 +63,9 @@ export function usePostgresData() {
   // Get vessels by type
   async function getVesselsByType(vesselType: string): Promise<Vessel[]> {
     const query: PostgresQuery = {
-      table: 'vessels',
-      where: { vessel_type: vesselType },
-      order_by: 'hull_identification_number ASC'
+      table: 'Vessel',
+      where: { vesseltype: vesselType },
+      order_by: 'hullidentificationnumber ASC'
     }
 
     const response = await fetchData(query)
@@ -83,12 +79,12 @@ export function usePostgresData() {
     return {
       totalVessels: vessels.length,
       vesselsByType: {
-        container: vessels.filter(v => v.vessel_type === 'container').length,
-        bulk: vessels.filter(v => v.vessel_type === 'bulk').length,
-        tanker: vessels.filter(v => v.vessel_type === 'tanker').length,
-        passenger: vessels.filter(v => v.vessel_type === 'passenger').length,
-        fishing: vessels.filter(v => v.vessel_type === 'fishing').length,
-        tug: vessels.filter(v => v.vessel_type === 'tug').length
+        'Cargo Ship': vessels.filter(v => v.vesseltype === 'Cargo Ship').length,
+        'Container Ship': vessels.filter(v => v.vesseltype === 'Container Ship').length,
+        'Tanker': vessels.filter(v => v.vesseltype === 'Tanker').length,
+        'Passenger': vessels.filter(v => v.vesseltype === 'Passenger').length,
+        'Fishing': vessels.filter(v => v.vesseltype === 'Fishing').length,
+        'Tug': vessels.filter(v => v.vesseltype === 'Tug').length
       }
     }
   }

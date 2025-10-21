@@ -70,6 +70,17 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
+    // Private keys (only available server-side)
+    postgresUrl: process.env.POSTGRES_URL || 'postgresql://mamakhub:mamakhub@yaoxiang-ubuntu.local:5432/portect',
+    postgresUser: process.env.POSTGRES_USER || 'mamakhub',
+    postgresPassword: process.env.POSTGRES_PASSWORD || 'mamakhub',
+    postgresDb: process.env.POSTGRES_DB || 'portect',
+    influxUrl: process.env.INFLUX_URL || 'http://yaoxiang-ubuntu.local:8086',
+    influxToken: process.env.INFLUX_TOKEN || '',
+    influxOrg: process.env.INFLUX_ORG || 'portect',
+    influxBucket: process.env.INFLUX_BUCKET || 'vessel_data',
+    
+    // Public keys (exposed to client)
     public: {
       appName: 'Portect',
     },

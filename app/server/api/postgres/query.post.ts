@@ -1,22 +1,84 @@
+import postgres from 'postgres'
 import type { PostgresQuery, PostgresResponse } from '~/types/postgres'
+
+// Explicitly import h3 utilities for TypeScript
+import { defineEventHandler, readBody } from 'h3'
+
+// Create a singleton connection pool
+let sql: ReturnType<typeof postgres> | null = null
+
+function getPostgresConnection() {
+  if (!sql) {
+    const config = useRuntimeConfig()
+    sql = postgres(config.postgresUrl as string, {
+      max: 10, // Maximum number of connections in the pool
+      idle_timeout: 20,
+      connect_timeout: 10,
+    })
+  }
+  return sql
+}
 
 export default defineEventHandler(async (event) => {
   try {
     const body = await readBody(event) as PostgresQuery
+    const sql = getPostgresConnection()
 
-    // PostgreSQL configuration
-    const POSTGRES_URL = process.env.POSTGRES_URL || 'postgresql://localhost:5432/portect'
-    const POSTGRES_USER = process.env.POSTGRES_USER || 'portect'
-    const POSTGRES_PASSWORD = process.env.POSTGRES_PASSWORD || 'portect'
-    const POSTGRES_DB = process.env.POSTGRES_DB || 'portect'
+    // Build the query - Quote table name for case-sensitivity
+    let query = `SELECT * FROM "${body.table}"`
+    const params: any[] = []
+    let paramIndex = 1
 
-    // For now, return mock data since we don't have actual PostgreSQL connection
-    // In production, you would use a PostgreSQL client like pg or prisma
-    const mockData = getMockData(body.table, body.where)
+    // Add WHERE clause if provided
+    if (body.where && Object.keys(body.where).length > 0) {
+      const whereConditions = Object.entries(body.where).map(([key, value]) => {
+        params.push(value)
+        // Quote column names for case-sensitivity
+        return `"${key}" = $${paramIndex++}`
+      })
+      query += ` WHERE ${whereConditions.join(' AND ')}`
+    }
+
+    // Add ORDER BY clause if provided
+    if (body.order_by) {
+      // Handle ORDER BY with potential ASC/DESC
+      const orderParts = body.order_by.split(' ')
+      const columnName = orderParts[0]
+      const direction = orderParts[1] || ''
+      query += ` ORDER BY "${columnName}"${direction ? ' ' + direction : ''}`
+    }
+
+    // Add LIMIT clause if provided
+    if (body.limit) {
+      query += ` LIMIT $${paramIndex++}`
+      params.push(body.limit)
+    }
+
+    // Add OFFSET clause if provided
+    if (body.offset) {
+      query += ` OFFSET $${paramIndex++}`
+      params.push(body.offset)
+    }
+
+    // Execute the query
+    const data = await sql.unsafe(query, params)
+
+    // Get total count for pagination (without limit/offset)
+    let countQuery = `SELECT COUNT(*) as total FROM "${body.table}"`
+    if (body.where && Object.keys(body.where).length > 0) {
+      const whereConditions = Object.entries(body.where).map(([key, _], index) => {
+        return `"${key}" = $${index + 1}`
+      })
+      countQuery += ` WHERE ${whereConditions.join(' AND ')}`
+    }
+    
+    const countParams = body.where ? Object.values(body.where) : []
+    const countResult = await sql.unsafe(countQuery, countParams)
+    const total = parseInt(countResult[0]?.total || '0')
 
     const result: PostgresResponse = {
-      data: mockData,
-      total: mockData.length,
+      data: data as any[],
+      total,
       success: true
     }
 
@@ -34,43 +96,3 @@ export default defineEventHandler(async (event) => {
     return result
   }
 })
-
-function getMockData(table: string, where?: Record<string, any>): any[] {
-  // Mock data for development - replace with actual PostgreSQL queries
-  switch (table) {
-    case 'vessels':
-      return [
-        {
-          device_id: 'vessel-gps-001',
-          hull_identification_number: 'HIN123456789',
-          vessel_type: 'container'
-        },
-        {
-          device_id: 'vessel-gps-002',
-          hull_identification_number: 'HIN987654321',
-          vessel_type: 'tanker'
-        },
-        {
-          device_id: 'vessel-gps-003',
-          hull_identification_number: 'HIN456789123',
-          vessel_type: 'bulk'
-        },
-        {
-          device_id: 'vessel-gps-004',
-          hull_identification_number: 'HIN789123456',
-          vessel_type: 'passenger'
-        },
-        {
-          device_id: 'vessel-gps-005',
-          hull_identification_number: 'HIN321654987',
-          vessel_type: 'fishing'
-        }
-      ].filter(item => {
-        if (!where) return true
-        return Object.entries(where).every(([key, value]) => (item as any)[key] === value)
-      })
-
-    default:
-      return []
-  }
-}
