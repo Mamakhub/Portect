@@ -24,8 +24,8 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event) as PostgresQuery
     const sql = getPostgresConnection()
 
-    // Build the query - Quote table name for case-sensitivity
-    let query = `SELECT * FROM "${body.table}"`
+    // Build the query - Don't quote table/column names to let PostgreSQL handle case
+    let query = `SELECT * FROM ${body.table}`
     const params: any[] = []
     let paramIndex = 1
 
@@ -33,19 +33,14 @@ export default defineEventHandler(async (event) => {
     if (body.where && Object.keys(body.where).length > 0) {
       const whereConditions = Object.entries(body.where).map(([key, value]) => {
         params.push(value)
-        // Quote column names for case-sensitivity
-        return `"${key}" = $${paramIndex++}`
+        return `${key} = $${paramIndex++}`
       })
       query += ` WHERE ${whereConditions.join(' AND ')}`
     }
 
     // Add ORDER BY clause if provided
     if (body.order_by) {
-      // Handle ORDER BY with potential ASC/DESC
-      const orderParts = body.order_by.split(' ')
-      const columnName = orderParts[0]
-      const direction = orderParts[1] || ''
-      query += ` ORDER BY "${columnName}"${direction ? ' ' + direction : ''}`
+      query += ` ORDER BY ${body.order_by}`
     }
 
     // Add LIMIT clause if provided
@@ -64,10 +59,10 @@ export default defineEventHandler(async (event) => {
     const data = await sql.unsafe(query, params)
 
     // Get total count for pagination (without limit/offset)
-    let countQuery = `SELECT COUNT(*) as total FROM "${body.table}"`
+    let countQuery = `SELECT COUNT(*) as total FROM ${body.table}`
     if (body.where && Object.keys(body.where).length > 0) {
       const whereConditions = Object.entries(body.where).map(([key, _], index) => {
-        return `"${key}" = $${index + 1}`
+        return `${key} = $${index + 1}`
       })
       countQuery += ` WHERE ${whereConditions.join(' AND ')}`
     }
