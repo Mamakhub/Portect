@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import { useInfluxData } from '~/composable/useInfluxData'
+import { usePostgresData } from '~/composable/usePostgresData'
 
 // Page metadata
 definePageMeta({
@@ -30,21 +32,15 @@ const {
 const vessels = ref<any[]>([])
 const vesselGPSData = ref<any[]>([])
 const sosVessels = ref<any[]>([])
-const summary = ref({
+const summary = ref<any>({
   totalVessels: 0,
-  vesselsByType: {
-    container: 0,
-    bulk: 0,
-    tanker: 0,
-    passenger: 0,
-    fishing: 0,
-    tug: 0
-  }
+  vesselsByType: {}
 })
 
 // Computed properties
-const loading = computed(() => influxLoading.value || postgresLoading.value)
-const hasError = computed(() => influxError.value || postgresError.value)
+const loading = computed(() => postgresLoading.value) // Only show loading for PostgreSQL
+const postgresDataAvailable = computed(() => !postgresError.value && vessels.value.length > 0)
+const influxDataAvailable = computed(() => !influxError.value && (vesselGPSData.value.length > 0 || sosVessels.value.length > 0))
 
 // Load data on mount
 onMounted(async () => {
@@ -52,26 +48,29 @@ onMounted(async () => {
 })
 
 async function loadDashboardData() {
+  // Load PostgreSQL data (critical - vessel information)
   try {
-    // Load all data in parallel
-    const [
-      vesselsData,
-      gpsData,
-      sosData,
-      summaryData
-    ] = await Promise.all([
+    const [vesselsData, summaryData] = await Promise.all([
       getVessels(),
-      getAllVesselGPSData(24), // Last 24 hours
-      getVesselsWithSOS(),
       getDashboardSummary()
     ])
-
     vessels.value = vesselsData
-    vesselGPSData.value = gpsData
-    sosVessels.value = sosData
     summary.value = summaryData
   } catch (error) {
-    console.error('Failed to load dashboard data:', error)
+    console.error('Failed to load PostgreSQL data:', error)
+  }
+
+  // Load InfluxDB data (optional - real-time sensor data)
+  try {
+    const [gpsData, sosData] = await Promise.all([
+      getAllVesselGPSData(24), // Last 24 hours
+      getVesselsWithSOS()
+    ])
+    vesselGPSData.value = gpsData
+    sosVessels.value = sosData
+  } catch (error) {
+    console.error('InfluxDB connection failed:', error)
+    // Don't block the UI - just log the error
   }
 }
 
@@ -97,11 +96,11 @@ async function refreshData() {
       <!-- Loading State -->
       <div v-if="loading" class="flex items-center justify-center py-12">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-tenang-primary"></div>
-        <span class="ml-3 text-gray-600 dark:text-gray-400">Loading dashboard data...</span>
+        <span class="ml-3 text-gray-600 dark:text-gray-400">Loading vessel data...</span>
       </div>
 
-      <!-- Error State -->
-      <div v-else-if="hasError" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 mb-6">
+      <!-- PostgreSQL Error State -->
+      <div v-else-if="!postgresDataAvailable" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6">
         <div class="flex items-center">
           <div class="text-red-600 dark:text-red-400">
             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -110,17 +109,41 @@ async function refreshData() {
           </div>
           <div class="ml-3">
             <h3 class="text-sm font-medium text-red-800 dark:text-red-400">
-              Error loading data
+              Database Connection Error
             </h3>
             <p class="mt-1 text-sm text-red-700 dark:text-red-300">
-              Please check your database connections and try again.
+              Unable to connect to PostgreSQL database. Please check your database connection and try again.
             </p>
+            <button
+              @click="refreshData"
+              class="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+            >
+              Retry Connection
+            </button>
           </div>
         </div>
       </div>
 
       <!-- Main Dashboard Content -->
       <div v-else class="space-y-6">
+        <!-- InfluxDB Warning Banner -->
+        <div v-if="!influxDataAvailable" class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+          <div class="flex items-center">
+            <div class="text-yellow-600 dark:text-yellow-400">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-400">
+                Real-time Sensor Data Unavailable
+              </h3>
+              <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
+                Could not connect to InfluxDB. Vessel information is displayed, but real-time GPS tracking and SOS alerts are currently unavailable. Please check InfluxDB connection.
+              </p>
+            </div>
+          </div>
+        </div>
         <!-- Summary Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Total Vessels -->
@@ -141,7 +164,7 @@ async function refreshData() {
           </div>
 
           <!-- GPS Data Points -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6" :class="!influxDataAvailable ? 'opacity-60' : ''">
             <div class="flex items-center">
               <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-green-100 dark:bg-green-900/20 rounded-lg flex items-center justify-center">
@@ -153,13 +176,15 @@ async function refreshData() {
               </div>
               <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">GPS Data Points</p>
-                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ vesselGPSData.length }}</p>
+                <p class="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ influxDataAvailable ? vesselGPSData.length : 'N/A' }}
+                </p>
               </div>
             </div>
           </div>
 
           <!-- SOS Alerts -->
-          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6" :class="!influxDataAvailable ? 'opacity-60' : ''">
             <div class="flex items-center">
               <div class="flex-shrink-0">
                 <div class="w-8 h-8 bg-red-100 dark:bg-red-900/20 rounded-lg flex items-center justify-center">
@@ -170,7 +195,9 @@ async function refreshData() {
               </div>
               <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">SOS Alerts</p>
-                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ sosVessels.length }}</p>
+                <p class="text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ influxDataAvailable ? sosVessels.length : 'N/A' }}
+                </p>
               </div>
             </div>
           </div>
@@ -187,7 +214,7 @@ async function refreshData() {
               </div>
               <div class="ml-4">
                 <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Container Vessels</p>
-                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ summary.vesselsByType.container }}</p>
+                <p class="text-2xl font-semibold text-gray-900 dark:text-white">{{ summary.vesselsByType['Container Ship'] || 0 }}</p>
               </div>
             </div>
           </div>
@@ -233,7 +260,14 @@ async function refreshData() {
             </div>
             
             <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              <p>No GPS data available</p>
+              <div v-if="!influxDataAvailable" class="space-y-2">
+                <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
+                </svg>
+                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-xs">Real-time GPS data unavailable</p>
+              </div>
+              <p v-else>No GPS data available</p>
             </div>
           </div>
 
@@ -273,7 +307,14 @@ async function refreshData() {
             </div>
             
             <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              <p>No SOS alerts</p>
+              <div v-if="!influxDataAvailable" class="space-y-2">
+                <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
+                </svg>
+                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-xs">Real-time SOS monitoring unavailable</p>
+              </div>
+              <p v-else>No SOS alerts</p>
             </div>
           </div>
         </div>
@@ -293,20 +334,20 @@ async function refreshData() {
           <div v-if="vessels.length > 0" class="space-y-4">
             <div 
               v-for="vessel in vessels" 
-              :key="vessel.device_id"
+              :key="vessel.deviceid"
               class="flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
             >
               <div class="flex items-center space-x-4">
                 <div class="w-3 h-3 rounded-full bg-green-500"></div>
                 <div>
-                  <div class="font-medium text-gray-900 dark:text-white">{{ vessel.device_id }}</div>
+                  <div class="font-medium text-gray-900 dark:text-white">{{ vessel.deviceid }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ vessel.vessel_type }} • HIN: {{ vessel.hull_identification_number }}
+                    {{ vessel.vesseltype }} • HIN: {{ vessel.hullidentificationnumber }}
                   </div>
                 </div>
               </div>
               <div class="text-sm text-gray-600 dark:text-gray-400">
-                {{ vessel.vessel_type }}
+                {{ vessel.vesseltype }}
               </div>
             </div>
           </div>
