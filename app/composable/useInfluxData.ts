@@ -64,12 +64,12 @@ export function useInfluxData() {
     return response.data[0] as VesselGPSData || null
   }
 
-  // Get all vessel GPS data
+  // Get all vessel GPS data (no filtering - get everything)
   async function getAllVesselGPSData(hours: number = 24): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
       start_time: `-${hours}h`,
       end_time: 'now()',
-      limit: 5000
+      limit: 10000 // Increased limit since we're doing one query for everything
     }
 
     const response = await fetchData(query)

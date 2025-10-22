@@ -29,12 +29,6 @@ export default defineEventHandler(async (event) => {
 
     fluxQuery += ` |> filter(fn: (r) => r._field =~ /^(longitude|latitude|altitude|priority|sos_signal)$/)`
     fluxQuery += ` |> pivot(rowKey:["_time", "device_id"], columnKey: ["_field"], valueColumn: "_value")`
-    
-    // Filter for SOS signals only if requested
-    if (body.sos_only) {
-      fluxQuery += ` |> filter(fn: (r) => r.sos_signal == true)`
-    }
-    
     fluxQuery += ` |> sort(columns: ["_time"])`
 
     if (body.limit) {
@@ -97,16 +91,38 @@ function parseInfluxCSV(csvData: string): any[] {
   const lines = csvData.trim().split('\n')
   if (lines.length < 2) return []
 
-  const headers = lines[0].split(',')
   const data = []
+  let currentHeaders: string[] = []
+  let tableCount = 0
 
-  for (let i = 1; i < lines.length; i++) {
-    const values = lines[i].split(',')
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i]
+    
+    // Skip empty lines and annotation lines (starting with #)
+    if (!line || line.startsWith('#')) continue
+    
+    const values = line.split(',')
+    
+    // Check if this is a header row (contains field names like _time, device_id, etc.)
+    // Header rows contain these known field names
+    const isHeaderRow = line.includes('_time') || (line.includes('result') && line.includes('table') && i < 5)
+    
+    if (isHeaderRow) {
+      // This is a new table with new headers
+      currentHeaders = values.map(h => h.trim())
+      tableCount++
+      console.log(`Table ${tableCount} headers:`, currentHeaders.filter(h => h && !h.startsWith('_')).join(', '))
+      continue
+    }
+    
+    // This is a data row - parse it with current headers
+    if (currentHeaders.length === 0) continue
+    
     const row: any = {}
-
-    headers.forEach((header, index) => {
+    
+    currentHeaders.forEach((header, index) => {
       const value = values[index]?.trim()
-      if (value && value !== '') {
+      if (value && value !== '' && value !== 'null') {
         if (header === '_time') {
           row.timestamp = value
         } else if (header === 'device_id') {
@@ -118,13 +134,14 @@ function parseInfluxCSV(csvData: string): any[] {
         } else if (header === 'altitude') {
           row.altitude = parseFloat(value)
         } else if (header === 'priority') {
-          row.priority = parseInt(value)
+          row.priority = parseFloat(value)
         } else if (header === 'sos_signal') {
-          row.sos_signal = value === 'true'
+          row.sos_signal = value === 'true' || value === 'True'
         }
       }
     })
 
+    // Only include rows with valid GPS coordinates
     if (row.timestamp && row.device_id && row.longitude !== undefined && row.latitude !== undefined) {
       data.push({
         timestamp: row.timestamp,
@@ -132,11 +149,12 @@ function parseInfluxCSV(csvData: string): any[] {
         longitude: row.longitude || 0,
         latitude: row.latitude || 0,
         altitude: row.altitude || 0,
-        priority: row.priority || 0,
+        priority: row.priority !== undefined ? row.priority : 0,
         sos_signal: row.sos_signal || false
       })
     }
   }
 
+  console.log(`Parsed ${tableCount} tables, extracted ${data.length} valid GPS readings`)
   return data
 }

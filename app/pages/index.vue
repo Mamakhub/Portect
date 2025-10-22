@@ -41,13 +41,18 @@ const summary = ref<any>({
   vesselsByType: {}
 })
 
+// Loading states
+const influxDataLoaded = ref(false)
+const postgresDataLoaded = ref(false)
+
 // Device selection for GPS data
 const selectedDevice = ref<string>('summary') // 'summary' or specific device ID
+const selectedTimeRange = ref<number>(24) // Hours to query (1, 6, 12, 24)
 
 // Computed properties
-const loading = computed(() => postgresLoading.value) // Only show loading for PostgreSQL
-const postgresDataAvailable = computed(() => !postgresError.value && vessels.value.length > 0)
-const influxDataAvailable = computed(() => !influxError.value && (vesselGPSData.value.length > 0 || sosVessels.value.length > 0))
+const loading = computed(() => !postgresDataLoaded.value || !influxDataLoaded.value)
+const postgresDataAvailable = computed(() => postgresDataLoaded.value && !postgresError.value && vessels.value.length > 0)
+const influxDataAvailable = computed(() => influxDataLoaded.value && !influxError.value && (vesselGPSData.value.length > 0 || sosVessels.value.length > 0))
 
 // Available devices for dropdown
 const availableDevices = computed(() => {
@@ -57,16 +62,23 @@ const availableDevices = computed(() => {
 // Filtered GPS data based on selected device
 const displayedGPSData = computed(() => {
   if (selectedDevice.value === 'summary') {
-    // Show all devices combined, sorted by priority (highest first), then timestamp
-    return vesselGPSData.value.sort((a, b) => {
-      if (b.priority !== a.priority) {
-        return b.priority - a.priority // Higher priority first
+    // Show all devices combined, sorted by priority (1=most important), then timestamp
+    const sorted = [...vesselGPSData.value].sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return a.priority - b.priority // Lower priority number = higher importance (1 is most important)
       }
       return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     })
+    return sorted
   } else {
-    // Show specific device data, sorted by timestamp
-    return gpsDataByDevice.value[selectedDevice.value] || []
+    // Show specific device data, sorted by priority then timestamp
+    const deviceData = gpsDataByDevice.value[selectedDevice.value] || []
+    return [...deviceData].sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return a.priority - b.priority // Lower priority number = higher importance
+      }
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    })
   }
 })
 
@@ -76,39 +88,92 @@ onMounted(async () => {
 })
 
 async function loadDashboardData() {
-  // Load PostgreSQL data (critical - vessel information)
+  // Reset loading states
+  postgresDataLoaded.value = false
+  influxDataLoaded.value = false
+
+  // Load both PostgreSQL and InfluxDB data in parallel
+  await Promise.allSettled([
+    loadPostgresData(),
+    loadInfluxData()
+  ])
+}
+
+async function loadPostgresData() {
   try {
+    console.log('Loading PostgreSQL data...')
     const [vesselsData, summaryData] = await Promise.all([
       getVessels(),
       getDashboardSummary()
     ])
     vessels.value = vesselsData
     summary.value = summaryData
+    postgresDataLoaded.value = true
+    console.log('PostgreSQL data loaded:', vesselsData.length, 'vessels')
   } catch (error) {
     console.error('Failed to load PostgreSQL data:', error)
+    postgresDataLoaded.value = true // Mark as loaded even if failed
   }
+}
 
-  // Load InfluxDB data (optional - real-time sensor data)
+async function loadInfluxData() {
   try {
-    const [gpsData, gpsGrouped, sosData, sosGrouped] = await Promise.all([
-      getAllVesselGPSData(24), // Last 1 hour for recent data
-      getGPSDataByDevice(24), // GPS data separated by device (1 hour)
-      getVesselsWithSOS(24), // Last 24 hours for SOS
-      getLatestSOSByDevice(1) // Latest SOS per device (24 hours)
-    ])
-    vesselGPSData.value = gpsData
-    gpsDataByDevice.value = gpsGrouped
+    console.log(`Loading InfluxDB data for last ${selectedTimeRange.value} hours...`)
+    const allData = await getAllVesselGPSData(selectedTimeRange.value) // Query for selected time range
+    console.log('InfluxDB data loaded:', allData.length, 'readings')
+    
+    // GPS data for the selected time range
+    vesselGPSData.value = allData
+    console.log(`GPS data (${selectedTimeRange.value} hours):`, vesselGPSData.value.length, 'readings')
+    
+    // GPS data grouped by device
+    const byDevice: Record<string, any[]> = {}
+    vesselGPSData.value.forEach(data => {
+      if (!byDevice[data.device_id]) {
+        byDevice[data.device_id] = []
+      }
+      byDevice[data.device_id].push(data)
+    })
+    // Sort each device's data by timestamp (newest first)
+    Object.keys(byDevice).forEach(deviceId => {
+      byDevice[deviceId].sort((a, b) => 
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
+    })
+    gpsDataByDevice.value = byDevice
+    
+    // All SOS alerts (last 24 hours - always query 24 hours for SOS)
+    const sosData = selectedTimeRange.value >= 24 ? allData : await getAllVesselGPSData(24)
     sosVessels.value = sosData
-    sosDataByDevice.value = sosGrouped
+      .filter(d => d.sos_signal === true)
+      .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    console.log('SOS alerts:', sosVessels.value.length)
+    
+    // Latest SOS per device
+    const latestSOSByDevice: Record<string, any> = {}
+    sosVessels.value.forEach(data => {
+      if (!latestSOSByDevice[data.device_id]) {
+        latestSOSByDevice[data.device_id] = data
+      }
+    })
+    sosDataByDevice.value = latestSOSByDevice
+    
+    influxDataLoaded.value = true
   } catch (error) {
     console.error('InfluxDB connection failed:', error)
-    // Don't block the UI - just log the error
+    influxDataLoaded.value = true // Mark as loaded even if failed
   }
 }
 
 // Refresh data
 async function refreshData() {
   await loadDashboardData()
+}
+
+// Reload GPS data when time range changes
+async function onTimeRangeChange() {
+  influxDataLoaded.value = false
+  await loadInfluxData()
 }
 </script>
 
@@ -126,9 +191,21 @@ async function refreshData() {
       </div>
 
       <!-- Loading State -->
-      <div v-if="loading" class="flex items-center justify-center py-12">
+      <div v-if="loading" class="flex flex-col items-center justify-center py-12 space-y-4">
         <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-tenang-primary"></div>
-        <span class="ml-3 text-gray-600 dark:text-gray-400">Loading vessel data...</span>
+        <div class="text-center">
+          <p class="text-gray-600 dark:text-gray-400 font-medium">Loading dashboard data...</p>
+          <div class="mt-2 space-y-1">
+            <p class="text-sm text-gray-500 dark:text-gray-500">
+              <span v-if="!postgresDataLoaded">⏳ Loading vessel information...</span>
+              <span v-else class="text-green-600 dark:text-green-400">✓ Vessel data loaded</span>
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-500">
+              <span v-if="!influxDataLoaded">⏳ Loading GPS & sensor data...</span>
+              <span v-else class="text-green-600 dark:text-green-400">✓ GPS data loaded</span>
+            </p>
+          </div>
+        </div>
       </div>
 
       <!-- PostgreSQL Error State -->
@@ -158,8 +235,8 @@ async function refreshData() {
 
       <!-- Main Dashboard Content -->
       <div v-else class="space-y-6">
-        <!-- InfluxDB Warning Banner -->
-        <div v-if="!influxDataAvailable" class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+        <!-- InfluxDB Warning Banner - Only show if loaded but no data -->
+        <div v-if="influxDataLoaded && !influxDataAvailable && !influxError" class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
           <div class="flex items-center">
             <div class="text-yellow-600 dark:text-yellow-400">
               <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
@@ -168,10 +245,29 @@ async function refreshData() {
             </div>
             <div class="ml-3">
               <h3 class="text-sm font-medium text-yellow-800 dark:text-yellow-400">
-                Real-time Sensor Data Unavailable
+                No GPS Data Available
               </h3>
               <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                Could not connect to InfluxDB. Vessel information is displayed, but real-time GPS tracking and SOS alerts are currently unavailable. Please check InfluxDB connection.
+                Connected to InfluxDB, but no GPS readings found in the last 24 hours. Vessel information is displayed.
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- InfluxDB Error Banner -->
+        <div v-if="influxDataLoaded && influxError" class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+          <div class="flex items-center">
+            <div class="text-red-600 dark:text-red-400">
+              <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <div class="ml-3">
+              <h3 class="text-sm font-medium text-red-800 dark:text-red-400">
+                InfluxDB Connection Error
+              </h3>
+              <p class="mt-1 text-sm text-red-700 dark:text-red-300">
+                Could not connect to InfluxDB. Real-time GPS tracking and SOS alerts are currently unavailable.
               </p>
             </div>
           </div>
@@ -257,8 +353,22 @@ async function refreshData() {
           <!-- GPS Data with Device Selection -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent GPS Data (Last 1 Hour)</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                Recent GPS Data (Last {{ selectedTimeRange }} Hour{{ selectedTimeRange > 1 ? 's' : '' }})
+              </h3>
               <div class="flex items-center space-x-4">
+                <!-- Time Range Selector -->
+                <select 
+                  v-model.number="selectedTimeRange"
+                  @change="onTimeRangeChange"
+                  class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-tenang-primary dark:focus:ring-tenang-primary-dark"
+                >
+                  <option :value="1">⏱️ Last 1 Hour</option>
+                  <option :value="6">⏱️ Last 6 Hours</option>
+                  <option :value="12">⏱️ Last 12 Hours</option>
+                  <option :value="24">⏱️ Last 24 Hours</option>
+                </select>
+                
                 <!-- Device Selector -->
                 <select 
                   v-model="selectedDevice"
@@ -283,7 +393,7 @@ async function refreshData() {
             <div v-if="selectedDevice === 'summary' && displayedGPSData.length > 0">
               <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
                 <p class="text-sm text-blue-800 dark:text-blue-300">
-                  📊 Showing {{ displayedGPSData.length }} readings from all devices sorted by priority (highest first)
+                  📊 Showing {{ displayedGPSData.length }} readings from all devices sorted by priority (1 = most important)
                 </p>
               </div>
               
@@ -300,9 +410,9 @@ async function refreshData() {
                         Device {{ data.device_id }}
                       </span>
                       <span class="px-2 py-0.5 text-xs font-medium rounded-full"
-                            :class="data.priority >= 3 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
-                                    data.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                            :class="data.priority === 1 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                                    data.priority === 2 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
+                                    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'">
                         Priority {{ data.priority }}
                       </span>
                       <span v-if="data.sos_signal" class="text-xs text-red-600 dark:text-red-400 font-medium">
@@ -338,9 +448,9 @@ async function refreshData() {
                   <div class="flex-1">
                     <div class="flex items-center space-x-2 mb-1">
                       <span class="px-2 py-0.5 text-xs font-medium rounded-full"
-                            :class="data.priority >= 3 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
-                                    data.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 
-                                    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                            :class="data.priority === 1 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                                    data.priority === 2 ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' : 
+                                    'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400'">
                         Priority {{ data.priority }}
                       </span>
                       <span v-if="data.sos_signal" class="text-xs text-red-600 dark:text-red-400 font-medium">
