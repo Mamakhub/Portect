@@ -74,26 +74,28 @@ const availableDevices = computed(() => {
   return Object.keys(gpsDataByDevice.value).sort()
 })
 
+// Device color mapping for visual distinction
+const deviceColors: Record<string, { bg: string, text: string, border: string }> = {
+  '10010': { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-400', border: 'border-blue-300 dark:border-blue-700' },
+  '24108': { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-400', border: 'border-purple-300 dark:border-purple-700' },
+  '63876': { bg: 'bg-emerald-100 dark:bg-emerald-900/30', text: 'text-emerald-700 dark:text-emerald-400', border: 'border-emerald-300 dark:border-emerald-700' }
+}
+
+// Get color for a device (with fallback)
+function getDeviceColor(deviceId: string) {
+  return deviceColors[deviceId] || { bg: 'bg-gray-100 dark:bg-gray-900/30', text: 'text-gray-700 dark:text-gray-400', border: 'border-gray-300 dark:border-gray-700' }
+}
+
 // Filtered GPS data based on selected device
 const displayedGPSData = computed(() => {
   if (selectedDevice.value === 'summary') {
-    // Show all devices combined, sorted by priority (1=most important), then timestamp
-    const sorted = [...vesselGPSData.value].sort((a, b) => {
-      if (a.priority !== b.priority) {
-        return a.priority - b.priority // Lower priority number = higher importance (1 is most important)
-      }
-      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    })
-    return sorted
+    // Show all devices combined, sorted by most recent timestamp
+    return [...vesselGPSData.value].sort((a, b) => 
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
   } else {
-    // Show specific device data, sorted by priority then timestamp
-    const deviceData = gpsDataByDevice.value[selectedDevice.value] || []
-    return [...deviceData].sort((a, b) => {
-      if (a.priority !== b.priority) {
-        return a.priority - b.priority // Lower priority number = higher importance
-      }
-      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-    })
+    // Show specific device data, sorted by most recent timestamp
+    return gpsDataByDevice.value[selectedDevice.value] || []
   }
 })
 
@@ -426,7 +428,7 @@ function stopAutoRefresh() {
                 >
                   <option value="summary">📊 Summary (All Devices)</option>
                   <option v-for="deviceId in availableDevices" :key="deviceId" :value="deviceId">
-                    🚢 Device {{ deviceId }}
+                    {{ deviceId === '10010' ? '🔵' : deviceId === '24108' ? '🟣' : '🟢' }} Device {{ deviceId }}
                   </option>
                 </select>
                 
@@ -441,11 +443,6 @@ function stopAutoRefresh() {
             
             <!-- Summary View (All Devices Sorted by Priority) -->
             <div v-if="selectedDevice === 'summary' && displayedGPSData.length > 0">
-              <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
-                <p class="text-sm text-blue-800 dark:text-blue-300">
-                  📊 Showing {{ displayedGPSData.length }} readings from all devices sorted by priority (1 = most important)
-                </p>
-              </div>
               
               <!-- Scrollable container -->
               <div class="max-h-96 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
@@ -456,8 +453,9 @@ function stopAutoRefresh() {
                 >
                   <div class="flex-1">
                     <div class="flex items-center space-x-2 mb-1">
-                      <span class="font-semibold text-gray-900 dark:text-white text-sm">
-                        Device {{ data.device_id }}
+                      <span class="px-2 py-1 text-xs font-semibold rounded-md border"
+                            :class="`${getDeviceColor(data.device_id).bg} ${getDeviceColor(data.device_id).text} ${getDeviceColor(data.device_id).border}`">
+                        🚢 Device {{ data.device_id }}
                       </span>
                       <span class="px-2 py-0.5 text-xs font-medium rounded-full"
                             :class="data.priority === 1 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
@@ -482,11 +480,6 @@ function stopAutoRefresh() {
             
             <!-- Individual Device View -->
             <div v-else-if="selectedDevice !== 'summary' && displayedGPSData.length > 0">
-              <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4">
-                <p class="text-sm text-green-800 dark:text-green-300">
-                  🚢 Showing {{ displayedGPSData.length }} readings for Device {{ selectedDevice }}
-                </p>
-              </div>
               
               <!-- Scrollable container -->
               <div class="max-h-96 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
