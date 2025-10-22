@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useInfluxData } from '~/composable/useInfluxData'
 import { usePostgresData } from '~/composable/usePostgresData'
 
@@ -17,6 +17,7 @@ const {
   getGPSDataByDevice,
   getVesselsWithSOS,
   getLatestSOSByDevice,
+  getLatestTimestamp,
   loading: influxLoading,
   hasError: influxError 
 } = useInfluxData()
@@ -43,6 +44,10 @@ const postgresDataLoaded = ref(false)
 // Device selection for GPS data
 const selectedDevice = ref<string>('summary') // 'summary' or specific device ID
 const selectedTimeRange = ref<number>(24) // Hours to query (1, 6, 12, 24)
+
+// Auto-refresh state
+const lastKnownTimestamp = ref<string | null>(null)
+const refreshInterval = ref<NodeJS.Timeout | null>(null)
 
 // Computed properties
 const loading = computed(() => !postgresDataLoaded.value || !influxDataLoaded.value)
@@ -92,9 +97,15 @@ const displayedGPSData = computed(() => {
   }
 })
 
-// Load data on mount
+// Load data on mount and start auto-refresh
 onMounted(async () => {
   await loadDashboardData()
+  startAutoRefresh()
+})
+
+// Clean up interval on unmount
+onBeforeUnmount(() => {
+  stopAutoRefresh()
 })
 
 async function loadDashboardData() {
@@ -164,6 +175,13 @@ async function loadInfluxData() {
     })
     sosDataByDevice.value = latestSOSByDevice
     
+    // Track the latest timestamp for auto-refresh
+    if (allData.length > 0) {
+      const timestamps = allData.map(d => new Date(d.timestamp).getTime())
+      const latestTime = Math.max(...timestamps)
+      lastKnownTimestamp.value = new Date(latestTime).toISOString()
+    }
+    
     influxDataLoaded.value = true
   } catch (error) {
     console.error('InfluxDB connection failed:', error)
@@ -180,6 +198,59 @@ async function refreshData() {
 async function onTimeRangeChange() {
   influxDataLoaded.value = false
   await loadInfluxData()
+}
+
+// Check for new data (lightweight query)
+async function checkForNewData() {
+  if (!influxDataLoaded.value) return // Don't check if initial load isn't complete
+  
+  try {
+    const latestTimestamp = await getLatestTimestamp()
+    
+    if (!latestTimestamp) return // No data available
+    
+    // If this is the first check, just store the timestamp
+    if (!lastKnownTimestamp.value) {
+      lastKnownTimestamp.value = latestTimestamp
+      return
+    }
+    
+    // Compare timestamps
+    const latest = new Date(latestTimestamp).getTime()
+    const lastKnown = new Date(lastKnownTimestamp.value).getTime()
+    
+    // If there's new data, reload
+    if (latest > lastKnown) {
+      console.log('🔄 New data detected! Reloading GPS data...')
+      await loadInfluxData()
+    }
+  } catch (error) {
+    console.error('Failed to check for new data:', error)
+  }
+}
+
+// Start auto-refresh
+function startAutoRefresh() {
+  // Clear any existing interval
+  if (refreshInterval.value) {
+    clearInterval(refreshInterval.value)
+  }
+  
+  // Check for new data every 5 seconds
+  refreshInterval.value = setInterval(() => {
+    checkForNewData()
+  }, 5000)
+  
+  console.log('✅ Auto-refresh enabled (checking every 5 seconds)')
+}
+
+// Stop auto-refresh
+function stopAutoRefresh() {
+  if (refreshInterval.value) {
+    clearInterval(refreshInterval.value)
+    refreshInterval.value = null
+    console.log('🛑 Auto-refresh disabled')
+  }
 }
 </script>
 

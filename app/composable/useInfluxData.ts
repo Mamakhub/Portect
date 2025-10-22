@@ -104,14 +104,13 @@ export function useInfluxData() {
     const query: InfluxQuery = {
       start_time: `-${hours}h`,
       end_time: 'now()',
-      limit: 5000,
-      sos_only: true  // Filter directly in InfluxDB query
+      limit: 5000
     }
 
     const response = await fetchData(query)
-    const sosData = response.data as VesselGPSData[]
+    const sosData = (response.data as VesselGPSData[]).filter(d => d.sos_signal === true)
     
-    // Data is already filtered by InfluxDB, just sort by timestamp (newest first)
+    // Filter and sort by timestamp (newest first)
     return sosData.sort((a, b) => 
       new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
     )
@@ -130,6 +129,26 @@ export function useInfluxData() {
     })
     
     return latestByDevice
+  }
+
+  // Lightweight check: Get only the latest timestamp to see if there's new data
+  async function getLatestTimestamp(): Promise<string | null> {
+    try {
+      const query: InfluxQuery = {
+        start_time: '-1h', // Only check last hour for performance
+        end_time: 'now()',
+        limit: 1 // Only get the most recent point
+      }
+
+      const response = await fetchData(query)
+      if (response.data && response.data.length > 0) {
+        return response.data[0].timestamp
+      }
+      return null
+    } catch (err) {
+      console.error('Failed to check for new data:', err)
+      return null
+    }
   }
 
   // Computed properties
@@ -151,6 +170,7 @@ export function useInfluxData() {
     getAllVesselGPSData,
     getGPSDataByDevice,
     getVesselsWithSOS,
-    getLatestSOSByDevice
+    getLatestSOSByDevice,
+    getLatestTimestamp
   }
 }
