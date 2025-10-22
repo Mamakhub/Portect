@@ -41,10 +41,10 @@ export function useInfluxData() {
   }
 
   // Get vessel GPS data
-  async function getVesselGPSData(deviceId?: string, days: number = 7): Promise<VesselGPSData[]> {
+  async function getVesselGPSData(deviceId?: string, hours: number = 24): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
       device_id: deviceId,
-      start_time: `-${days}d`,
+      start_time: `-${hours}h`,
       end_time: 'now()',
       limit: 5000
     }
@@ -65,9 +65,9 @@ export function useInfluxData() {
   }
 
   // Get all vessel GPS data
-  async function getAllVesselGPSData(days: number = 7): Promise<VesselGPSData[]> {
+  async function getAllVesselGPSData(hours: number = 24): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
-      start_time: `-${days}d`,
+      start_time: `-${hours}h`,
       end_time: 'now()',
       limit: 5000
     }
@@ -77,8 +77,8 @@ export function useInfluxData() {
   }
 
   // Get GPS data grouped by device ID
-  async function getGPSDataByDevice(days: number = 7): Promise<Record<string, VesselGPSData[]>> {
-    const allData = await getAllVesselGPSData(days)
+  async function getGPSDataByDevice(hours: number = 24): Promise<Record<string, VesselGPSData[]>> {
+    const allData = await getAllVesselGPSData(hours)
     
     // Group by device_id
     const grouped: Record<string, VesselGPSData[]> = {}
@@ -99,10 +99,10 @@ export function useInfluxData() {
     return grouped
   }
 
-  // Get vessels with SOS signal active (longer period to catch all alerts)
-  async function getVesselsWithSOS(days: number = 30): Promise<VesselGPSData[]> {
+  // Get vessels with SOS signal active (last 24 hours)
+  async function getVesselsWithSOS(hours: number = 24): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
-      start_time: `-${days}d`,
+      start_time: `-${hours}h`,
       end_time: 'now()',
       limit: 5000,
       sos_only: true  // Filter directly in InfluxDB query
@@ -118,8 +118,8 @@ export function useInfluxData() {
   }
 
   // Get latest SOS alerts per device
-  async function getLatestSOSByDevice(days: number = 30): Promise<Record<string, VesselGPSData>> {
-    const sosData = await getVesselsWithSOS(days)
+  async function getLatestSOSByDevice(hours: number = 24): Promise<Record<string, VesselGPSData>> {
+    const sosData = await getVesselsWithSOS(hours)
     
     // Get only the most recent SOS for each device
     const latestByDevice: Record<string, VesselGPSData> = {}

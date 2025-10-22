@@ -41,10 +41,34 @@ const summary = ref<any>({
   vesselsByType: {}
 })
 
+// Device selection for GPS data
+const selectedDevice = ref<string>('summary') // 'summary' or specific device ID
+
 // Computed properties
 const loading = computed(() => postgresLoading.value) // Only show loading for PostgreSQL
 const postgresDataAvailable = computed(() => !postgresError.value && vessels.value.length > 0)
 const influxDataAvailable = computed(() => !influxError.value && (vesselGPSData.value.length > 0 || sosVessels.value.length > 0))
+
+// Available devices for dropdown
+const availableDevices = computed(() => {
+  return Object.keys(gpsDataByDevice.value).sort()
+})
+
+// Filtered GPS data based on selected device
+const displayedGPSData = computed(() => {
+  if (selectedDevice.value === 'summary') {
+    // Show all devices combined, sorted by priority (highest first), then timestamp
+    return vesselGPSData.value.sort((a, b) => {
+      if (b.priority !== a.priority) {
+        return b.priority - a.priority // Higher priority first
+      }
+      return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    })
+  } else {
+    // Show specific device data, sorted by timestamp
+    return gpsDataByDevice.value[selectedDevice.value] || []
+  }
+})
 
 // Load data on mount
 onMounted(async () => {
@@ -67,10 +91,10 @@ async function loadDashboardData() {
   // Load InfluxDB data (optional - real-time sensor data)
   try {
     const [gpsData, gpsGrouped, sosData, sosGrouped] = await Promise.all([
-      getAllVesselGPSData(7), // Last 7 days
-      getGPSDataByDevice(7), // GPS data separated by device
-      getVesselsWithSOS(30), // Last 30 days for SOS
-      getLatestSOSByDevice(30) // Latest SOS per device
+      getAllVesselGPSData(24), // Last 1 hour for recent data
+      getGPSDataByDevice(24), // GPS data separated by device (1 hour)
+      getVesselsWithSOS(24), // Last 24 hours for SOS
+      getLatestSOSByDevice(1) // Latest SOS per device (24 hours)
     ])
     vesselGPSData.value = gpsData
     gpsDataByDevice.value = gpsGrouped
@@ -228,61 +252,107 @@ async function refreshData() {
           </div>
         </div>
 
-        <!-- Vessel GPS Data Section - Separated by Device -->
+        <!-- Vessel GPS Data Section -->
         <div class="grid grid-cols-1 gap-6">
-          <!-- GPS Data by Device -->
+          <!-- GPS Data with Device Selection -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent GPS Data by Device (Last 7 Days)</h3>
-              <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                <span class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ Object.keys(gpsDataByDevice).length }} Devices
-                </span>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent GPS Data (Last 1 Hour)</h3>
+              <div class="flex items-center space-x-4">
+                <!-- Device Selector -->
+                <select 
+                  v-model="selectedDevice"
+                  class="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-tenang-primary dark:focus:ring-tenang-primary-dark"
+                >
+                  <option value="summary">📊 Summary (All Devices)</option>
+                  <option v-for="deviceId in availableDevices" :key="deviceId" :value="deviceId">
+                    🚢 Device {{ deviceId }}
+                  </option>
+                </select>
+                
+                <div class="flex items-center space-x-2">
+                  <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    {{ availableDevices.length }} Devices
+                  </span>
+                </div>
               </div>
             </div>
             
-            <div v-if="Object.keys(gpsDataByDevice).length > 0" class="space-y-6">
-              <!-- Loop through each device -->
-              <div 
-                v-for="(deviceData, deviceId) in gpsDataByDevice" 
-                :key="deviceId"
-                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
-              >
-                <div class="flex items-center justify-between mb-3">
-                  <h4 class="font-semibold text-gray-900 dark:text-white">
-                    Device: {{ deviceId }}
-                  </h4>
-                  <span class="text-sm text-gray-500 dark:text-gray-400">
-                    {{ deviceData.length }} readings
-                  </span>
-                </div>
-                
-                <div class="space-y-2">
-                  <div 
-                    v-for="(data, index) in deviceData.slice(0, 3)" 
-                    :key="index"
-                    class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded"
-                  >
-                    <div>
-                      <div class="text-xs text-gray-600 dark:text-gray-400">
-                        Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}
-                      </div>
-                      <div class="text-xs text-gray-500 dark:text-gray-500">
-                        Alt: {{ data.altitude.toFixed(2) }}m
-                      </div>
-                    </div>
-                    <div class="text-right">
-                      <div class="text-xs text-gray-500 dark:text-gray-400">
-                        {{ new Date(data.timestamp).toLocaleString() }}
-                      </div>
-                      <div v-if="data.sos_signal" class="text-xs text-red-600 font-medium">
+            <!-- Summary View (All Devices Sorted by Priority) -->
+            <div v-if="selectedDevice === 'summary' && displayedGPSData.length > 0">
+              <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 mb-4">
+                <p class="text-sm text-blue-800 dark:text-blue-300">
+                  📊 Showing {{ displayedGPSData.length }} readings from all devices sorted by priority (highest first)
+                </p>
+              </div>
+              
+              <!-- Scrollable container -->
+              <div class="max-h-96 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
+                <div 
+                  v-for="(data, index) in displayedGPSData" 
+                  :key="index"
+                  class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                >
+                  <div class="flex-1">
+                    <div class="flex items-center space-x-2 mb-1">
+                      <span class="font-semibold text-gray-900 dark:text-white text-sm">
+                        Device {{ data.device_id }}
+                      </span>
+                      <span class="px-2 py-0.5 text-xs font-medium rounded-full"
+                            :class="data.priority >= 3 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                                    data.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                        Priority {{ data.priority }}
+                      </span>
+                      <span v-if="data.sos_signal" class="text-xs text-red-600 dark:text-red-400 font-medium">
                         🚨 SOS
-                      </div>
+                      </span>
+                    </div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">
+                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}, Alt: {{ data.altitude.toFixed(2) }}m
                     </div>
                   </div>
-                  <div v-if="deviceData.length > 3" class="text-center text-xs text-gray-500 dark:text-gray-400 pt-1">
-                    + {{ deviceData.length - 3 }} more readings
+                  <div class="text-right text-xs text-gray-500 dark:text-gray-400">
+                    {{ new Date(data.timestamp).toLocaleString() }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Individual Device View -->
+            <div v-else-if="selectedDevice !== 'summary' && displayedGPSData.length > 0">
+              <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-3 mb-4">
+                <p class="text-sm text-green-800 dark:text-green-300">
+                  🚢 Showing {{ displayedGPSData.length }} readings for Device {{ selectedDevice }}
+                </p>
+              </div>
+              
+              <!-- Scrollable container -->
+              <div class="max-h-96 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
+                <div 
+                  v-for="(data, index) in displayedGPSData" 
+                  :key="index"
+                  class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700/50"
+                >
+                  <div class="flex-1">
+                    <div class="flex items-center space-x-2 mb-1">
+                      <span class="px-2 py-0.5 text-xs font-medium rounded-full"
+                            :class="data.priority >= 3 ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 
+                                    data.priority === 2 ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' : 
+                                    'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400'">
+                        Priority {{ data.priority }}
+                      </span>
+                      <span v-if="data.sos_signal" class="text-xs text-red-600 dark:text-red-400 font-medium">
+                        🚨 SOS
+                      </span>
+                    </div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">
+                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}, Alt: {{ data.altitude.toFixed(2) }}m
+                    </div>
+                  </div>
+                  <div class="text-right text-xs text-gray-500 dark:text-gray-400">
+                    {{ new Date(data.timestamp).toLocaleString() }}
                   </div>
                 </div>
               </div>
@@ -307,7 +377,7 @@ async function refreshData() {
           <!-- SOS Alerts - All Alerts -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent SOS Alerts (Last 30 Days)</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent SOS Alerts (Last 24 Hours)</h3>
               <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
@@ -316,9 +386,10 @@ async function refreshData() {
               </div>
             </div>
             
-            <div v-if="sosVessels.length > 0" class="space-y-3">
+            <!-- Scrollable SOS Alerts Container -->
+            <div v-if="sosVessels.length > 0" class="max-h-80 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
               <div 
-                v-for="(vessel, index) in sosVessels.slice(0, 10)" 
+                v-for="(vessel, index) in sosVessels" 
                 :key="index"
                 class="p-3 border border-red-200 dark:border-red-800 rounded-lg bg-red-50 dark:bg-red-900/20"
               >
@@ -336,9 +407,6 @@ async function refreshData() {
                 <div class="text-xs text-red-600 dark:text-red-400 mt-1">
                   {{ new Date(vessel.timestamp).toLocaleString() }}
                 </div>
-              </div>
-              <div v-if="sosVessels.length > 10" class="text-center text-xs text-gray-500 dark:text-gray-400 pt-2">
-                + {{ sosVessels.length - 10 }} more SOS alerts
               </div>
             </div>
             
@@ -366,7 +434,8 @@ async function refreshData() {
               </div>
             </div>
             
-            <div v-if="Object.keys(sosDataByDevice).length > 0" class="space-y-3">
+            <!-- Scrollable Latest SOS Container -->
+            <div v-if="Object.keys(sosDataByDevice).length > 0" class="max-h-80 overflow-y-auto space-y-3 pr-2 scrollbar-thin">
               <div 
                 v-for="(vessel, deviceId) in sosDataByDevice" 
                 :key="deviceId"
