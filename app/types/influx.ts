@@ -6,6 +6,7 @@ export interface VesselGPSData {
   longitude: number
   latitude: number
   altitude: number
+  priority: number
   sos_signal: boolean
 }
 
@@ -15,6 +16,7 @@ export interface InfluxQuery {
   end_time?: string
   limit?: number
   offset?: number
+  sos_only?: boolean  // Filter for SOS signals only
 }
 
 export interface InfluxResponse<T = VesselGPSData> {

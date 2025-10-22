@@ -5,21 +5,36 @@ export default defineEventHandler(async (event) => {
     const body = await readBody(event) as InfluxQuery
 
     // InfluxDB configuration
-    const INFLUX_URL = process.env.INFLUX_URL || 'http://localhost:8086'
-    const INFLUX_TOKEN = process.env.INFLUX_TOKEN || ''
-    const INFLUX_ORG = process.env.INFLUX_ORG || 'portect'
-    const INFLUX_BUCKET = process.env.INFLUX_BUCKET || 'vessel_data'
+    const config = useRuntimeConfig()
+    const INFLUX_URL = config.influxUrl
+    const INFLUX_TOKEN = config.influxToken
+    const INFLUX_ORG = config.influxOrg
+    const INFLUX_BUCKET = config.influxBucket
+
+    // Debug logging
+    console.log('InfluxDB Config:', {
+      url: INFLUX_URL,
+      org: INFLUX_ORG,
+      bucket: INFLUX_BUCKET,
+      tokenLength: INFLUX_TOKEN?.length || 0
+    })
 
     // Build InfluxDB query for vessel GPS data
     let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")`
-    fluxQuery += ` |> range(start: ${body.start_time || '-24h'}, stop: ${body.end_time || 'now()'})`
+    fluxQuery += ` |> range(start: ${body.start_time || '-7d'}, stop: ${body.end_time || 'now()'})`
     
     if (body.device_id) {
       fluxQuery += ` |> filter(fn: (r) => r.device_id == "${body.device_id}")`
     }
 
-    fluxQuery += ` |> filter(fn: (r) => r._field =~ /^(longitude|latitude|altitude|sos_signal)$/)`
-    fluxQuery += ` |> pivot(rowKey:["_time", "device_id"], columnKey: "_field", valueColumn: "_value")`
+    fluxQuery += ` |> filter(fn: (r) => r._field =~ /^(longitude|latitude|altitude|priority|sos_signal)$/)`
+    fluxQuery += ` |> pivot(rowKey:["_time", "device_id"], columnKey: ["_field"], valueColumn: "_value")`
+    
+    // Filter for SOS signals only if requested
+    if (body.sos_only) {
+      fluxQuery += ` |> filter(fn: (r) => r.sos_signal == true)`
+    }
+    
     fluxQuery += ` |> sort(columns: ["_time"])`
 
     if (body.limit) {
@@ -29,6 +44,9 @@ export default defineEventHandler(async (event) => {
     if (body.offset) {
       fluxQuery += ` |> offset(n: ${body.offset})`
     }
+
+    // Log the Flux query for debugging
+    console.log('Flux Query:', fluxQuery)
 
     // Make request to InfluxDB
     const response = await fetch(`${INFLUX_URL}/api/v2/query?org=${INFLUX_ORG}`, {
@@ -42,7 +60,13 @@ export default defineEventHandler(async (event) => {
     })
 
     if (!response.ok) {
-      throw new Error(`InfluxDB error: ${response.status} ${response.statusText}`)
+      const errorText = await response.text()
+      console.error('InfluxDB Response Error:', {
+        status: response.status,
+        statusText: response.statusText,
+        body: errorText
+      })
+      throw new Error(`InfluxDB error: ${response.status} ${response.statusText} - ${errorText}`)
     }
 
     const csvData = await response.text()
@@ -93,6 +117,8 @@ function parseInfluxCSV(csvData: string): any[] {
           row.latitude = parseFloat(value)
         } else if (header === 'altitude') {
           row.altitude = parseFloat(value)
+        } else if (header === 'priority') {
+          row.priority = parseInt(value)
         } else if (header === 'sos_signal') {
           row.sos_signal = value === 'true'
         }
@@ -106,6 +132,7 @@ function parseInfluxCSV(csvData: string): any[] {
         longitude: row.longitude || 0,
         latitude: row.latitude || 0,
         altitude: row.altitude || 0,
+        priority: row.priority || 0,
         sos_signal: row.sos_signal || false
       })
     }

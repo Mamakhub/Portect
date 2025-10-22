@@ -14,7 +14,9 @@ const {
   getVesselGPSData, 
   getLatestGPSReading, 
   getAllVesselGPSData,
+  getGPSDataByDevice,
   getVesselsWithSOS,
+  getLatestSOSByDevice,
   loading: influxLoading,
   hasError: influxError 
 } = useInfluxData()
@@ -31,7 +33,9 @@ const {
 // Reactive data
 const vessels = ref<any[]>([])
 const vesselGPSData = ref<any[]>([])
+const gpsDataByDevice = ref<Record<string, any[]>>({})
 const sosVessels = ref<any[]>([])
+const sosDataByDevice = ref<Record<string, any>>({})
 const summary = ref<any>({
   totalVessels: 0,
   vesselsByType: {}
@@ -62,12 +66,16 @@ async function loadDashboardData() {
 
   // Load InfluxDB data (optional - real-time sensor data)
   try {
-    const [gpsData, sosData] = await Promise.all([
-      getAllVesselGPSData(24), // Last 24 hours
-      getVesselsWithSOS()
+    const [gpsData, gpsGrouped, sosData, sosGrouped] = await Promise.all([
+      getAllVesselGPSData(7), // Last 7 days
+      getGPSDataByDevice(7), // GPS data separated by device
+      getVesselsWithSOS(30), // Last 30 days for SOS
+      getLatestSOSByDevice(30) // Latest SOS per device
     ])
     vesselGPSData.value = gpsData
+    gpsDataByDevice.value = gpsGrouped
     sosVessels.value = sosData
+    sosDataByDevice.value = sosGrouped
   } catch (error) {
     console.error('InfluxDB connection failed:', error)
     // Don't block the UI - just log the error
@@ -220,40 +228,61 @@ async function refreshData() {
           </div>
         </div>
 
-        <!-- Vessel GPS Data Section -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <!-- Recent GPS Data -->
+        <!-- Vessel GPS Data Section - Separated by Device -->
+        <div class="grid grid-cols-1 gap-6">
+          <!-- GPS Data by Device -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent GPS Data</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent GPS Data by Device (Last 7 Days)</h3>
               <div class="flex items-center space-x-2">
                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
-                  Live
+                  {{ Object.keys(gpsDataByDevice).length }} Devices
                 </span>
               </div>
             </div>
             
-            <div v-if="vesselGPSData.length > 0" class="space-y-3">
+            <div v-if="Object.keys(gpsDataByDevice).length > 0" class="space-y-6">
+              <!-- Loop through each device -->
               <div 
-                v-for="(data, index) in vesselGPSData.slice(0, 5)" 
-                :key="index"
-                class="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg"
+                v-for="(deviceData, deviceId) in gpsDataByDevice" 
+                :key="deviceId"
+                class="border border-gray-200 dark:border-gray-700 rounded-lg p-4"
               >
-                <div>
-                  <div class="font-medium text-gray-900 dark:text-white text-sm">
-                    {{ data.device_id }}
-                  </div>
-                  <div class="text-xs text-gray-600 dark:text-gray-400">
-                    {{ data.latitude.toFixed(6) }}, {{ data.longitude.toFixed(6) }}
-                  </div>
+                <div class="flex items-center justify-between mb-3">
+                  <h4 class="font-semibold text-gray-900 dark:text-white">
+                    Device: {{ deviceId }}
+                  </h4>
+                  <span class="text-sm text-gray-500 dark:text-gray-400">
+                    {{ deviceData.length }} readings
+                  </span>
                 </div>
-                <div class="text-right">
-                  <div class="text-xs text-gray-500 dark:text-gray-400">
-                    {{ new Date(data.timestamp).toLocaleTimeString() }}
+                
+                <div class="space-y-2">
+                  <div 
+                    v-for="(data, index) in deviceData.slice(0, 3)" 
+                    :key="index"
+                    class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700/50 rounded"
+                  >
+                    <div>
+                      <div class="text-xs text-gray-600 dark:text-gray-400">
+                        Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}
+                      </div>
+                      <div class="text-xs text-gray-500 dark:text-gray-500">
+                        Alt: {{ data.altitude.toFixed(2) }}m
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ new Date(data.timestamp).toLocaleString() }}
+                      </div>
+                      <div v-if="data.sos_signal" class="text-xs text-red-600 font-medium">
+                        🚨 SOS
+                      </div>
+                    </div>
                   </div>
-                  <div v-if="data.sos_signal" class="text-xs text-red-600 font-medium">
-                    SOS
+                  <div v-if="deviceData.length > 3" class="text-center text-xs text-gray-500 dark:text-gray-400 pt-1">
+                    + {{ deviceData.length - 3 }} more readings
                   </div>
                 </div>
               </div>
@@ -270,35 +299,89 @@ async function refreshData() {
               <p v-else>No GPS data available</p>
             </div>
           </div>
+        </div>
 
-          <!-- SOS Alerts -->
+        <!-- SOS Alerts Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- SOS Alerts - All Alerts -->
           <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <div class="flex items-center justify-between mb-4">
-              <h3 class="text-lg font-medium text-gray-900 dark:text-white">SOS Alerts</h3>
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Recent SOS Alerts (Last 30 Days)</h3>
               <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
                 <span class="text-sm text-gray-600 dark:text-gray-400">
-                  {{ sosVessels.length }} Active
+                  {{ sosVessels.length }} Total
                 </span>
               </div>
             </div>
             
             <div v-if="sosVessels.length > 0" class="space-y-3">
               <div 
-                v-for="(vessel, index) in sosVessels.slice(0, 5)" 
+                v-for="(vessel, index) in sosVessels.slice(0, 10)" 
                 :key="index"
                 class="p-3 border border-red-200 dark:border-red-800 rounded-lg bg-red-50 dark:bg-red-900/20"
               >
                 <div class="flex items-center justify-between">
                   <div class="font-medium text-red-900 dark:text-red-400 text-sm">
-                    {{ vessel.device_id }}
+                    Device {{ vessel.device_id }}
                   </div>
                   <div class="text-xs text-red-600 dark:text-red-400 font-medium">
-                    SOS ACTIVE
+                    🚨 SOS
                   </div>
                 </div>
                 <div class="text-xs text-red-800 dark:text-red-300 mt-1">
-                  {{ vessel.latitude.toFixed(6) }}, {{ vessel.longitude.toFixed(6) }}
+                  Lat: {{ vessel.latitude.toFixed(6) }}, Lon: {{ vessel.longitude.toFixed(6) }}
+                </div>
+                <div class="text-xs text-red-600 dark:text-red-400 mt-1">
+                  {{ new Date(vessel.timestamp).toLocaleString() }}
+                </div>
+              </div>
+              <div v-if="sosVessels.length > 10" class="text-center text-xs text-gray-500 dark:text-gray-400 pt-2">
+                + {{ sosVessels.length - 10 }} more SOS alerts
+              </div>
+            </div>
+            
+            <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <div v-if="!influxDataAvailable" class="space-y-2">
+                <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
+                </svg>
+                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-xs">Real-time SOS monitoring unavailable</p>
+              </div>
+              <p v-else>✅ No SOS alerts</p>
+            </div>
+          </div>
+
+          <!-- Latest SOS by Device -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h3 class="text-lg font-medium text-gray-900 dark:text-white">Latest SOS by Device</h3>
+              <div class="flex items-center space-x-2">
+                <div class="w-2 h-2 rounded-full bg-red-500"></div>
+                <span class="text-sm text-gray-600 dark:text-gray-400">
+                  {{ Object.keys(sosDataByDevice).length }} Devices
+                </span>
+              </div>
+            </div>
+            
+            <div v-if="Object.keys(sosDataByDevice).length > 0" class="space-y-3">
+              <div 
+                v-for="(vessel, deviceId) in sosDataByDevice" 
+                :key="deviceId"
+                class="p-3 border border-red-200 dark:border-red-800 rounded-lg bg-red-50 dark:bg-red-900/20"
+              >
+                <div class="flex items-center justify-between">
+                  <div class="font-medium text-red-900 dark:text-red-400 text-sm">
+                    Device {{ deviceId }}
+                  </div>
+                  <div class="text-xs text-red-600 dark:text-red-400 font-medium">
+                    🚨 LATEST SOS
+                  </div>
+                </div>
+                <div class="text-xs text-red-800 dark:text-red-300 mt-1">
+                  Lat: {{ vessel.latitude.toFixed(6) }}, Lon: {{ vessel.longitude.toFixed(6) }}
                 </div>
                 <div class="text-xs text-red-600 dark:text-red-400 mt-1">
                   {{ new Date(vessel.timestamp).toLocaleString() }}
@@ -314,7 +397,7 @@ async function refreshData() {
                 <p class="text-sm font-medium">InfluxDB Connection Required</p>
                 <p class="text-xs">Real-time SOS monitoring unavailable</p>
               </div>
-              <p v-else>No SOS alerts</p>
+              <p v-else>✅ No SOS alerts</p>
             </div>
           </div>
         </div>

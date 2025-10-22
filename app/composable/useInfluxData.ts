@@ -1,11 +1,8 @@
 import { computed, ref } from 'vue'
 import type { InfluxQuery, InfluxResponse, VesselGPSData } from '~/types/influx'
 
-// Configuration
-const INFLUX_URL = process.env.INFLUX_URL || 'http://localhost:8086'
-const INFLUX_TOKEN = process.env.INFLUX_TOKEN || ''
-const INFLUX_ORG = process.env.INFLUX_ORG || 'portect'
-const INFLUX_BUCKET = process.env.INFLUX_BUCKET || 'vessel_data'
+// Configuration - These are now managed in nuxt.config.ts and server-side
+// The composable uses the API endpoints which handle the actual InfluxDB connection
 
 // Reactive state
 const isLoading = ref(false)
@@ -44,15 +41,12 @@ export function useInfluxData() {
   }
 
   // Get vessel GPS data
-  async function getVesselGPSData(deviceId?: string, hours: number = 24): Promise<VesselGPSData[]> {
-    const endTime = new Date()
-    const startTime = new Date(endTime.getTime() - hours * 60 * 60 * 1000)
-
+  async function getVesselGPSData(deviceId?: string, days: number = 7): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
       device_id: deviceId,
-      start_time: startTime.toISOString(),
-      end_time: endTime.toISOString(),
-      limit: 1000
+      start_time: `-${days}d`,
+      end_time: 'now()',
+      limit: 5000
     }
 
     const response = await fetchData(query)
@@ -71,31 +65,71 @@ export function useInfluxData() {
   }
 
   // Get all vessel GPS data
-  async function getAllVesselGPSData(hours: number = 24): Promise<VesselGPSData[]> {
-    const endTime = new Date()
-    const startTime = new Date(endTime.getTime() - hours * 60 * 60 * 1000)
-
+  async function getAllVesselGPSData(days: number = 7): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
-      start_time: startTime.toISOString(),
-      end_time: endTime.toISOString(),
-      limit: 1000
+      start_time: `-${days}d`,
+      end_time: 'now()',
+      limit: 5000
     }
 
     const response = await fetchData(query)
     return response.data as VesselGPSData[]
   }
 
-  // Get vessels with SOS signal active
-  async function getVesselsWithSOS(): Promise<VesselGPSData[]> {
+  // Get GPS data grouped by device ID
+  async function getGPSDataByDevice(days: number = 7): Promise<Record<string, VesselGPSData[]>> {
+    const allData = await getAllVesselGPSData(days)
+    
+    // Group by device_id
+    const grouped: Record<string, VesselGPSData[]> = {}
+    allData.forEach(data => {
+      if (!grouped[data.device_id]) {
+        grouped[data.device_id] = []
+      }
+      grouped[data.device_id].push(data)
+    })
+    
+    // Sort each device's data by timestamp (newest first)
+    Object.keys(grouped).forEach(deviceId => {
+      grouped[deviceId].sort((a, b) => 
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      )
+    })
+    
+    return grouped
+  }
+
+  // Get vessels with SOS signal active (longer period to catch all alerts)
+  async function getVesselsWithSOS(days: number = 30): Promise<VesselGPSData[]> {
     const query: InfluxQuery = {
-      limit: 100
+      start_time: `-${days}d`,
+      end_time: 'now()',
+      limit: 5000,
+      sos_only: true  // Filter directly in InfluxDB query
     }
 
     const response = await fetchData(query)
-    const allData = response.data as VesselGPSData[]
+    const sosData = response.data as VesselGPSData[]
     
-    // Filter for vessels with SOS signal active
-    return allData.filter(data => data.sos_signal === true)
+    // Data is already filtered by InfluxDB, just sort by timestamp (newest first)
+    return sosData.sort((a, b) => 
+      new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
+  }
+
+  // Get latest SOS alerts per device
+  async function getLatestSOSByDevice(days: number = 30): Promise<Record<string, VesselGPSData>> {
+    const sosData = await getVesselsWithSOS(days)
+    
+    // Get only the most recent SOS for each device
+    const latestByDevice: Record<string, VesselGPSData> = {}
+    sosData.forEach(data => {
+      if (!latestByDevice[data.device_id]) {
+        latestByDevice[data.device_id] = data
+      }
+    })
+    
+    return latestByDevice
   }
 
   // Computed properties
@@ -115,6 +149,8 @@ export function useInfluxData() {
     getVesselGPSData,
     getLatestGPSReading,
     getAllVesselGPSData,
-    getVesselsWithSOS
+    getGPSDataByDevice,
+    getVesselsWithSOS,
+    getLatestSOSByDevice
   }
 }

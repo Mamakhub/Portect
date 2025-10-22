@@ -75,10 +75,10 @@ export default defineNuxtConfig({
     postgresUser: process.env.POSTGRES_USER || 'mamakhub',
     postgresPassword: process.env.POSTGRES_PASSWORD || 'mamakhub',
     postgresDb: process.env.POSTGRES_DB || 'portect',
-    influxUrl: process.env.INFLUX_URL || 'http://yaoxiang-ubuntu.local:8086',
-    influxToken: process.env.INFLUX_TOKEN || '',
-    influxOrg: process.env.INFLUX_ORG || 'portect',
-    influxBucket: process.env.INFLUX_BUCKET || 'vessel_data',
+    influxUrl: process.env.INFLUX_URL || 'http://yaoxiang-ubuntu:8086',
+    influxToken: process.env.INFLUX_TOKEN || 'DUcxc8urooet7hwWujbWUVhN-NmPjqGe4NL37AVeIJMVvEFNdrtYhR2pua70Y_QGZvEw58Qkn5hrEySU_AzBlw==',
+    influxOrg: process.env.INFLUX_ORG || 'Portect',
+    influxBucket: process.env.INFLUX_BUCKET || 'pvm-monitoring',
     
     // Public keys (exposed to client)
     public: {
