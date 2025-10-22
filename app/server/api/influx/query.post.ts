@@ -11,14 +11,6 @@ export default defineEventHandler(async (event) => {
     const INFLUX_ORG = config.influxOrg
     const INFLUX_BUCKET = config.influxBucket
 
-    // Debug logging
-    console.log('InfluxDB Config:', {
-      url: INFLUX_URL,
-      org: INFLUX_ORG,
-      bucket: INFLUX_BUCKET,
-      tokenLength: INFLUX_TOKEN?.length || 0
-    })
-
     // Build InfluxDB query for vessel GPS data
     let fluxQuery = `from(bucket: "${INFLUX_BUCKET}")`
     fluxQuery += ` |> range(start: ${body.start_time || '-7d'}, stop: ${body.end_time || 'now()'})`
@@ -38,9 +30,6 @@ export default defineEventHandler(async (event) => {
     if (body.offset) {
       fluxQuery += ` |> offset(n: ${body.offset})`
     }
-
-    // Log the Flux query for debugging
-    console.log('Flux Query:', fluxQuery)
 
     // Make request to InfluxDB
     const response = await fetch(`${INFLUX_URL}/api/v2/query?org=${INFLUX_ORG}`, {
@@ -111,7 +100,6 @@ function parseInfluxCSV(csvData: string): any[] {
       // This is a new table with new headers
       currentHeaders = values.map(h => h.trim())
       tableCount++
-      console.log(`Table ${tableCount} headers:`, currentHeaders.filter(h => h && !h.startsWith('_')).join(', '))
       continue
     }
     
@@ -155,6 +143,5 @@ function parseInfluxCSV(csvData: string): any[] {
     }
   }
 
-  console.log(`Parsed ${tableCount} tables, extracted ${data.length} valid GPS readings`)
   return data
 }

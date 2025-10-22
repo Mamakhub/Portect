@@ -122,11 +122,9 @@ async function loadDashboardData() {
 
 async function loadPostgresData() {
   try {
-    console.log('Loading PostgreSQL data...')
     const vesselsData = await getVessels()
     vessels.value = vesselsData
     postgresDataLoaded.value = true
-    console.log('PostgreSQL data loaded:', vesselsData.length, 'vessels')
   } catch (error) {
     console.error('Failed to load PostgreSQL data:', error)
     postgresDataLoaded.value = true // Mark as loaded even if failed
@@ -135,13 +133,10 @@ async function loadPostgresData() {
 
 async function loadInfluxData() {
   try {
-    console.log(`Loading InfluxDB data for last ${selectedTimeRange.value} hours...`)
     const allData = await getAllVesselGPSData(selectedTimeRange.value) // Query for selected time range
-    console.log('InfluxDB data loaded:', allData.length, 'readings')
     
     // GPS data for the selected time range
     vesselGPSData.value = allData
-    console.log(`GPS data (${selectedTimeRange.value} hours):`, vesselGPSData.value.length, 'readings')
     
     // GPS data grouped by device
     const byDevice: Record<string, any[]> = {}
@@ -164,7 +159,6 @@ async function loadInfluxData() {
     sosVessels.value = sosData
       .filter(d => d.sos_signal === true)
       .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-    console.log('SOS alerts:', sosVessels.value.length)
     
     // Latest SOS per device
     const latestSOSByDevice: Record<string, any> = {}
@@ -221,7 +215,6 @@ async function checkForNewData() {
     
     // If there's new data, reload
     if (latest > lastKnown) {
-      console.log('🔄 New data detected! Reloading GPS data...')
       await loadInfluxData()
     }
   } catch (error) {
@@ -240,8 +233,6 @@ function startAutoRefresh() {
   refreshInterval.value = setInterval(() => {
     checkForNewData()
   }, 5000)
-  
-  console.log('✅ Auto-refresh enabled (checking every 5 seconds)')
 }
 
 // Stop auto-refresh
@@ -249,7 +240,6 @@ function stopAutoRefresh() {
   if (refreshInterval.value) {
     clearInterval(refreshInterval.value)
     refreshInterval.value = null
-    console.log('🛑 Auto-refresh disabled')
   }
 }
 </script>
