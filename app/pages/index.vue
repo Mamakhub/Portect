@@ -24,8 +24,7 @@ const {
 const { 
   getVessels, 
   getVesselByDeviceId, 
-  getVesselsByType, 
-  getDashboardSummary,
+  getVesselsByType,
   loading: postgresLoading,
   hasError: postgresError 
 } = usePostgresData()
@@ -36,10 +35,6 @@ const vesselGPSData = ref<any[]>([])
 const gpsDataByDevice = ref<Record<string, any[]>>({})
 const sosVessels = ref<any[]>([])
 const sosDataByDevice = ref<Record<string, any>>({})
-const summary = ref<any>({
-  totalVessels: 0,
-  vesselsByType: {}
-})
 
 // Loading states
 const influxDataLoaded = ref(false)
@@ -53,6 +48,21 @@ const selectedTimeRange = ref<number>(24) // Hours to query (1, 6, 12, 24)
 const loading = computed(() => !postgresDataLoaded.value || !influxDataLoaded.value)
 const postgresDataAvailable = computed(() => postgresDataLoaded.value && !postgresError.value && vessels.value.length > 0)
 const influxDataAvailable = computed(() => influxDataLoaded.value && !influxError.value && (vesselGPSData.value.length > 0 || sosVessels.value.length > 0))
+
+// Calculate summary from vessels data (no extra database query needed)
+const summary = computed(() => {
+  return {
+    totalVessels: vessels.value.length,
+    vesselsByType: {
+      'Cargo Ship': vessels.value.filter(v => v.vesseltype === 'Cargo Ship').length,
+      'Container Ship': vessels.value.filter(v => v.vesseltype === 'Container Ship').length,
+      'Tanker': vessels.value.filter(v => v.vesseltype === 'Tanker').length,
+      'Passenger': vessels.value.filter(v => v.vesseltype === 'Passenger').length,
+      'Fishing': vessels.value.filter(v => v.vesseltype === 'Fishing').length,
+      'Tug': vessels.value.filter(v => v.vesseltype === 'Tug').length
+    }
+  }
+})
 
 // Available devices for dropdown
 const availableDevices = computed(() => {
@@ -102,12 +112,8 @@ async function loadDashboardData() {
 async function loadPostgresData() {
   try {
     console.log('Loading PostgreSQL data...')
-    const [vesselsData, summaryData] = await Promise.all([
-      getVessels(),
-      getDashboardSummary()
-    ])
+    const vesselsData = await getVessels()
     vessels.value = vesselsData
-    summary.value = summaryData
     postgresDataLoaded.value = true
     console.log('PostgreSQL data loaded:', vesselsData.length, 'vessels')
   } catch (error) {
