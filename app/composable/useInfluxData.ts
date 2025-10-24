@@ -80,6 +80,18 @@ export function useInfluxData() {
     return response.data as VesselGPSData[]
   }
 
+  // Get only the most recent GPS data (for incremental updates)
+  async function getRecentGPSData(seconds: number = 30): Promise<VesselGPSData[]> {
+    const query: InfluxQuery = {
+      start_time: `-${seconds}s`,
+      end_time: 'now()',
+      limit: 1000 // Should be plenty for 30 seconds of data
+    }
+
+    const response = await fetchData(query)
+    return response.data as VesselGPSData[]
+  }
+
   // Get GPS data grouped by device ID
   async function getGPSDataByDevice(hours: number = 24): Promise<Record<string, VesselGPSData[]>> {
     const allData = await getAllVesselGPSData(hours)
@@ -174,6 +186,7 @@ export function useInfluxData() {
     getVesselGPSData,
     getLatestGPSReading,
     getAllVesselGPSData,
+    getRecentGPSData,
     getGPSDataByDevice,
     getVesselsWithSOS,
     getLatestSOSByDevice,

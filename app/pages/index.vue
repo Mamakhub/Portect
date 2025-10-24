@@ -14,6 +14,7 @@ const {
   getVesselGPSData, 
   getLatestGPSReading, 
   getAllVesselGPSData,
+  getRecentGPSData,
   getGPSDataByDevice,
   getVesselsWithSOS,
   getLatestSOSByDevice,
@@ -198,31 +199,74 @@ async function onTimeRangeChange() {
   await loadInfluxData()
 }
 
-// Check for new data (lightweight query)
-async function checkForNewData() {
-  if (!influxDataLoaded.value) return // Don't check if initial load isn't complete
+// Fetch and merge recent data (efficient incremental update)
+async function updateRecentData() {
+  if (!influxDataLoaded.value || influxError.value) return // Don't update if initial load isn't complete or there's an error
   
   try {
-    const latestTimestamp = await getLatestTimestamp()
+    // Fetch only the last 30 seconds of data
+    const recentData = await getRecentGPSData(30)
     
-    if (!latestTimestamp) return // No data available
+    if (recentData.length === 0) return // No new data
     
-    // If this is the first check, just store the timestamp
-    if (!lastKnownTimestamp.value) {
-      lastKnownTimestamp.value = latestTimestamp
-      return
-    }
+    // Update the latest known timestamp
+    const timestamps = recentData.map(d => new Date(d.timestamp).getTime())
+    const latestTime = Math.max(...timestamps)
+    lastKnownTimestamp.value = new Date(latestTime).toISOString()
     
-    // Compare timestamps
-    const latest = new Date(latestTimestamp).getTime()
-    const lastKnown = new Date(lastKnownTimestamp.value).getTime()
+    // Merge new data with existing data
+    // Create a Set of existing timestamps for quick lookup
+    const existingTimestamps = new Set(
+      vesselGPSData.value.map(d => `${d.device_id}-${d.timestamp}`)
+    )
     
-    // If there's new data, reload
-    if (latest > lastKnown) {
-      await loadInfluxData()
+    // Filter out duplicates and add new data
+    const newUniqueData = recentData.filter(
+      d => !existingTimestamps.has(`${d.device_id}-${d.timestamp}`)
+    )
+    
+    if (newUniqueData.length > 0) {
+      // Add new data to the beginning
+      vesselGPSData.value = [...newUniqueData, ...vesselGPSData.value]
+      
+      // Trim data based on selected time range to avoid memory bloat
+      const cutoffTime = Date.now() - (selectedTimeRange.value * 60 * 60 * 1000)
+      vesselGPSData.value = vesselGPSData.value.filter(
+        d => new Date(d.timestamp).getTime() > cutoffTime
+      )
+      
+      // Update GPS data grouped by device
+      const byDevice: Record<string, any[]> = {}
+      vesselGPSData.value.forEach(data => {
+        if (!byDevice[data.device_id]) {
+          byDevice[data.device_id] = []
+        }
+        byDevice[data.device_id].push(data)
+      })
+      // Sort each device's data by timestamp (newest first)
+      Object.keys(byDevice).forEach(deviceId => {
+        byDevice[deviceId].sort((a, b) => 
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )
+      })
+      gpsDataByDevice.value = byDevice
+      
+      // Update SOS data
+      sosVessels.value = vesselGPSData.value
+        .filter(d => d.sos_signal === true)
+        .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+      
+      // Update latest SOS per device
+      const latestSOSByDevice: Record<string, any> = {}
+      sosVessels.value.forEach(data => {
+        if (!latestSOSByDevice[data.device_id]) {
+          latestSOSByDevice[data.device_id] = data
+        }
+      })
+      sosDataByDevice.value = latestSOSByDevice
     }
   } catch (error) {
-    console.error('Failed to check for new data:', error)
+    console.error('Failed to update recent data:', error)
   }
 }
 
@@ -233,9 +277,9 @@ function startAutoRefresh() {
     clearInterval(refreshInterval.value)
   }
   
-  // Check for new data every 5 seconds
+  // Fetch and merge recent data every 5 seconds (efficient incremental update)
   refreshInterval.value = setInterval(() => {
-    checkForNewData()
+    updateRecentData()
   }, 5000)
 }
 
