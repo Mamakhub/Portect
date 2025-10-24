@@ -70,15 +70,18 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    // Private keys (only available server-side)
-    postgresUrl: process.env.POSTGRES_URL || 'postgresql://mamakhub:mamakhub@yaoxiang-ubuntu.local:5432/portect',
-    postgresUser: process.env.POSTGRES_USER || 'mamakhub',
-    postgresPassword: process.env.POSTGRES_PASSWORD || 'mamakhub',
-    postgresDb: process.env.POSTGRES_DB || 'portect',
-    influxUrl: process.env.INFLUX_URL || 'http://yaoxiang-ubuntu:8086',
-    influxToken: process.env.INFLUX_TOKEN || 'DUcxc8urooet7hwWujbWUVhN-NmPjqGe4NL37AVeIJMVvEFNdrtYhR2pua70Y_QGZvEw58Qkn5hrEySU_AzBlw==',
-    influxOrg: process.env.INFLUX_ORG || 'Portect',
-    influxBucket: process.env.INFLUX_BUCKET || 'pvm-monitoring',
+    // Database credentials (server-side only)
+    // To change these values, edit them directly in this file
+    postgresUrl: 'postgresql://mamakhub:mamakhub@yaoxiang-ubuntu.local:5432/portect',
+    postgresUser: 'mamakhub',
+    postgresPassword: 'mamakhub',
+    postgresDb: 'portect',
+    
+    // InfluxDB credentials (server-side only)
+    influxUrl: 'http://yaoxiang-ubuntu:8086',
+    influxToken: 'DUcxc8urooet7hwWujbWUVhN-NmPjqGe4NL37AVeIJMVvEFNdrtYhR2pua70Y_QGZvEw58Qkn5hrEySU_AzBlw==',
+    influxOrg: 'Portect',
+    influxBucket: 'pvm-monitoring',
     
     // Public keys (exposed to client)
     public: {
