@@ -520,7 +520,7 @@ function stopAutoRefresh() {
                       </span>
                     </div>
                     <div class="text-xs text-gray-600 dark:text-gray-400">
-                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}, Alt: {{ data.altitude.toFixed(2) }}m
+                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}
                     </div>
                   </div>
                   <div class="text-right text-xs text-gray-500 dark:text-gray-400">
@@ -553,7 +553,7 @@ function stopAutoRefresh() {
                       </span>
                     </div>
                     <div class="text-xs text-gray-600 dark:text-gray-400">
-                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}, Alt: {{ data.altitude.toFixed(2) }}m
+                      Lat: {{ data.latitude.toFixed(6) }}, Lon: {{ data.longitude.toFixed(6) }}
                     </div>
                   </div>
                   <div class="text-right text-xs text-gray-500 dark:text-gray-400">
