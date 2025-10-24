@@ -19,7 +19,9 @@ const {
   getLatestSOSByDevice,
   getLatestTimestamp,
   loading: influxLoading,
-  hasError: influxError 
+  hasError: influxError,
+  errorMessage: influxErrorMessage,
+  isConnectionError: influxConnectionError
 } = useInfluxData()
 
 const { 
@@ -317,7 +319,7 @@ function stopAutoRefresh() {
                 No GPS Data Available
               </h3>
               <p class="mt-1 text-sm text-yellow-700 dark:text-yellow-300">
-                Connected to InfluxDB, but no GPS readings found in the last 24 hours. Vessel information is displayed.
+                ✓ Successfully connected to InfluxDB, but no GPS readings found in the selected time range (last {{ selectedTimeRange }} hour{{ selectedTimeRange > 1 ? 's' : '' }}). Vessel information is still available below.
               </p>
             </div>
           </div>
@@ -336,8 +338,14 @@ function stopAutoRefresh() {
                 InfluxDB Connection Error
               </h3>
               <p class="mt-1 text-sm text-red-700 dark:text-red-300">
-                Could not connect to InfluxDB. Real-time GPS tracking and SOS alerts are currently unavailable.
+                {{ influxErrorMessage || 'Could not connect to InfluxDB.' }} Real-time GPS tracking and SOS alerts are currently unavailable.
               </p>
+              <button
+                @click="refreshData"
+                class="mt-3 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors text-sm"
+              >
+                Retry Connection
+              </button>
             </div>
           </div>
         </div>
@@ -512,14 +520,14 @@ function stopAutoRefresh() {
             </div>
             
             <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              <div v-if="!influxDataAvailable" class="space-y-2">
+              <div v-if="influxError" class="space-y-2">
                 <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
                 </svg>
-                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-sm font-medium">Connection Error</p>
                 <p class="text-xs">Real-time GPS data unavailable</p>
               </div>
-              <p v-else>No GPS data available</p>
+              <p v-else>📭 No GPS data available in the selected time range</p>
             </div>
           </div>
         </div>
@@ -564,14 +572,14 @@ function stopAutoRefresh() {
             </div>
             
             <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              <div v-if="!influxDataAvailable" class="space-y-2">
+              <div v-if="influxError" class="space-y-2">
                 <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
                 </svg>
-                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-sm font-medium">Connection Error</p>
                 <p class="text-xs">Real-time SOS monitoring unavailable</p>
               </div>
-              <p v-else>✅ No SOS alerts</p>
+              <p v-else>✅ No SOS alerts in the last 24 hours</p>
             </div>
           </div>
 
@@ -612,14 +620,14 @@ function stopAutoRefresh() {
             </div>
             
             <div v-else class="text-center py-8 text-gray-500 dark:text-gray-400">
-              <div v-if="!influxDataAvailable" class="space-y-2">
+              <div v-if="influxError" class="space-y-2">
                 <svg class="mx-auto h-12 w-12 text-gray-400 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636a9 9 0 010 12.728m0 0l-2.829-2.829m2.829 2.829L21 21M15.536 8.464a5 5 0 010 7.072m0 0l-2.829-2.829m-4.243 2.829a4.978 4.978 0 01-1.414-2.83m-1.414 5.658a9 9 0 01-2.167-9.238m7.824 2.167a1 1 0 111.414 1.414m-1.414-1.414L3 3" />
                 </svg>
-                <p class="text-sm font-medium">InfluxDB Connection Required</p>
+                <p class="text-sm font-medium">Connection Error</p>
                 <p class="text-xs">Real-time SOS monitoring unavailable</p>
               </div>
-              <p v-else>✅ No SOS alerts</p>
+              <p v-else>✅ No SOS alerts from any device</p>
             </div>
           </div>
         </div>

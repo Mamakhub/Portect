@@ -8,12 +8,14 @@ import type { InfluxQuery, InfluxResponse, VesselGPSData } from '~/types/influx'
 const isLoading = ref(false)
 const error = ref<string | null>(null)
 const lastUpdate = ref<string | null>(null)
+const connectionError = ref(false) // Track if it's a connection error vs just no data
 
 export function useInfluxData() {
   // Fetch data from InfluxDB
   async function fetchData(query: InfluxQuery): Promise<InfluxResponse> {
     isLoading.value = true
     error.value = null
+    connectionError.value = false
 
     try {
       const response = await $fetch('/api/influx/query', {
@@ -22,12 +24,14 @@ export function useInfluxData() {
       }) as InfluxResponse
 
       if (!response.success) {
+        connectionError.value = true
         throw new Error(response.error || 'Failed to fetch data from InfluxDB')
       }
 
       lastUpdate.value = new Date().toISOString()
       return response
     } catch (err) {
+      connectionError.value = true
       error.value = err instanceof Error ? err.message : 'Unknown error occurred'
       return {
         data: [],
@@ -155,12 +159,14 @@ export function useInfluxData() {
   const loading = computed(() => isLoading.value)
   const hasError = computed(() => error.value !== null)
   const errorMessage = computed(() => error.value)
+  const isConnectionError = computed(() => connectionError.value)
 
   return {
     // State
     loading,
     hasError,
     errorMessage,
+    isConnectionError,
     lastUpdate,
 
     // Methods

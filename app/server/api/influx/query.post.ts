@@ -49,7 +49,20 @@ export default defineEventHandler(async (event) => {
         statusText: response.statusText,
         body: errorText
       })
-      throw new Error(`InfluxDB error: ${response.status} ${response.statusText} - ${errorText}`)
+      
+      // Provide more specific error messages based on status code
+      let errorMessage = 'InfluxDB connection error: '
+      if (response.status === 401) {
+        errorMessage += 'Authentication failed. Please check your InfluxDB token.'
+      } else if (response.status === 404) {
+        errorMessage += 'Bucket not found. Please verify your InfluxDB bucket configuration.'
+      } else if (response.status === 503) {
+        errorMessage += 'InfluxDB service unavailable. The database may be down or unreachable.'
+      } else {
+        errorMessage += `${response.status} ${response.statusText}`
+      }
+      
+      throw new Error(errorMessage)
     }
 
     const csvData = await response.text()
@@ -65,11 +78,21 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     console.error('InfluxDB query error:', error)
     
+    // Distinguish between network errors and other errors
+    let errorMessage = 'Unknown error'
+    if (error instanceof Error) {
+      if (error.message.includes('fetch failed') || error.message.includes('ECONNREFUSED')) {
+        errorMessage = 'Cannot reach InfluxDB server. Please check your network connection and InfluxDB URL configuration.'
+      } else {
+        errorMessage = error.message
+      }
+    }
+    
     const result: InfluxResponse = {
       data: [],
       total: 0,
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error'
+      error: errorMessage
     }
 
     return result
