@@ -277,10 +277,10 @@ function startAutoRefresh() {
     clearInterval(refreshInterval.value)
   }
   
-  // Fetch and merge recent data every 5 seconds (efficient incremental update)
+  // Fetch and merge recent data every 1 second (efficient incremental update)
   refreshInterval.value = setInterval(() => {
     updateRecentData()
-  }, 5000)
+  }, 1000)
 }
 
 // Stop auto-refresh

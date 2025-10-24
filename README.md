@@ -4,7 +4,7 @@ A real-time port monitoring dashboard that connects to InfluxDB for vessel GPS d
 
 ## Features
 
-- **Real-time GPS Tracking**: Auto-refreshing vessel GPS data with coordinates, altitude, and SOS signals (updates every 5 seconds)
+- **Real-time GPS Tracking**: Auto-refreshing vessel GPS data with coordinates, altitude, and SOS signals (updates every second)
 - **Vessel Management**: Vessel information stored in PostgreSQL
 - **SOS Alert System**: Real-time monitoring of emergency signals
 - **Dashboard Overview**: Clean, modern dashboard showing vessel locations and status
@@ -149,10 +149,10 @@ app/
 
 ### Auto-Refresh System
 
-The dashboard automatically updates every 5 seconds with an optimized incremental update system:
+The dashboard automatically updates every second with an optimized incremental update system:
 
 1. **Initial Load**: Fetches full time range (1-24 hours based on selection)
-2. **Auto-Refresh**: Every 5 seconds, fetches only the last 30 seconds of new data
+2. **Auto-Refresh**: Every second, fetches only the last 30 seconds of new data
 3. **Smart Merging**: Deduplicates and merges new data with existing data
 4. **Memory Management**: Automatically trims old data beyond selected time range
 5. **Efficiency**: ~99% reduction in data transfer compared to full reloads
